@@ -9,15 +9,14 @@ import SwiftUI
 import SpriteKit
 
 struct ContentView: View {
-    
     @StateObject var game: GameScene = {
         let scene = GameScene(size: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
         scene.scaleMode = .fill
         scene.backgroundColor = GameScene.backgoundColor
         return scene
     }()
-    
-    
+    @State private var showSettings: Bool = false
+
     var body: some View {
         VStack(spacing: 0) {
             SpriteView(scene: game)
@@ -25,7 +24,13 @@ struct ContentView: View {
         }.ignoresSafeArea()
         
         .overlay(alignment: .top) {
-            Header().environmentObject(game)
+            Header(showSettings: $showSettings).environmentObject(game)
+        }
+        
+        .overlay {
+            if showSettings {
+                SettingView(showSettings: $showSettings)
+            }
         }
     }
 }
@@ -47,6 +52,7 @@ struct ContentView: View {
 
 struct Header: View {
     @EnvironmentObject var game: GameScene
+    @Binding var showSettings: Bool
     
     var body: some View {
         ZStack {
@@ -61,7 +67,6 @@ struct Header: View {
                     NextObjectView(dropObject: $game.nextDropObject)
                     Spacer()
                 }
-            
                 .overlay(alignment: .topTrailing) {
                     HStack {
                         Button(action: {}, label: {
@@ -69,7 +74,11 @@ struct Header: View {
                                 .resizable()
                                 .frame(width: 40, height: 40)
                         })
-                        Button(action: {}, label: {
+                        Button(action: {
+                            withAnimation(.bouncy) {
+                                showSettings.toggle()
+                            }
+                        }, label: {
                             Image("settingsButton")
                                 .resizable()
                                 .frame(width: 40, height: 40)

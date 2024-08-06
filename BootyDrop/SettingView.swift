@@ -8,12 +8,14 @@
 import SwiftUI
 
 struct SettingView: View {
+    @Binding var showSettings: Bool
     
     var body: some View {
         Image("scroll3")
             .resizable()
-            .frame(width: 300, height: 400)
-            .pirateShadow(y: 10)
+            .flipHorizontal()
+            
+            .pirateShadow(y: 30)
             
             .overlay(alignment: .top) {
                 VStack {
@@ -43,15 +45,11 @@ struct SettingView: View {
                     
                 }.padding(.top, 24)
             }
-        
-            .transition(.asymmetric(insertion: .scale, removal: .move(edge: .leading)))
-        
+            
             .overlay(alignment: .topTrailing) {
                 closeButton.padding([.top, .trailing], 15)
             }
     }
-    
-    
     
     func ButtonLabel(imageName: String, title: String, frame: CGSize? = nil) -> some View {
         VStack {
@@ -68,7 +66,9 @@ struct SettingView: View {
     
     var closeButton: some View {
         Button(action: {
-            // close settings view here
+            withAnimation(.bouncy) {
+                showSettings.toggle()
+            }
         }, label: {
             Image("close_button")
                 .resizable()
@@ -81,5 +81,20 @@ struct SettingView: View {
 }
 
 #Preview {
-    SettingView()
+    @State var showSettings: Bool = true
+    
+    return SettingView(showSettings: $showSettings)
 }
+
+
+
+extension Image {
+    func flipHorizontal() -> some View {
+        self.rotation3DEffect(.degrees(180), axis: (x: 1.0, y: 0.0, z: 0.0))
+    }
+    
+    func flipVertically() -> some View {
+        self.rotation3DEffect(.degrees(180), axis: (x: 0.0, y: 1.0, z: 0.0))
+    }
+}
+
