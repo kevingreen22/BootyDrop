@@ -14,7 +14,7 @@ struct SettingView: View {
         Image("scroll3")
             .resizable()
             .flipHorizontal()
-            
+            .frame(width: 300, height: 400)
             .pirateShadow(y: 30)
             
             .overlay(alignment: .top) {
@@ -49,6 +49,8 @@ struct SettingView: View {
             .overlay(alignment: .topTrailing) {
                 closeButton.padding([.top, .trailing], 15)
             }
+        
+            .transition(.scale)
     }
     
     func ButtonLabel(imageName: String, title: String, frame: CGSize? = nil) -> some View {
