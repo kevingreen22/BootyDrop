@@ -26,16 +26,20 @@
 		C7DDA4122C559E27005E6663 /* gem4.png in Resources */ = {isa = PBXBuildFile; fileRef = C7DDA4092C559E27005E6663 /* gem4.png */; };
 		C7DDA4142C559ED0005E6663 /* gem1.png in Resources */ = {isa = PBXBuildFile; fileRef = C7DDA4132C559ED0005E6663 /* gem1.png */; };
 		C7EFD0DF2C51D5E000B883B4 /* background.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C7EFD0DE2C51D5E000B883B4 /* background.jpg */; };
-		C7EFD0EC2C531D0400B883B4 /* scroll4.png in Resources */ = {isa = PBXBuildFile; fileRef = C7EFD0E82C531D0300B883B4 /* scroll4.png */; };
-		C7EFD0ED2C531D0400B883B4 /* scroll2.png in Resources */ = {isa = PBXBuildFile; fileRef = C7EFD0E92C531D0300B883B4 /* scroll2.png */; };
-		C7EFD0EE2C531D0400B883B4 /* scroll1.png in Resources */ = {isa = PBXBuildFile; fileRef = C7EFD0EA2C531D0300B883B4 /* scroll1.png */; };
-		C7EFD0EF2C531D0400B883B4 /* scroll3.png in Resources */ = {isa = PBXBuildFile; fileRef = C7EFD0EB2C531D0400B883B4 /* scroll3.png */; };
+		C7EFD0EF2C531D0400B883B4 /* scroll.png in Resources */ = {isa = PBXBuildFile; fileRef = C7EFD0EB2C531D0400B883B4 /* scroll.png */; };
 		C7EFD0F52C5433CE00B883B4 /* CustomFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7EFD0F42C5433CE00B883B4 /* CustomFonts.swift */; };
 		C7EFD0F72C543A3300B883B4 /* TheRumIsGone.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C7EFD0F22C54335100B883B4 /* TheRumIsGone.ttf */; };
 		C7EFD0F92C5463FE00B883B4 /* sand.png in Resources */ = {isa = PBXBuildFile; fileRef = C7EFD0F82C5463FE00B883B4 /* sand.png */; };
 		C7EFD0FB2C546D6200B883B4 /* trophy.png in Resources */ = {isa = PBXBuildFile; fileRef = C7EFD0FA2C546D6200B883B4 /* trophy.png */; };
 		C7EFD0FE2C547F9B00B883B4 /* crownButton.png in Resources */ = {isa = PBXBuildFile; fileRef = C7EFD0FC2C547F9B00B883B4 /* crownButton.png */; };
 		C7EFD0FF2C547F9B00B883B4 /* settingsButton.png in Resources */ = {isa = PBXBuildFile; fileRef = C7EFD0FD2C547F9B00B883B4 /* settingsButton.png */; };
+		C7FB00382C642BDF00C8AC70 /* scroll_top.png in Resources */ = {isa = PBXBuildFile; fileRef = C7FB00352C642BDE00C8AC70 /* scroll_top.png */; };
+		C7FB00392C642BDF00C8AC70 /* scroll_middle.png in Resources */ = {isa = PBXBuildFile; fileRef = C7FB00362C642BDF00C8AC70 /* scroll_middle.png */; };
+		C7FB003A2C642BDF00C8AC70 /* scroll_bottom.png in Resources */ = {isa = PBXBuildFile; fileRef = C7FB00372C642BDF00C8AC70 /* scroll_bottom.png */; };
+		C7FB003D2C653B1C00C8AC70 /* SwiftfulUI in Frameworks */ = {isa = PBXBuildFile; productRef = C7FB003C2C653B1C00C8AC70 /* SwiftfulUI */; };
+		C7FB00402C65450A00C8AC70 /* KGViews in Frameworks */ = {isa = PBXBuildFile; productRef = C7FB003F2C65450A00C8AC70 /* KGViews */; };
+		C7FB00422C66A47B00C8AC70 /* PaperScroll.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7FB00412C66A47B00C8AC70 /* PaperScroll.swift */; };
+		C7FB00442C66A71300C8AC70 /* Image Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7FB00432C66A71300C8AC70 /* Image Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -59,10 +63,7 @@
 		C7DDA4092C559E27005E6663 /* gem4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gem4.png; sourceTree = "<group>"; };
 		C7DDA4132C559ED0005E6663 /* gem1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gem1.png; sourceTree = "<group>"; };
 		C7EFD0DE2C51D5E000B883B4 /* background.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = background.jpg; sourceTree = "<group>"; };
-		C7EFD0E82C531D0300B883B4 /* scroll4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = scroll4.png; sourceTree = "<group>"; };
-		C7EFD0E92C531D0300B883B4 /* scroll2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = scroll2.png; sourceTree = "<group>"; };
-		C7EFD0EA2C531D0300B883B4 /* scroll1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = scroll1.png; sourceTree = "<group>"; };
-		C7EFD0EB2C531D0400B883B4 /* scroll3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = scroll3.png; sourceTree = "<group>"; };
+		C7EFD0EB2C531D0400B883B4 /* scroll.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = scroll.png; sourceTree = "<group>"; };
 		C7EFD0F22C54335100B883B4 /* TheRumIsGone.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = TheRumIsGone.ttf; sourceTree = "<group>"; };
 		C7EFD0F32C54338100B883B4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C7EFD0F42C5433CE00B883B4 /* CustomFonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFonts.swift; sourceTree = "<group>"; };
@@ -70,6 +71,11 @@
 		C7EFD0FA2C546D6200B883B4 /* trophy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = trophy.png; sourceTree = "<group>"; };
 		C7EFD0FC2C547F9B00B883B4 /* crownButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = crownButton.png; sourceTree = "<group>"; };
 		C7EFD0FD2C547F9B00B883B4 /* settingsButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settingsButton.png; sourceTree = "<group>"; };
+		C7FB00352C642BDE00C8AC70 /* scroll_top.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = scroll_top.png; sourceTree = "<group>"; };
+		C7FB00362C642BDF00C8AC70 /* scroll_middle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = scroll_middle.png; sourceTree = "<group>"; };
+		C7FB00372C642BDF00C8AC70 /* scroll_bottom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = scroll_bottom.png; sourceTree = "<group>"; };
+		C7FB00412C66A47B00C8AC70 /* PaperScroll.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaperScroll.swift; sourceTree = "<group>"; };
+		C7FB00432C66A71300C8AC70 /* Image Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Image Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +83,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C7FB003D2C653B1C00C8AC70 /* SwiftfulUI in Frameworks */,
+				C7FB00402C65450A00C8AC70 /* KGViews in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -89,10 +97,10 @@
 				C7EFD0DE2C51D5E000B883B4 /* background.jpg */,
 				C7EFD0F82C5463FE00B883B4 /* sand.png */,
 				C7EFD0FA2C546D6200B883B4 /* trophy.png */,
-				C7EFD0EA2C531D0300B883B4 /* scroll1.png */,
-				C7EFD0E92C531D0300B883B4 /* scroll2.png */,
-				C7EFD0EB2C531D0400B883B4 /* scroll3.png */,
-				C7EFD0E82C531D0300B883B4 /* scroll4.png */,
+				C7FB00372C642BDF00C8AC70 /* scroll_bottom.png */,
+				C7FB00362C642BDF00C8AC70 /* scroll_middle.png */,
+				C7FB00352C642BDE00C8AC70 /* scroll_top.png */,
+				C7EFD0EB2C531D0400B883B4 /* scroll.png */,
 				C7EFD0FC2C547F9B00B883B4 /* crownButton.png */,
 				C7EFD0FD2C547F9B00B883B4 /* settingsButton.png */,
 				C78A55CD2C606C8F00630C56 /* close_button.jpg */,
@@ -134,12 +142,14 @@
 				C7CC62462C508459005D9F48 /* GameScene.swift */,
 				C7CC623A2C507A3E005D9F48 /* ContentView.swift */,
 				C78A55CB2C602F6700630C56 /* SettingView.swift */,
+				C7FB00452C66A73400C8AC70 /* Components */,
 				C7CC623C2C507A40005D9F48 /* Assets.xcassets */,
 				C7EFD0F22C54335100B883B4 /* TheRumIsGone.ttf */,
 				C7EFD0F42C5433CE00B883B4 /* CustomFonts.swift */,
 				C78A55CA2C602CB100630C56 /* Images */,
 				C7CC623E2C507A40005D9F48 /* Preview Content */,
 				C7CC62592C50BAC6005D9F48 /* Shape(Not Used but good to save).swift */,
+				C7FB00432C66A71300C8AC70 /* Image Extensions.swift */,
 			);
 			path = BootyDrop;
 			sourceTree = "<group>";
@@ -150,6 +160,14 @@
 				C7CC623F2C507A40005D9F48 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		C7FB00452C66A73400C8AC70 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				C7FB00412C66A47B00C8AC70 /* PaperScroll.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -168,6 +186,10 @@
 			dependencies = (
 			);
 			name = BootyDrop;
+			packageProductDependencies = (
+				C7FB003C2C653B1C00C8AC70 /* SwiftfulUI */,
+				C7FB003F2C65450A00C8AC70 /* KGViews */,
+			);
 			productName = BootyDrop;
 			productReference = C7CC62352C507A3E005D9F48 /* BootyDrop.app */;
 			productType = "com.apple.product-type.application";
@@ -196,6 +218,10 @@
 				Base,
 			);
 			mainGroup = C7CC622C2C507A3E005D9F48;
+			packageReferences = (
+				C7FB003B2C653B1C00C8AC70 /* XCRemoteSwiftPackageReference "SwiftfulUI" */,
+				C7FB003E2C65450A00C8AC70 /* XCRemoteSwiftPackageReference "KGViews" */,
+			);
 			productRefGroup = C7CC62362C507A3E005D9F48 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -212,18 +238,16 @@
 			files = (
 				C7CC62402C507A40005D9F48 /* Preview Assets.xcassets in Resources */,
 				C7DDA40A2C559E27005E6663 /* potion.png in Resources */,
+				C7FB00382C642BDF00C8AC70 /* scroll_top.png in Resources */,
 				C7DDA4112C559E27005E6663 /* nugget.png in Resources */,
 				C7DDA40F2C559E27005E6663 /* gem2.png in Resources */,
 				C7EFD0FB2C546D6200B883B4 /* trophy.png in Resources */,
 				C7EFD0FF2C547F9B00B883B4 /* settingsButton.png in Resources */,
 				C7DDA40D2C559E27005E6663 /* coin.png in Resources */,
-				C7EFD0EC2C531D0400B883B4 /* scroll4.png in Resources */,
 				C7DDA4142C559ED0005E6663 /* gem1.png in Resources */,
 				C7EFD0F72C543A3300B883B4 /* TheRumIsGone.ttf in Resources */,
 				C7EFD0FE2C547F9B00B883B4 /* crownButton.png in Resources */,
-				C7EFD0EF2C531D0400B883B4 /* scroll3.png in Resources */,
-				C7EFD0EE2C531D0400B883B4 /* scroll1.png in Resources */,
-				C7EFD0ED2C531D0400B883B4 /* scroll2.png in Resources */,
+				C7EFD0EF2C531D0400B883B4 /* scroll.png in Resources */,
 				C7DDA4102C559E27005E6663 /* diamond.png in Resources */,
 				C7DDA4122C559E27005E6663 /* gem4.png in Resources */,
 				C7CC623D2C507A40005D9F48 /* Assets.xcassets in Resources */,
@@ -231,6 +255,8 @@
 				C7DDA40B2C559E27005E6663 /* skull.png in Resources */,
 				C7EFD0F92C5463FE00B883B4 /* sand.png in Resources */,
 				C78A55CE2C606C8F00630C56 /* close_button.jpg in Resources */,
+				C7FB00392C642BDF00C8AC70 /* scroll_middle.png in Resources */,
+				C7FB003A2C642BDF00C8AC70 /* scroll_bottom.png in Resources */,
 				C7EFD0DF2C51D5E000B883B4 /* background.jpg in Resources */,
 				C7DDA40E2C559E27005E6663 /* gem5.png in Resources */,
 			);
@@ -245,7 +271,9 @@
 			files = (
 				C7CC62472C508459005D9F48 /* GameScene.swift in Sources */,
 				C7CC623B2C507A3E005D9F48 /* ContentView.swift in Sources */,
+				C7FB00422C66A47B00C8AC70 /* PaperScroll.swift in Sources */,
 				C7EFD0F52C5433CE00B883B4 /* CustomFonts.swift in Sources */,
+				C7FB00442C66A71300C8AC70 /* Image Extensions.swift in Sources */,
 				C78A55CC2C602F6700630C56 /* SettingView.swift in Sources */,
 				C7CC62392C507A3E005D9F48 /* BootyDropApp.swift in Sources */,
 				C7CC625A2C50BAC6005D9F48 /* Shape(Not Used but good to save).swift in Sources */,
@@ -456,6 +484,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		C7FB003B2C653B1C00C8AC70 /* XCRemoteSwiftPackageReference "SwiftfulUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SwiftfulThinking/SwiftfulUI";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.2.0;
+			};
+		};
+		C7FB003E2C65450A00C8AC70 /* XCRemoteSwiftPackageReference "KGViews" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kevingreen22/KGViews";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		C7FB003C2C653B1C00C8AC70 /* SwiftfulUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C7FB003B2C653B1C00C8AC70 /* XCRemoteSwiftPackageReference "SwiftfulUI" */;
+			productName = SwiftfulUI;
+		};
+		C7FB003F2C65450A00C8AC70 /* KGViews */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C7FB003E2C65450A00C8AC70 /* XCRemoteSwiftPackageReference "KGViews" */;
+			productName = KGViews;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = C7CC622D2C507A3E005D9F48 /* Project object */;
 }

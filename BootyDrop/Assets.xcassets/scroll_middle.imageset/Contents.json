@@ -1,11 +1,11 @@
 {
   "images" : [
     {
+      "filename" : "scroll_middle.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "scroll2.png",
       "idiom" : "universal",
       "scale" : "2x"
     },

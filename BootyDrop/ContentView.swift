@@ -30,6 +30,7 @@ struct ContentView: View {
         .overlay {
             if showSettings {
                 SettingView(showSettings: $showSettings)
+                    .transition(.asymmetric(insertion: .move(edge: .leading), removal: .move(edge: .trailing)))
             }
         }
     }
@@ -76,7 +77,7 @@ struct Header: View {
                         })
                         Button(action: {
                             withAnimation(.bouncy) {
-                                showSettings.toggle()
+                                showSettings = true
                             }
                         }, label: {
                             Image("settingsButton")

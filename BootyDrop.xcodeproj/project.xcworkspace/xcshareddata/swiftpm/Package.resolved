@@ -1,0 +1,33 @@
+{
+  "originHash" : "a94145cf730f702f21a2094d84d0b12b5137cdff0c01709b99e1340afc43817e",
+  "pins" : [
+    {
+      "identity" : "kgviews",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/kevingreen22/KGViews",
+      "state" : {
+        "revision" : "20c2005034c1aa31171f202c15b474565d8abf70",
+        "version" : "1.1.0"
+      }
+    },
+    {
+      "identity" : "swiftfulrecursiveui",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SwiftfulThinking/SwiftfulRecursiveUI.git",
+      "state" : {
+        "revision" : "3d2d5ac6efe70874fb5ffb2f8e1d5ccd457f4366",
+        "version" : "1.0.2"
+      }
+    },
+    {
+      "identity" : "swiftfului",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SwiftfulThinking/SwiftfulUI",
+      "state" : {
+        "revision" : "7e6e2d1c29d05e1519f2f5a2ce6012fe4e4dfa19",
+        "version" : "1.2.0"
+      }
+    }
+  ],
+  "version" : 3
+}
