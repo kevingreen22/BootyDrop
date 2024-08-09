@@ -36,8 +36,6 @@
 		C7FB00382C642BDF00C8AC70 /* scroll_top.png in Resources */ = {isa = PBXBuildFile; fileRef = C7FB00352C642BDE00C8AC70 /* scroll_top.png */; };
 		C7FB00392C642BDF00C8AC70 /* scroll_middle.png in Resources */ = {isa = PBXBuildFile; fileRef = C7FB00362C642BDF00C8AC70 /* scroll_middle.png */; };
 		C7FB003A2C642BDF00C8AC70 /* scroll_bottom.png in Resources */ = {isa = PBXBuildFile; fileRef = C7FB00372C642BDF00C8AC70 /* scroll_bottom.png */; };
-		C7FB003D2C653B1C00C8AC70 /* SwiftfulUI in Frameworks */ = {isa = PBXBuildFile; productRef = C7FB003C2C653B1C00C8AC70 /* SwiftfulUI */; };
-		C7FB00402C65450A00C8AC70 /* KGViews in Frameworks */ = {isa = PBXBuildFile; productRef = C7FB003F2C65450A00C8AC70 /* KGViews */; };
 		C7FB00422C66A47B00C8AC70 /* PaperScroll.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7FB00412C66A47B00C8AC70 /* PaperScroll.swift */; };
 		C7FB00442C66A71300C8AC70 /* Image Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7FB00432C66A71300C8AC70 /* Image Extensions.swift */; };
 /* End PBXBuildFile section */
@@ -83,8 +81,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C7FB003D2C653B1C00C8AC70 /* SwiftfulUI in Frameworks */,
-				C7FB00402C65450A00C8AC70 /* KGViews in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -187,8 +183,6 @@
 			);
 			name = BootyDrop;
 			packageProductDependencies = (
-				C7FB003C2C653B1C00C8AC70 /* SwiftfulUI */,
-				C7FB003F2C65450A00C8AC70 /* KGViews */,
 			);
 			productName = BootyDrop;
 			productReference = C7CC62352C507A3E005D9F48 /* BootyDrop.app */;
@@ -219,8 +213,6 @@
 			);
 			mainGroup = C7CC622C2C507A3E005D9F48;
 			packageReferences = (
-				C7FB003B2C653B1C00C8AC70 /* XCRemoteSwiftPackageReference "SwiftfulUI" */,
-				C7FB003E2C65450A00C8AC70 /* XCRemoteSwiftPackageReference "KGViews" */,
 			);
 			productRefGroup = C7CC62362C507A3E005D9F48 /* Products */;
 			projectDirPath = "";
@@ -484,38 +476,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		C7FB003B2C653B1C00C8AC70 /* XCRemoteSwiftPackageReference "SwiftfulUI" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SwiftfulThinking/SwiftfulUI";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.2.0;
-			};
-		};
-		C7FB003E2C65450A00C8AC70 /* XCRemoteSwiftPackageReference "KGViews" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/kevingreen22/KGViews";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.1.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		C7FB003C2C653B1C00C8AC70 /* SwiftfulUI */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = C7FB003B2C653B1C00C8AC70 /* XCRemoteSwiftPackageReference "SwiftfulUI" */;
-			productName = SwiftfulUI;
-		};
-		C7FB003F2C65450A00C8AC70 /* KGViews */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = C7FB003E2C65450A00C8AC70 /* XCRemoteSwiftPackageReference "KGViews" */;
-			productName = KGViews;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = C7CC622D2C507A3E005D9F48 /* Project object */;
 }
