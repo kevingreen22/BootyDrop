@@ -157,7 +157,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
             addChild(emitter)
             destroy(object: objectA)
             destroy(object: objectB)
-            addDropObjectNode(dropObjectSize: newSize, position: position, isDynamic: true)
+            let newObject = addDropObjectNode(dropObjectSize: newSize, position: position, isDynamic: true)
+            newObject?.physicsBody?.applyImpulse(CGVector(dx: 15, dy: 15))
+            
             DispatchQueue.main.asyncAfter(deadline: .now()+0.4) {
                 self.destroy(object: emitter)
             }
@@ -173,7 +175,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         let dropObject = DropObject(size: dropObjectSize)
         let texture = SKTexture(imageNamed: dropObject.imageName.rawValue)
         let node = SKSpriteNode(texture: texture, size: dropObject.size)
-        node.physicsBody = physicsBodies.getPhysicsBody(for: dropObject.imageName) //SKPhysicsBody(texture: texture, size: dropObject.size)
+        node.physicsBody = SKPhysicsBody(texture: texture, size: dropObject.size) 
+        #warning("This next line replaces the above line. Make sure to fix the actual image file's sizes to their respective size (in points). Otherwise the size of the objects as your playing the game are all wrong.")
+        // node.physicsBody = physicsBodies.getPhysicsBody(for: dropObject.imageName)
         node.physicsBody?.restitution = 0
         node.physicsBody?.friction = 0.7
         node.physicsBody?.angularDamping = 6
@@ -527,8 +531,8 @@ class PhysicsBodies {
         createPhysicsBodies()
     }
     
-    func getPhysicsBody(for name: DropObjectImageName) -> SKPhysicsBody! {
-        switch name {
+    func getPhysicsBody(for object: DropObject) -> SKPhysicsBody! {
+        switch object.imageName {
         case .coin: return coinPhysics.copy() as? SKPhysicsBody
         case .gem1: return gem1Physics.copy() as? SKPhysicsBody
         case .gem2: return gem2Physics.copy() as? SKPhysicsBody
