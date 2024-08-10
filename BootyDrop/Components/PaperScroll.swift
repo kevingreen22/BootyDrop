@@ -158,7 +158,3 @@ struct PaperScroll<Content: View>: View {
     }
     
 }
-<<<<<<< HEAD
-=======
-
->>>>>>> create_settings_view
