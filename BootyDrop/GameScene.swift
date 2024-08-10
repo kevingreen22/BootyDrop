@@ -23,7 +23,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     private let dropY: CGFloat = 640
     private let dashSize = CGSize(width: 3, height: 60)
     
-    private var physicsBodies: PhysicsBodies!
+//    private var physicsBodies: PhysicsBodies!
     
     
     // MARK: SKScene
@@ -38,7 +38,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         scene.physicsWorld.contactDelegate = self
         scene.physicsWorld.gravity = CGVector(dx: 0, dy: -5)
         
-        physicsBodies = PhysicsBodies()
+//        physicsBodies = PhysicsBodies()
         
         addBackgroundImage(position: CGPoint(x: scene.frame.width/2, y: scene.frame.height/2), scene: scene)
         
@@ -143,7 +143,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     
     func collision(between objectA: SKNode, objectB: SKNode) {
 //        print("\(type(of: self)).\(#function)")
-        // Combine both balls into next ball size if they are a matching pair (i.e. destroy both balls and create a new one)
+        // Combine both dropObjects into next dropObject size if they are a matching pair (i.e. destroy both and create a new one)
         let newSize = objectA.dropObjectSize.nextSize
         print("currentSize: \(objectA.dropObjectSize.rawValue) - newSize: \(newSize.rawValue)\n")
         let newX = objectA.position.x + abs(objectA.position.x - objectB.position.x)/2
@@ -158,7 +158,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
             destroy(object: objectA)
             destroy(object: objectB)
             let newObject = addDropObjectNode(dropObjectSize: newSize, position: position, isDynamic: true)
-            newObject?.physicsBody?.applyImpulse(CGVector(dx: 15, dy: 15))
+            newObject?.physicsBody?.applyImpulse(CGVector(dx: 15, dy: -10)) // adds explosion push
             
             DispatchQueue.main.asyncAfter(deadline: .now()+0.4) {
                 self.destroy(object: emitter)
