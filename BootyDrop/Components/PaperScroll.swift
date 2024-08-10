@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct PaperScroll<Content: View>: View {
-    @Binding var show: Bool { willSet { animatePaperScroll() } }
+    @Binding var show: Bool
     var height: CGFloat = 400
     @ViewBuilder var content: Content
     
@@ -43,12 +43,9 @@ struct PaperScroll<Content: View>: View {
                 .offset(y: scrollTopOffset)
             
         } // end paper scroll
-        .frame(width: 360)
-        .transition(.scale)
+        .frame(width: UIScreen.main.bounds.width*0.85)
         .onAppear {
-            DispatchQueue.main.asyncAfter(deadline: .now()+0.3) {
-                animatePaperScroll()
-            }
+            openPaperScroll()
         }
     }
     
@@ -75,26 +72,41 @@ struct PaperScroll<Content: View>: View {
             .onEnded { value in
                 scrollMiddleHeight = height // resets the height
                 scrollMiddleOffset = 0 // resets the offset
-                DispatchQueue.main.asyncAfter(deadline: .now()+0.3) {
-                    animatePaperScroll()
-                }
+                dismissPaperScroll()
             }
     }
     
     var tapToClose: some Gesture {
         TapGesture(count: 1)
             .onEnded { value in
-                animatePaperScroll()
+                dismissPaperScroll()
             }
     }
     
-    func animatePaperScroll() {
-        withAnimation(.easeInOut) {
-            scrollTopOffset == -36 ? (scrollTopOffset = (-height/2)-18 )  : (scrollTopOffset = -36)
-            scrollBottomOffset == 36 ? (scrollBottomOffset = (height/2)+18 ) : (scrollBottomOffset = 36)
-            scrollMiddleHeight == 30 ? (scrollMiddleHeight = height) : (scrollMiddleHeight = 30)
+    func dismissPaperScroll(delay: Double = 0.3) {
+        DispatchQueue.main.asyncAfter(deadline: .now()+delay) {
+            withAnimation(.easeInOut) {
+                scrollTopOffset = -36
+                scrollBottomOffset = 36
+                scrollMiddleHeight = 30
+                DispatchQueue.main.asyncAfter(deadline: .now()+delay) {
+                    withAnimation(.easeInOut) {
+                        show = false
+                    }
+                }
+            }
         }
-}
+    }
+    
+    func openPaperScroll(delay: Double = 0.3) {
+        DispatchQueue.main.asyncAfter(deadline: .now()+delay) {
+            withAnimation(.easeInOut) {
+                scrollTopOffset = (-height/2)-18
+                scrollBottomOffset = (height/2)+18
+                scrollMiddleHeight = height
+            }
+        }
+    }
     
 }
 
@@ -146,3 +158,4 @@ struct PaperScroll<Content: View>: View {
     }
     
 }
+
