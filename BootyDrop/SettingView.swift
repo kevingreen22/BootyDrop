@@ -65,4 +65,3 @@ struct SettingView: View {
     return SettingView(showSettings: $showSettings)
 }
 
-
