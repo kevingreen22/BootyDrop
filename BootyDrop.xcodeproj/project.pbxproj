@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		C78A55CC2C602F6700630C56 /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78A55CB2C602F6700630C56 /* SettingView.swift */; };
-		C78A55CE2C606C8F00630C56 /* close_button.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C78A55CD2C606C8F00630C56 /* close_button.jpg */; };
 		C7CC62392C507A3E005D9F48 /* BootyDropApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7CC62382C507A3E005D9F48 /* BootyDropApp.swift */; };
 		C7CC623B2C507A3E005D9F48 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7CC623A2C507A3E005D9F48 /* ContentView.swift */; };
 		C7CC623D2C507A40005D9F48 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C7CC623C2C507A40005D9F48 /* Assets.xcassets */; };
@@ -26,7 +25,6 @@
 		C7DDA4122C559E27005E6663 /* gem4.png in Resources */ = {isa = PBXBuildFile; fileRef = C7DDA4092C559E27005E6663 /* gem4.png */; };
 		C7DDA4142C559ED0005E6663 /* gem1.png in Resources */ = {isa = PBXBuildFile; fileRef = C7DDA4132C559ED0005E6663 /* gem1.png */; };
 		C7EFD0DF2C51D5E000B883B4 /* background.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C7EFD0DE2C51D5E000B883B4 /* background.jpg */; };
-		C7EFD0EF2C531D0400B883B4 /* scroll.png in Resources */ = {isa = PBXBuildFile; fileRef = C7EFD0EB2C531D0400B883B4 /* scroll.png */; };
 		C7EFD0F52C5433CE00B883B4 /* CustomFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7EFD0F42C5433CE00B883B4 /* CustomFonts.swift */; };
 		C7EFD0F72C543A3300B883B4 /* TheRumIsGone.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C7EFD0F22C54335100B883B4 /* TheRumIsGone.ttf */; };
 		C7EFD0F92C5463FE00B883B4 /* sand.png in Resources */ = {isa = PBXBuildFile; fileRef = C7EFD0F82C5463FE00B883B4 /* sand.png */; };
@@ -42,7 +40,6 @@
 
 /* Begin PBXFileReference section */
 		C78A55CB2C602F6700630C56 /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
-		C78A55CD2C606C8F00630C56 /* close_button.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = close_button.jpg; sourceTree = "<group>"; };
 		C7CC62352C507A3E005D9F48 /* BootyDrop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BootyDrop.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7CC62382C507A3E005D9F48 /* BootyDropApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BootyDropApp.swift; sourceTree = "<group>"; };
 		C7CC623A2C507A3E005D9F48 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -61,7 +58,6 @@
 		C7DDA4092C559E27005E6663 /* gem4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gem4.png; sourceTree = "<group>"; };
 		C7DDA4132C559ED0005E6663 /* gem1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gem1.png; sourceTree = "<group>"; };
 		C7EFD0DE2C51D5E000B883B4 /* background.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = background.jpg; sourceTree = "<group>"; };
-		C7EFD0EB2C531D0400B883B4 /* scroll.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = scroll.png; sourceTree = "<group>"; };
 		C7EFD0F22C54335100B883B4 /* TheRumIsGone.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = TheRumIsGone.ttf; sourceTree = "<group>"; };
 		C7EFD0F32C54338100B883B4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C7EFD0F42C5433CE00B883B4 /* CustomFonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFonts.swift; sourceTree = "<group>"; };
@@ -96,10 +92,8 @@
 				C7FB00372C642BDF00C8AC70 /* scroll_bottom.png */,
 				C7FB00362C642BDF00C8AC70 /* scroll_middle.png */,
 				C7FB00352C642BDE00C8AC70 /* scroll_top.png */,
-				C7EFD0EB2C531D0400B883B4 /* scroll.png */,
 				C7EFD0FC2C547F9B00B883B4 /* crownButton.png */,
 				C7EFD0FD2C547F9B00B883B4 /* settingsButton.png */,
-				C78A55CD2C606C8F00630C56 /* close_button.jpg */,
 				C7DDA4042C559E26005E6663 /* coin.png */,
 				C7DDA4132C559ED0005E6663 /* gem1.png */,
 				C7DDA4062C559E26005E6663 /* gem2.png */,
@@ -239,14 +233,12 @@
 				C7DDA4142C559ED0005E6663 /* gem1.png in Resources */,
 				C7EFD0F72C543A3300B883B4 /* TheRumIsGone.ttf in Resources */,
 				C7EFD0FE2C547F9B00B883B4 /* crownButton.png in Resources */,
-				C7EFD0EF2C531D0400B883B4 /* scroll.png in Resources */,
 				C7DDA4102C559E27005E6663 /* diamond.png in Resources */,
 				C7DDA4122C559E27005E6663 /* gem4.png in Resources */,
 				C7CC623D2C507A40005D9F48 /* Assets.xcassets in Resources */,
 				C7DDA40C2C559E27005E6663 /* gem3.png in Resources */,
 				C7DDA40B2C559E27005E6663 /* skull.png in Resources */,
 				C7EFD0F92C5463FE00B883B4 /* sand.png in Resources */,
-				C78A55CE2C606C8F00630C56 /* close_button.jpg in Resources */,
 				C7FB00392C642BDF00C8AC70 /* scroll_middle.png in Resources */,
 				C7FB003A2C642BDF00C8AC70 /* scroll_bottom.png in Resources */,
 				C7EFD0DF2C51D5E000B883B4 /* background.jpg in Resources */,
