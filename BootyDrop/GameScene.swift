@@ -91,9 +91,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         dropObject.physicsBody?.isDynamic = true
         dropGuide.alpha = 0
         
+        if let emmiter = SKEmitterNode(fileNamed: "finger_touch") {
+            emmiter.position = touch.location(in: self)
+            addChild(emmiter)
+        }
+        
         view.isUserInteractionEnabled = false
         DispatchQueue.main.asyncAfter(deadline: .now()+0.6) { [self] in
             view.isUserInteractionEnabled = true
+            
             let size = self.nextDropObject.dropObjectSize
             self.dropGuide.alpha = 1
             
@@ -141,15 +147,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         
         incrementScore(with: objectA.dropObjectSize)
         
-        destroy(ball: objectA)
-        destroy(ball: objectB)
-
-        addBallNode(dropObjectSize: newSize, position: position, isDynamic: true)
+        if let emitter = SKEmitterNode(fileNamed: "merge") {
+            emitter.position = position
+            emitter.particleSize = CGSize(width: newSize.rawValue, height: newSize.rawValue)
+            addChild(emitter)
+            destroy(object: objectA)
+            destroy(object: objectB)
+            addBallNode(dropObjectSize: newSize, position: position, isDynamic: true)
+            DispatchQueue.main.asyncAfter(deadline: .now()+0.4) {
+                self.destroy(object: emitter)
+            }
+        }
     }
     
-    func destroy(ball: SKNode) {
+    func destroy(object: SKNode) {
 //        print("\(type(of: self)).\(#function)")
-        ball.removeFromParent()
+        object.removeFromParent()
     }
     
     @discardableResult private func addBallNode(dropObjectSize: DropObjectSize, position: CGPoint, isDynamic: Bool = false) -> SKSpriteNode? {
@@ -343,15 +356,15 @@ struct DropObject {
         let size = self.customSize
         switch self.imageName {
 //        case .coin: return MyShape.circle(center: .zero, size: size.height)
-//        
+//
 //        case .blueGem: return MyShape.octagon(center: .zero, radius: size.height)
-//        
+//
 //        case .greenGem: return MyShape.emeraldCut(center: .zero, width: size.width, height: size.height, cornerCut: size.height*0.33)
-//        
+//
 //        case .redGem: return MyShape.gemstoneProfile(center: .zero, size: size.height)
-//        
+//
 //        case .goldBrick: return MyShape.rectangle(rect: CGRect(origin: .zero, size: CGSize(width: size.width, height: size.height)))
-//        
+//
 //        case .skull: return MyShape.circle(center: .zero, size: size.height)
             
         default: return MyShape.circle(center: .zero, size: size.height)

@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C73A26202C67DFBA00890644 /* ripple_ring.png in Resources */ = {isa = PBXBuildFile; fileRef = C73A261F2C67DFBA00890644 /* ripple_ring.png */; };
+		C73A26232C67DFC900890644 /* finger_touch.sks in Resources */ = {isa = PBXBuildFile; fileRef = C73A26212C67DFC900890644 /* finger_touch.sks */; };
+		C73A26242C67DFC900890644 /* merge.sks in Resources */ = {isa = PBXBuildFile; fileRef = C73A26222C67DFC900890644 /* merge.sks */; };
 		C78A55CC2C602F6700630C56 /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78A55CB2C602F6700630C56 /* SettingView.swift */; };
 		C7CC62392C507A3E005D9F48 /* BootyDropApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7CC62382C507A3E005D9F48 /* BootyDropApp.swift */; };
 		C7CC623B2C507A3E005D9F48 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7CC623A2C507A3E005D9F48 /* ContentView.swift */; };
@@ -39,6 +42,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C73A261F2C67DFBA00890644 /* ripple_ring.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ripple_ring.png; path = ../../../../Desktop/ripple_ring.png; sourceTree = "<group>"; };
+		C73A26212C67DFC900890644 /* finger_touch.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; name = finger_touch.sks; path = ../../../../Desktop/finger_touch.sks; sourceTree = "<group>"; };
+		C73A26222C67DFC900890644 /* merge.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; name = merge.sks; path = ../../../../Desktop/merge.sks; sourceTree = "<group>"; };
 		C78A55CB2C602F6700630C56 /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
 		C7CC62352C507A3E005D9F48 /* BootyDrop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BootyDrop.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7CC62382C507A3E005D9F48 /* BootyDropApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BootyDropApp.swift; sourceTree = "<group>"; };
@@ -140,6 +146,9 @@
 				C7CC623E2C507A40005D9F48 /* Preview Content */,
 				C7CC62592C50BAC6005D9F48 /* Shape(Not Used but good to save).swift */,
 				C7FB00432C66A71300C8AC70 /* Image Extensions.swift */,
+				C73A261F2C67DFBA00890644 /* ripple_ring.png */,
+				C73A26212C67DFC900890644 /* finger_touch.sks */,
+				C73A26222C67DFC900890644 /* merge.sks */,
 			);
 			path = BootyDrop;
 			sourceTree = "<group>";
@@ -222,6 +231,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C73A26242C67DFC900890644 /* merge.sks in Resources */,
 				C7CC62402C507A40005D9F48 /* Preview Assets.xcassets in Resources */,
 				C7DDA40A2C559E27005E6663 /* potion.png in Resources */,
 				C7FB00382C642BDF00C8AC70 /* scroll_top.png in Resources */,
@@ -231,11 +241,13 @@
 				C7EFD0FF2C547F9B00B883B4 /* settingsButton.png in Resources */,
 				C7DDA40D2C559E27005E6663 /* coin.png in Resources */,
 				C7DDA4142C559ED0005E6663 /* gem1.png in Resources */,
+				C73A26202C67DFBA00890644 /* ripple_ring.png in Resources */,
 				C7EFD0F72C543A3300B883B4 /* TheRumIsGone.ttf in Resources */,
 				C7EFD0FE2C547F9B00B883B4 /* crownButton.png in Resources */,
 				C7DDA4102C559E27005E6663 /* diamond.png in Resources */,
 				C7DDA4122C559E27005E6663 /* gem4.png in Resources */,
 				C7CC623D2C507A40005D9F48 /* Assets.xcassets in Resources */,
+				C73A26232C67DFC900890644 /* finger_touch.sks in Resources */,
 				C7DDA40C2C559E27005E6663 /* gem3.png in Resources */,
 				C7DDA40B2C559E27005E6663 /* skull.png in Resources */,
 				C7EFD0F92C5463FE00B883B4 /* sand.png in Resources */,
