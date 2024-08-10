@@ -137,7 +137,7 @@ struct NextObjectView: View {
                 .resizable()
                 .frame(width: 30, height: 30)
                 .pirateShadow(x: 3)
-                .animation(.bouncy, value: dropObject.customSize)
+                .animation(.bouncy, value: dropObject.size)
             
         }
         .padding(.top, 8)

@@ -23,6 +23,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     private let dropY: CGFloat = 640
     private let dashSize = CGSize(width: 3, height: 60)
     
+    private var physicsBodies: PhysicsBodies!
+    
     
     // MARK: SKScene
     override func didMove(to view: SKView) {
@@ -36,6 +38,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         scene.physicsWorld.contactDelegate = self
         scene.physicsWorld.gravity = CGVector(dx: 0, dy: -5)
         
+        physicsBodies = PhysicsBodies()
+        
         addBackgroundImage(position: CGPoint(x: scene.frame.width/2, y: scene.frame.height/2), scene: scene)
         
         addStartLine()
@@ -46,7 +50,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         
         addChild(sceneHeader(position: CGPoint(x: position.x, y: scene.frame.height-dashSize.height-15), size: CGSize(width: scene.frame.width*2, height: scene.frame.height-dropY)))
         
-        dropObject = addBallNode(dropObjectSize: .random, position: CGPoint(x: scene.frame.width/2, y: dropY))
+        dropObject = addDropObjectNode(dropObjectSize: .random, position: CGPoint(x: scene.frame.width/2, y: dropY))
                 
 //        addBottomLine()
     }
@@ -103,9 +107,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
             let size = self.nextDropObject.dropObjectSize
             self.dropGuide.alpha = 1
             
-            calculateLastDropPositionForLargerBall(in: scene)
+            calculateLastDropPositionForLargerDropObject(in: scene)
             
-            self.dropObject = self.addBallNode(dropObjectSize: size, position: lastDropPosition ?? location)
+            self.dropObject = self.addDropObjectNode(dropObjectSize: size, position: lastDropPosition ?? location)
             
             self.dropGuide.position.x = self.dropObject.position.x
             
@@ -153,7 +157,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
             addChild(emitter)
             destroy(object: objectA)
             destroy(object: objectB)
-            addBallNode(dropObjectSize: newSize, position: position, isDynamic: true)
+            addDropObjectNode(dropObjectSize: newSize, position: position, isDynamic: true)
             DispatchQueue.main.asyncAfter(deadline: .now()+0.4) {
                 self.destroy(object: emitter)
             }
@@ -165,12 +169,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         object.removeFromParent()
     }
     
-    @discardableResult private func addBallNode(dropObjectSize: DropObjectSize, position: CGPoint, isDynamic: Bool = false) -> SKSpriteNode? {
-//        let dropObject = SKSpriteNode(color: getColor(for: size), size: CGSize(width: size.rawValue, height: size.rawValue))
+    @discardableResult private func addDropObjectNode(dropObjectSize: DropObjectSize, position: CGPoint, isDynamic: Bool = false) -> SKSpriteNode? {
         let dropObject = DropObject(size: dropObjectSize)
         let texture = SKTexture(imageNamed: dropObject.imageName.rawValue)
-        let node = SKSpriteNode(texture: texture, size: dropObject.customSize)
-        node.physicsBody = SKPhysicsBody(polygonFrom: dropObject.shape)
+        let node = SKSpriteNode(texture: texture, size: dropObject.size)
+        node.physicsBody = physicsBodies.getPhysicsBody(for: dropObject.imageName) //SKPhysicsBody(texture: texture, size: dropObject.size)
         node.physicsBody?.restitution = 0
         node.physicsBody?.friction = 0.7
         node.physicsBody?.angularDamping = 6
@@ -191,7 +194,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         addChild(node)
         return node
     }
-    
+        
     private func addBackgroundImage(position: CGPoint, scene: SKScene) {
         let background = SKSpriteNode(imageNamed: "background.jpg")
         background.position = position
@@ -274,7 +277,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     }
     
     /// THIS FIXES THE NEXT OBJECT'S EDGE OVERLAY. So the new ball does not extend beyond the edge of the scene/screen
-    private func calculateLastDropPositionForLargerBall(in scene: SKScene) {
+    private func calculateLastDropPositionForLargerDropObject(in scene: SKScene) {
         if self.lastDropPosition != nil {
             // Check if next ballsize is bigger or smaller than previous
             if nextDropObject.dropObjectSize > dropObject.dropObjectSize {
@@ -310,20 +313,20 @@ extension SKNode  {
 // MARK: DropObject Model
 struct DropObject {
     var dropObjectSize: DropObjectSize
-    var customSize: CGSize = .zero
+    var size: CGSize = .zero
     var idName: DropObjectIDName.RawValue = "coin"
     var imageName: DropObjectImageName = .coin
     var shape: CGPath = CGPath(ellipseIn: .zero, transform: .none)
 
     init(size: DropObjectSize) {
         self.dropObjectSize = size
-        self.customSize = _customSize
+        self.size = _actual
         self.idName = DropObjectIDName.getNameFor(size: dropObjectSize)
         self.imageName = _imageName
         self.shape = _shape
     }
     
-    private var _customSize: CGSize {
+    private var _actual: CGSize {
         let size = self.dropObjectSize.rawValue
         switch self.imageName {
 //        case .coin: return CGSize(width: size, height: size)
@@ -353,7 +356,7 @@ struct DropObject {
     }
     
     private var _shape: CGPath {
-        let size = self.customSize
+        let size = self._actual
         switch self.imageName {
 //        case .coin: return MyShape.circle(center: .zero, size: size.height)
 //
@@ -401,6 +404,21 @@ enum DropObjectSize: CGFloat, CaseIterable, Comparable {
     case _120 = 120
     case _130 = 130
     case _150 = 150
+    
+//    var actual: CGSize {
+//        switch self {
+//        case ._30: CGSize(width: 30, height: 30)
+//        case ._40: CGSize(width: 40, height: 40)
+//        case ._50: CGSize(width: 50, height: 50)
+//        case ._60: CGSize(width: 60, height: 60)
+//        case ._70: CGSize(width: 70, height: 70)
+//        case ._80: CGSize(width: 80, height: 80)
+//        case ._100: CGSize(width: 100, height: 100)
+//        case ._120: CGSize(width: 120, height: 120)
+//        case ._130: CGSize(width: 130, height: 130)
+//        case ._150: CGSize(width: 150, height: 150)
+//        }
+//    }
     
     static var smallest: DropObjectSize {
         return DropObjectSize.allCases.first!
@@ -493,3 +511,67 @@ enum DropObjectIDName: String, RawRepresentable, CaseIterable {
     
 }
 
+class PhysicsBodies {
+    var coinPhysics: SKPhysicsBody!
+    var gem1Physics: SKPhysicsBody!
+    var gem2Physics: SKPhysicsBody!
+    var gem3Physics: SKPhysicsBody!
+    var gem4Physics: SKPhysicsBody!
+    var gem5Physics: SKPhysicsBody!
+    var diamondPhysics: SKPhysicsBody!
+    var nuggetPhysics: SKPhysicsBody!
+    var potionPhysics: SKPhysicsBody!
+    var skullPhysics: SKPhysicsBody!
+    
+    init() {
+        createPhysicsBodies()
+    }
+    
+    func getPhysicsBody(for name: DropObjectImageName) -> SKPhysicsBody! {
+        switch name {
+        case .coin: return coinPhysics.copy() as? SKPhysicsBody
+        case .gem1: return gem1Physics.copy() as? SKPhysicsBody
+        case .gem2: return gem2Physics.copy() as? SKPhysicsBody
+        case .gem3: return gem3Physics.copy() as? SKPhysicsBody
+        case .gem4: return gem4Physics.copy() as? SKPhysicsBody
+        case .gem5: return gem5Physics.copy() as? SKPhysicsBody
+        case .diamond: return diamondPhysics.copy() as? SKPhysicsBody
+        case .potion: return potionPhysics.copy() as? SKPhysicsBody
+        case .goldNugget: return nuggetPhysics.copy() as? SKPhysicsBody
+        case .skull: return skullPhysics.copy() as? SKPhysicsBody
+        }
+    }
+    
+    private func createPhysicsBodies() {
+        let coinTexture = SKTexture(imageNamed: "coin")
+        coinPhysics = SKPhysicsBody(texture: coinTexture, size: coinTexture.size())
+        
+        let gem1Texture = SKTexture(imageNamed: "gem1")
+        gem1Physics = SKPhysicsBody(texture: gem1Texture, size: gem1Texture.size())
+
+        let gem2Texture = SKTexture(imageNamed: "gem2")
+        gem2Physics = SKPhysicsBody(texture: gem2Texture, size: gem2Texture.size())
+
+        let gem3Texture = SKTexture(imageNamed: "gem3")
+        gem3Physics = SKPhysicsBody(texture: gem3Texture, size: gem3Texture.size())
+
+        let gem4Texture = SKTexture(imageNamed: "gem4")
+        gem4Physics = SKPhysicsBody(texture: gem4Texture, size: gem4Texture.size())
+
+        let gem5Texture = SKTexture(imageNamed: "gem5")
+        gem5Physics = SKPhysicsBody(texture: gem5Texture, size: gem5Texture.size())
+
+        let diamondTexture = SKTexture(imageNamed: "diamond")
+        diamondPhysics = SKPhysicsBody(texture: diamondTexture, size: diamondTexture.size())
+
+        let nuggetTexture = SKTexture(imageNamed: "nugget")
+        nuggetPhysics = SKPhysicsBody(texture: nuggetTexture, size: nuggetTexture.size())
+
+        let potionTexture = SKTexture(imageNamed: "potion")
+        potionPhysics = SKPhysicsBody(texture: potionTexture, size: potionTexture.size())
+
+        let skullTexture = SKTexture(imageNamed: "skull")
+        skullPhysics = SKPhysicsBody(texture: skullTexture, size: skullTexture.size())
+
+    }
+}
