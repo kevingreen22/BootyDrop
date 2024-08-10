@@ -138,7 +138,6 @@ struct NextObjectView: View {
                 .frame(width: 30, height: 30)
                 .pirateShadow(x: 3)
                 .animation(.bouncy, value: dropObject.size)
-            
         }
         .padding(.top, 8)
         .padding(.leading)
@@ -149,25 +148,30 @@ struct Footer: View {
     var body: some View {
         ZStack {
             background
-            collage
+            collage.padding(.horizontal, 16)
         }
     }
         
     var collage: some View {
         HStack {
             Image("coin").resizable().scaledToFit()
-            Image("red_gem").resizable().scaledToFit()
-            Image("blue_gem").resizable().scaledToFit()
-            Image("green_gem").resizable().scaledToFit()
-            Image("gold_brick").resizable().scaledToFit()
+            Image("gem1").resizable().scaledToFit()
+            Image("gem2").resizable().scaledToFit()
+            Image("gem3").resizable().scaledToFit()
+            Image("gem4").resizable().scaledToFit()
+            Image("gem5").resizable().scaledToFit()
+            Image("diamond").resizable().scaledToFit()
+            Image("potion").resizable().scaledToFit()
+            Image("nugget").resizable().scaledToFit()
             Image("skull").resizable().scaledToFit()
         }
-        .frame(height: 30)
         .padding(.horizontal, 8)
-        .padding(.vertical, 8)
+        .padding(.vertical, 4)
         .background {
-            RoundedRectangle(cornerRadius: 10.0, style: .continuous).fill(Color.black.opacity(0.6))
+            RoundedRectangle(cornerRadius: 10.0, style: .continuous)
+                .fill(Color.white.opacity(0.6))
         }
+        .frame(height: 45)
     }
     
     var background: some View {
