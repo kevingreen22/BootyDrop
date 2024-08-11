@@ -11,6 +11,7 @@
 		C73A26232C67DFC900890644 /* finger_touch.sks in Resources */ = {isa = PBXBuildFile; fileRef = C73A26212C67DFC900890644 /* finger_touch.sks */; };
 		C73A26242C67DFC900890644 /* merge.sks in Resources */ = {isa = PBXBuildFile; fileRef = C73A26222C67DFC900890644 /* merge.sks */; };
 		C78A55CC2C602F6700630C56 /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78A55CB2C602F6700630C56 /* SettingView.swift */; };
+		C796E5612C683868002E0423 /* RankingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C796E5602C683868002E0423 /* RankingsView.swift */; };
 		C7CC62392C507A3E005D9F48 /* BootyDropApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7CC62382C507A3E005D9F48 /* BootyDropApp.swift */; };
 		C7CC623B2C507A3E005D9F48 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7CC623A2C507A3E005D9F48 /* ContentView.swift */; };
 		C7CC623D2C507A40005D9F48 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C7CC623C2C507A40005D9F48 /* Assets.xcassets */; };
@@ -46,6 +47,7 @@
 		C73A26212C67DFC900890644 /* finger_touch.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; name = finger_touch.sks; path = ../../../../Desktop/finger_touch.sks; sourceTree = "<group>"; };
 		C73A26222C67DFC900890644 /* merge.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; name = merge.sks; path = ../../../../Desktop/merge.sks; sourceTree = "<group>"; };
 		C78A55CB2C602F6700630C56 /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
+		C796E5602C683868002E0423 /* RankingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankingsView.swift; sourceTree = "<group>"; };
 		C7CC62352C507A3E005D9F48 /* BootyDrop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BootyDrop.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7CC62382C507A3E005D9F48 /* BootyDropApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BootyDropApp.swift; sourceTree = "<group>"; };
 		C7CC623A2C507A3E005D9F48 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -137,6 +139,7 @@
 				C7CC62382C507A3E005D9F48 /* BootyDropApp.swift */,
 				C7CC62462C508459005D9F48 /* GameScene.swift */,
 				C7CC623A2C507A3E005D9F48 /* ContentView.swift */,
+				C796E5602C683868002E0423 /* RankingsView.swift */,
 				C78A55CB2C602F6700630C56 /* SettingView.swift */,
 				C7FB00452C66A73400C8AC70 /* Components */,
 				C7CC623C2C507A40005D9F48 /* Assets.xcassets */,
@@ -267,6 +270,7 @@
 			files = (
 				C7CC62472C508459005D9F48 /* GameScene.swift in Sources */,
 				C7CC623B2C507A3E005D9F48 /* ContentView.swift in Sources */,
+				C796E5612C683868002E0423 /* RankingsView.swift in Sources */,
 				C7FB00422C66A47B00C8AC70 /* PaperScroll.swift in Sources */,
 				C7EFD0F52C5433CE00B883B4 /* CustomFonts.swift in Sources */,
 				C7FB00442C66A71300C8AC70 /* Image Extensions.swift in Sources */,
