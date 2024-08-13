@@ -7,9 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C73A26202C67DFBA00890644 /* ripple_ring.png in Resources */ = {isa = PBXBuildFile; fileRef = C73A261F2C67DFBA00890644 /* ripple_ring.png */; };
-		C73A26232C67DFC900890644 /* finger_touch.sks in Resources */ = {isa = PBXBuildFile; fileRef = C73A26212C67DFC900890644 /* finger_touch.sks */; };
-		C73A26242C67DFC900890644 /* merge.sks in Resources */ = {isa = PBXBuildFile; fileRef = C73A26222C67DFC900890644 /* merge.sks */; };
 		C78A55CC2C602F6700630C56 /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78A55CB2C602F6700630C56 /* SettingView.swift */; };
 		C796E5612C683868002E0423 /* RankingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C796E5602C683868002E0423 /* RankingsView.swift */; };
 		C796E5642C6BE921002E0423 /* GameCenterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C796E5632C6BE921002E0423 /* GameCenterManager.swift */; };
@@ -57,7 +54,7 @@
 		C7CC623C2C507A40005D9F48 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C7CC623F2C507A40005D9F48 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		C7CC62462C508459005D9F48 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
-		C7CC62592C50BAC6005D9F48 /* Shape(Not Used but good to save).swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Shape(Not Used but good to save).swift"; sourceTree = "<group>"; };
+		C7CC62592C50BAC6005D9F48 /* Shape(Not Used but good to save).swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Shape(Not Used but good to save).swift"; path = "../Shape(Not Used but good to save).swift"; sourceTree = "<group>"; };
 		C7DDA4012C559E25005E6663 /* potion.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = potion.png; sourceTree = "<group>"; };
 		C7DDA4022C559E26005E6663 /* skull.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = skull.png; sourceTree = "<group>"; };
 		C7DDA4032C559E26005E6663 /* gem3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gem3.png; sourceTree = "<group>"; };
@@ -80,7 +77,7 @@
 		C7FB00362C642BDF00C8AC70 /* scroll_middle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = scroll_middle.png; sourceTree = "<group>"; };
 		C7FB00372C642BDF00C8AC70 /* scroll_bottom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = scroll_bottom.png; sourceTree = "<group>"; };
 		C7FB00412C66A47B00C8AC70 /* PaperScroll.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaperScroll.swift; sourceTree = "<group>"; };
-		C7FB00432C66A71300C8AC70 /* Image Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Image Extensions.swift"; sourceTree = "<group>"; };
+		C7FB00432C66A71300C8AC70 /* Image Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Image Extensions.swift"; path = "../Image Extensions.swift"; sourceTree = "<group>"; };
 		C7FB735C2C6C117000DC4DBB /* finger_touch.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; name = finger_touch.sks; path = "Preview Content/finger_touch.sks"; sourceTree = "<group>"; };
 		C7FB735D2C6C117000DC4DBB /* merge.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; name = merge.sks; path = "Preview Content/merge.sks"; sourceTree = "<group>"; };
 		C7FB735E2C6C117000DC4DBB /* ripple_ring.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ripple_ring.png; path = "Preview Content/ripple_ring.png"; sourceTree = "<group>"; };
@@ -142,7 +139,6 @@
 			isa = PBXGroup;
 			children = (
 				C796E5622C6BE68E002E0423 /* BootyDrop.entitlements */,
-				C7EFD0F32C54338100B883B4 /* Info.plist */,
 				C7CC62382C507A3E005D9F48 /* BootyDropApp.swift */,
 				C7CC62462C508459005D9F48 /* GameScene.swift */,
 				C7FB73592C6C10C500DC4DBB /* Views */,
@@ -156,11 +152,6 @@
 				C7FB735D2C6C117000DC4DBB /* merge.sks */,
 				C7FB735E2C6C117000DC4DBB /* ripple_ring.png */,
 				C7CC623E2C507A40005D9F48 /* Preview Content */,
-				C7CC62592C50BAC6005D9F48 /* Shape(Not Used but good to save).swift */,
-				C7FB00432C66A71300C8AC70 /* Image Extensions.swift */,
-				C73A261F2C67DFBA00890644 /* ripple_ring.png */,
-				C73A26212C67DFC900890644 /* finger_touch.sks */,
-				C73A26222C67DFC900890644 /* merge.sks */,
 				C796E5632C6BE921002E0423 /* GameCenterManager.swift */,
 			);
 			path = BootyDrop;
@@ -204,8 +195,8 @@
 		C7FB735B2C6C110F00DC4DBB /* Helper Files */ = {
 			isa = PBXGroup;
 			children = (
-				C7CC62592C50BAC6005D9F48 /* Shape(Not Used but good to save).swift */,
 				C7FB00432C66A71300C8AC70 /* Image Extensions.swift */,
+				C7CC62592C50BAC6005D9F48 /* Shape(Not Used but good to save).swift */,
 			);
 			path = "Helper Files";
 			sourceTree = "<group>";
