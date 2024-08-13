@@ -12,6 +12,9 @@ struct BootyDropApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .task {
+                    GameCenterManager.authenticateUser()
+                }
         }
     }
 }
