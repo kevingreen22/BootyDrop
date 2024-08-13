@@ -12,6 +12,7 @@
 		C73A26242C67DFC900890644 /* merge.sks in Resources */ = {isa = PBXBuildFile; fileRef = C73A26222C67DFC900890644 /* merge.sks */; };
 		C78A55CC2C602F6700630C56 /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78A55CB2C602F6700630C56 /* SettingView.swift */; };
 		C796E5612C683868002E0423 /* RankingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C796E5602C683868002E0423 /* RankingsView.swift */; };
+		C796E5642C6BE921002E0423 /* GameCenterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C796E5632C6BE921002E0423 /* GameCenterManager.swift */; };
 		C7CC62392C507A3E005D9F48 /* BootyDropApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7CC62382C507A3E005D9F48 /* BootyDropApp.swift */; };
 		C7CC623B2C507A3E005D9F48 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7CC623A2C507A3E005D9F48 /* ContentView.swift */; };
 		C7CC623D2C507A40005D9F48 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C7CC623C2C507A40005D9F48 /* Assets.xcassets */; };
@@ -48,6 +49,8 @@
 		C73A26222C67DFC900890644 /* merge.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; name = merge.sks; path = ../../../../Desktop/merge.sks; sourceTree = "<group>"; };
 		C78A55CB2C602F6700630C56 /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
 		C796E5602C683868002E0423 /* RankingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankingsView.swift; sourceTree = "<group>"; };
+		C796E5622C6BE68E002E0423 /* BootyDrop.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BootyDrop.entitlements; sourceTree = "<group>"; };
+		C796E5632C6BE921002E0423 /* GameCenterManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameCenterManager.swift; sourceTree = "<group>"; };
 		C7CC62352C507A3E005D9F48 /* BootyDrop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BootyDrop.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7CC62382C507A3E005D9F48 /* BootyDropApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BootyDropApp.swift; sourceTree = "<group>"; };
 		C7CC623A2C507A3E005D9F48 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -135,6 +138,7 @@
 		C7CC62372C507A3E005D9F48 /* BootyDrop */ = {
 			isa = PBXGroup;
 			children = (
+				C796E5622C6BE68E002E0423 /* BootyDrop.entitlements */,
 				C7EFD0F32C54338100B883B4 /* Info.plist */,
 				C7CC62382C507A3E005D9F48 /* BootyDropApp.swift */,
 				C7CC62462C508459005D9F48 /* GameScene.swift */,
@@ -152,6 +156,7 @@
 				C73A261F2C67DFBA00890644 /* ripple_ring.png */,
 				C73A26212C67DFC900890644 /* finger_touch.sks */,
 				C73A26222C67DFC900890644 /* merge.sks */,
+				C796E5632C6BE921002E0423 /* GameCenterManager.swift */,
 			);
 			path = BootyDrop;
 			sourceTree = "<group>";
@@ -276,6 +281,7 @@
 				C7FB00442C66A71300C8AC70 /* Image Extensions.swift in Sources */,
 				C78A55CC2C602F6700630C56 /* SettingView.swift in Sources */,
 				C7CC62392C507A3E005D9F48 /* BootyDropApp.swift in Sources */,
+				C796E5642C6BE921002E0423 /* GameCenterManager.swift in Sources */,
 				C7CC625A2C50BAC6005D9F48 /* Shape(Not Used but good to save).swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -407,6 +413,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = BootyDrop/BootyDrop.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"BootyDrop/Preview Content\"";
@@ -437,6 +444,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = BootyDrop/BootyDrop.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"BootyDrop/Preview Content\"";
