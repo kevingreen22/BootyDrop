@@ -16,7 +16,8 @@ struct ContentView: View {
         return scene
     }()
     @State private var showSettings: Bool = false
-
+    @State private var showLeaderboard: Bool = false
+    
     var body: some View {
         VStack(spacing: 0) {
             SpriteView(scene: game)
@@ -24,7 +25,7 @@ struct ContentView: View {
         }.ignoresSafeArea()
         
         .overlay(alignment: .top) {
-            Header(showSettings: $showSettings).environmentObject(game)
+            Header(showSettings: $showSettings, showLeaderboard: $showLeaderboard).environmentObject(game)
         }
         
         .overlay {
@@ -54,6 +55,7 @@ struct ContentView: View {
 struct Header: View {
     @EnvironmentObject var game: GameScene
     @Binding var showSettings: Bool
+    @Binding var showLeaderboard: Bool
     
     var body: some View {
         ZStack {
@@ -70,7 +72,9 @@ struct Header: View {
                 }
                 .overlay(alignment: .topTrailing) {
                     HStack {
-                        Button(action: {}, label: {
+                        Button(action: {
+                            showLeaderboard = true
+                        }, label: {
                             Image("crownButton")
                                 .resizable()
                                 .frame(width: 40, height: 40)
