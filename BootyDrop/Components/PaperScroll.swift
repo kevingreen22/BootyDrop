@@ -17,7 +17,11 @@ struct PaperScroll<Content: View>: View {
     @State private var scrollMiddleHeight: CGFloat = 30
     @State private var scrollMiddleOffset: CGFloat = 0
     @GestureState var dragAmount = CGSize.zero
+    @State private var chevronOffset: CGFloat = 0
+    @State private var isAnimatingChevron: Bool = false
+    @State private var chevronScale: CGFloat = 1
     
+        
     var body: some View {
         ZStack {
             Image("scroll_middle")
@@ -33,11 +37,7 @@ struct PaperScroll<Content: View>: View {
                 .resizable()
                 .scaledToFit()
                 .overlay(alignment: .bottom) {
-                    Image(systemName: "chevron.down")
-                        .resizable()
-                        .foregroundStyle(Color.gray)
-                        .frame(width: 36, height: 15)
-                        .opacity(scrollMiddleHeight == 30 ? 0 : 1)
+                    pullChevron
                 }
                 .offset(y: scrollBottomOffset)
                 .offset(dragAmount)
@@ -54,6 +54,17 @@ struct PaperScroll<Content: View>: View {
         .onAppear {
             openPaperScroll()
         }
+    }
+    
+    var pullChevron: some View {
+        Image(systemName: "chevron.down")
+            .resizable()
+            .foregroundStyle(Color.gray)
+            .frame(width: 36, height: 15)
+            .opacity(scrollMiddleHeight == 30 ? 0 : 1)
+            .offset(y: chevronOffset)
+            .scaleEffect(chevronScale)
+            .animation(.easeInOut(duration: 0.5).repeatForever(autoreverses: true), value: chevronOffset)
     }
     
     var dragToClose: some Gesture {
@@ -112,6 +123,8 @@ struct PaperScroll<Content: View>: View {
                 scrollBottomOffset = (height/2)+18
                 scrollMiddleHeight = height
             }
+            chevronOffset = 5
+            chevronScale = 1.4
         }
     }
     
