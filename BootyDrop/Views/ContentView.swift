@@ -31,6 +31,7 @@ struct ContentView: View {
         .overlay {
             if showSettings {
                 SettingView(showSettings: $showSettings)
+                    .environmentObject(game)
                     .transition(.asymmetric(insertion: .move(edge: .leading), removal: .move(edge: .trailing)))
             }
         }

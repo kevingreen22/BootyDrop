@@ -105,5 +105,7 @@ struct LeaderboardView: View {
 #Preview {
     @State var showLeaderboard: Bool = true
     
-    return LeaderboardView(showLeaderboard: $showLeaderboard)
+    return ZStack {
+        LeaderboardView(showLeaderboard: $showLeaderboard)
+    }
 }

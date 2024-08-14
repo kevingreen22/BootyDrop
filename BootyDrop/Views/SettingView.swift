@@ -10,6 +10,9 @@ import SwiftUI
 struct SettingView: View {
     @Binding var showSettings: Bool
     
+    @EnvironmentObject var game: GameScene
+    
+    
     var body: some View {
         Color.black.opacity(0.7)
             .ignoresSafeArea()
@@ -37,7 +40,9 @@ struct SettingView: View {
                     })
                 }.padding(.bottom, 20)
                 
-                Button(action: {}, label: {
+                Button(action: {
+                    game.resetGame()
+                }, label: {
                     ButtonLabel(imageName: "trophy", title: "Restart")
                 }).buttonStyle(.borderedProminent)
                 
@@ -62,8 +67,16 @@ struct SettingView: View {
 }
 
 #Preview {
+    @StateObject var game: GameScene = {
+        let scene = GameScene()
+        scene.size = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+        return scene
+    }()
     @State var showSettings: Bool = true
     
-    return SettingView(showSettings: $showSettings)
+    return ZStack {
+        SettingView(showSettings: $showSettings)
+            .environmentObject(game)
+    }
 }
 

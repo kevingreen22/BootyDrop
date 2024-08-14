@@ -19,6 +19,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     private var dropObject: SKNode!
     private var dropGuide: SKNode!
     private var lastDropPosition: CGPoint?
+    
     private let dropY: CGFloat = 640
     private let dashSize = CGSize(width: 3, height: 60)
 //    private var physicsBodies: PhysicsBodies!
@@ -142,6 +143,31 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     
     
 // MARK: Helper Methods
+    
+    func resetGame() {
+        // Remove all drop-objects
+        scene?.children.forEach({ node in
+            if node.name != "background" || node.name != dropGuide.name || node.name != startLine.name {
+                if let child = node as? SKSpriteNode {
+                    child.removeFromParent()
+                }
+            }
+        })
+        
+        // reset drop position
+        lastDropPosition = nil
+        
+        // Reset timer
+        timer?.invalidate()
+        timer = nil
+        
+        // Reset score
+        score = 0
+        
+        // Reset gameOverTime amount
+        gameOverTime = 20
+        
+    }
     
     func startGameEndingSequence(_ scene: SKScene) {
 //        print("\(type(of: self)).\(#function)")
