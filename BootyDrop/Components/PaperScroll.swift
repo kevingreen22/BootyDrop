@@ -32,6 +32,13 @@ struct PaperScroll<Content: View>: View {
             Image("scroll_bottom")
                 .resizable()
                 .scaledToFit()
+                .overlay(alignment: .bottom) {
+                    Image(systemName: "chevron.down")
+                        .resizable()
+                        .foregroundStyle(Color.gray)
+                        .frame(width: 36, height: 15)
+                        .opacity(scrollMiddleHeight == 30 ? 0 : 1)
+                }
                 .offset(y: scrollBottomOffset)
                 .offset(dragAmount)
                 .gesture(dragToClose)
@@ -114,33 +121,38 @@ struct PaperScroll<Content: View>: View {
 #Preview {
     @State var showSettings: Bool = true
     
-    return PaperScroll(show: $showSettings) {
-        VStack {
-            Text("Settings")
-                .font(.custom(CustomFont.rum, size: 30, relativeTo: .largeTitle))
-                .pirateShadow()
-            
-            VStack(spacing: 18) {
-                Button(action: {
+    return ZStack {
+        Color.black.opacity(0.7)
+            .ignoresSafeArea()
+            .transition(.opacity)
+        PaperScroll(show: $showSettings) {
+            VStack {
+                Text("Settings")
+                    .font(.custom(CustomFont.rum, size: 30, relativeTo: .largeTitle))
+                    .pirateShadow()
+                
+                VStack(spacing: 18) {
+                    Button(action: {
+                        
+                    }, label: {
+                        ButtonLabel(imageName: "trophy", title: "Music")
+                    })
                     
-                }, label: {
-                    ButtonLabel(imageName: "trophy", title: "Music")
-                })
+                    Button(action: {}, label: {
+                        ButtonLabel(imageName: "trophy", title: "Sound")
+                    })
+                    
+                    Button(action: {}, label: {
+                        ButtonLabel(imageName: "trophy", title: "Vibrate")
+                    })
+                    
+                }.padding(.bottom, 20)
                 
                 Button(action: {}, label: {
-                    ButtonLabel(imageName: "trophy", title: "Sound")
+                    ButtonLabel(imageName: "trophy", title: "Restart")
                 })
-                
-                Button(action: {}, label: {
-                    ButtonLabel(imageName: "trophy", title: "Vibrate")
-                })
-                
-            }.padding(.bottom, 20)
-            
-            Button(action: {}, label: {
-                ButtonLabel(imageName: "trophy", title: "Restart")
-            })
-            .buttonStyle(.borderedProminent)
+                .buttonStyle(.borderedProminent)
+            }
         }
     }
     
