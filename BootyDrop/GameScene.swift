@@ -1,6 +1,6 @@
 //
 //  GameScene.swift
-//  BallDrop
+//  BootyDrop
 //
 //  Created by Kevin Green on 7/15/24.
 //
@@ -10,23 +10,24 @@ import SwiftUI
 import UIKit
 import SpriteKit
 
-// A simple game scene with falling balls
+// A simple game scene with falling pirate booty.
 class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     @Published var score: Int = 0
     @Published var nextDropObject: DropObject = .init(size: DropObjectSize.random)
-    
-    static let backgoundColor: UIColor = .clear
-    
+        
+    private var startLine: SKShapeNode!
     private var dropObject: SKNode!
     private var dropGuide: SKNode!
     private var lastDropPosition: CGPoint?
     private let dropY: CGFloat = 640
     private let dashSize = CGSize(width: 3, height: 60)
-    
 //    private var physicsBodies: PhysicsBodies!
+    private var timer: Timer?
+    private var gameOverTime: Int = 20
     
     
-    // MARK: SKScene
+// MARK: SKScene
+    
     override func didMove(to view: SKView) {
         /* Setup scene here */
 //        print("\(type(of: self)).\(#function)")
@@ -46,16 +47,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         
         dropGuide = createDropGuide(position: CGPoint(x: scene.frame.width/2, y: 0))
         
-//        addBackgroundTopCutImage(position: CGPoint(x: scene.frame.width/2, y: scene.frame.height/2), scene: scene)
-        
-        addChild(sceneHeader(position: CGPoint(x: position.x, y: scene.frame.height-dashSize.height-15), size: CGSize(width: scene.frame.width*2, height: scene.frame.height-dropY)))
-        
         dropObject = addDropObjectNode(dropObjectSize: .random, position: CGPoint(x: scene.frame.width/2, y: dropY))
                 
-//        addBottomLine()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        print("\(type(of: self)).\(#function)")
         guard let touch = touches.first else { return }
         let location = CGPoint(x: touch.location(in: self).x, y: dropY)
         dropObject.position = location
@@ -63,6 +60,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        print("\(type(of: self)).\(#function)")
         guard let scene else { return }
         guard let touch = touches.first else { return }
         let location = CGPoint(x: touch.location(in: self).x, y: dropY)
@@ -70,7 +68,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         dropObject.position = location
         dropGuide.position.x = location.x
         
-        // Makes it so that the ball does not go beyond the scene/screen's edge/
+        // Makes it so that the drop-object does not go beyond the scene/screen's edge/
         if dropObject.frame.minX < scene.frame.minX {
             dropObject.position.x = scene.frame.minX + (dropObject.frame.width/2)
             dropGuide.position.x = dropObject.position.x
@@ -117,9 +115,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         }
     }
     
+    override func update(_ currentTime: TimeInterval) {
+        guard let scene = scene else { return }
+        startGameEndingSequence(scene)
+    }
     
     
-    // MARK: SKPhysicsContactDelegate
+// MARK: SKPhysicsContactDelegate
 
     // Called when there is a collision
     func didBegin(_ contact: SKPhysicsContact) {
@@ -139,7 +141,47 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     
     
     
-    // MARK: Helper Methods
+// MARK: Helper Methods
+    
+    func startGameEndingSequence(_ scene: SKScene) {
+//        print("\(type(of: self)).\(#function)")
+        // if any drop object's y position is greater than or equal to the start line,
+        if !scene.children.filter({
+            $0 != dropObject &&
+            $0.name != "background" &&
+            $0.name != dropGuide.name &&
+            $0.name != startLine.name &&
+            $0.position.y <= startLine.position.y
+        }).isEmpty {
+            // Then start a timer (turn start line color red)
+            if timer == nil {
+                startLine.strokeColor = .red
+                print("creating timer")
+                timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] timer in
+                    print("timer running \(timer)")
+                    // When the timer runs out the game ends.
+                    self?.gameOverTime -= 1
+                    
+                    if self?.gameOverTime == 0 {
+                        self?.timer?.invalidate()
+                        self?.timer = nil
+                        self?.gameOverTime = 20
+                        self?.startLine.strokeColor = .darkGray
+                    }
+                }
+                RunLoop.current.add(timer!, forMode: .common)
+            }
+        } else {
+            // If all drop-objects fall below the start line, then invalidate the timer
+            if timer != nil {
+                print("invalidating timer")
+                timer?.invalidate()
+                timer = nil
+                self.gameOverTime = 20
+                self.startLine.strokeColor = .darkGray
+            }
+        }
+    }
     
     func collision(between objectA: SKNode, objectB: SKNode) {
 //        print("\(type(of: self)).\(#function)")
@@ -172,12 +214,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     }
     
     @discardableResult private func addDropObjectNode(dropObjectSize: DropObjectSize, position: CGPoint, isDynamic: Bool = false) -> SKSpriteNode? {
+//        print("\(type(of: self)).\(#function)")
         let dropObject = DropObject(size: dropObjectSize)
         let texture = SKTexture(imageNamed: dropObject.imageName.rawValue)
         let node = SKSpriteNode(texture: texture, size: dropObject.size)
-        node.physicsBody = SKPhysicsBody(texture: texture, size: dropObject.size) 
+        
+        node.physicsBody = SKPhysicsBody(texture: texture, size: dropObject.size)
         #warning("This next line replaces the above line. Make sure to fix the actual image file's sizes to their respective size (in points). Otherwise the size of the objects as your playing the game are all wrong.")
         // node.physicsBody = physicsBodies.getPhysicsBody(for: dropObject.imageName)
+        
         node.physicsBody?.restitution = 0
         node.physicsBody?.friction = 0.7
         node.physicsBody?.angularDamping = 6
@@ -187,14 +232,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         node.position = position
         node.name = dropObject.idName
         
-        #warning("temp label")
-//        let label = SKLabelNode(fontNamed: "Verdana")
-//        label.text = "\(ball.frame.width)"
-//        label.fontSize = 18
-//        label.position = CGPoint(x: 0, y: 0)
-//        dropObject.addChild(label)
-        
-//        print("adding ball")
         addChild(node)
         return node
     }
@@ -204,31 +241,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         background.position = position
         background.size = scene.frame.size
         background.zPosition = -2
-        addChild(background)
-    }
-    
-    private func addBackgroundTopCutImage(position: CGPoint, scene: SKScene) {
-        let background = SKSpriteNode(imageNamed: "background.jpg")
-        background.position = position
-        background.size = CGSize(width: scene.frame.width, height: abs(scene.frame.width - dropY))
-        background.zPosition = 1
+        background.name = "background"
         addChild(background)
     }
     
     private func addStartLine() {
-        let startLine = SKShapeNode(rect: CGRect(x: 0, y: dropY, width: UIScreen.main.bounds.width, height: 1))
-        startLine.strokeColor = .black
-        startLine.fillColor = .black
+        startLine = SKShapeNode(rect: CGRect(x: 0, y: dropY, width: UIScreen.main.bounds.width, height: 1))
+        startLine.strokeColor = .darkGray
+//        startLine.fillColor = .darkGray
+        startLine.name = "start_line"
         addChild(startLine)
     }
-    
-    private func addBottomLine() {
-        let bottomLine = SKShapeNode(rect: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 3))
-        bottomLine.strokeColor = .black
-        bottomLine.fillColor = .black
-        addChild(bottomLine)
-    }
-    
+        
     private func createDropGuide(position: CGPoint) -> SKNode {
         let guideLine = SKSpriteNode(color: .clear, size: CGSize(width: 3, height: dropY))
         guideLine.position.x = position.x
@@ -268,32 +292,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         return dash
     }
     
-    private func sceneHeader(position: CGPoint, size: CGSize) -> SKNode {
-        let header = SKSpriteNode(color: GameScene.backgoundColor, size: size)
-        header.name = "header"
-        header.position = position
-        return header
-    }
-    
     private func incrementScore(with dropObjectSize: DropObjectSize) {
-        print("score increated \(Int(Double(dropObjectSize.rawValue)*0.1))")
+//        print("\(type(of: self)).\(#function).score_increased:\(Int(Double(dropObjectSize.rawValue)*0.1))")
         score += Int(Double(dropObjectSize.rawValue)*0.1)
     }
     
-    /// THIS FIXES THE NEXT OBJECT'S EDGE OVERLAY. So the new ball does not extend beyond the edge of the scene/screen
+    /// THIS FIXES THE NEXT OBJECT'S EDGE OVERLAY. So the new drop object bounds does not extend beyond the edge of the scene/screen
     private func calculateLastDropPositionForLargerDropObject(in scene: SKScene) {
+        print("\(type(of: self)).\(#function)")
         if self.lastDropPosition != nil {
-            // Check if next ballsize is bigger or smaller than previous
+            // Check if next drop-object size is bigger or smaller than previous
             if nextDropObject.dropObjectSize > dropObject.dropObjectSize {
                                     
                 // Check for leading edge of scene frame
                 if lastDropPosition!.x - (nextDropObject.dropObjectSize.rawValue/2) <= scene.frame.minX {
-                    // add half the size of the nextBallSize to the lastDropPosition
+                    // add half the size of the next drop-object size to the lastDropPosition
                     self.lastDropPosition!.x += abs(self.dropObject.dropObjectSize.rawValue/2 - nextDropObject.dropObjectSize.rawValue/2)
                     
                 // Check for trailing edge of scene
                 } else if lastDropPosition!.x + (nextDropObject.dropObjectSize.rawValue/2) >= scene.frame.maxX {
-                    // subtract half the size of the nextBallSize to the lastDropPosition
+                    // subtract half the size of the next drop-object size to the lastDropPosition
                     self.lastDropPosition!.x -= abs(self.dropObject.dropObjectSize.rawValue/2 - nextDropObject.dropObjectSize.rawValue/2)
                 }
             }
@@ -578,4 +596,20 @@ class PhysicsBodies {
         skullPhysics = SKPhysicsBody(texture: skullTexture, size: skullTexture.size())
 
     }
+}
+
+
+
+
+
+
+#Preview {
+    @StateObject var game: GameScene = {
+        let scene = GameScene()
+        scene.size = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+        return scene
+    }()
+    
+    return ContentView()
+        .environmentObject(game)
 }

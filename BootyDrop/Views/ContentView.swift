@@ -1,6 +1,6 @@
 //
 //  ContentView.swift
-//  BallDrop
+//  BootyDrop
 //
 //  Created by Kevin Green on 7/15/24.
 //
@@ -12,7 +12,7 @@ struct ContentView: View {
     @StateObject var game: GameScene = {
         let scene = GameScene(size: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
         scene.scaleMode = .fill
-        scene.backgroundColor = GameScene.backgoundColor
+//        scene.backgroundColor = GameScene.backgoundColor
         return scene
     }()
     @State private var showSettings: Bool = false
@@ -48,7 +48,6 @@ struct ContentView: View {
     @StateObject var game: GameScene = {
         let scene = GameScene()
         scene.size = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-        scene.backgroundColor = GameScene.backgoundColor
         return scene
     }()
     
