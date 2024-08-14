@@ -34,6 +34,13 @@ struct ContentView: View {
                     .transition(.asymmetric(insertion: .move(edge: .leading), removal: .move(edge: .trailing)))
             }
         }
+        
+        .overlay {
+            if showLeaderboard {
+                LeaderboardView(showLeaderboard: $showLeaderboard)
+                    .transition(.asymmetric(insertion: .move(edge: .leading), removal: .move(edge: .trailing)))
+            }
+        }
     }
 }
 
@@ -73,14 +80,16 @@ struct Header: View {
                 .overlay(alignment: .topTrailing) {
                     HStack {
                         Button(action: {
-                            showLeaderboard = true
+                            withAnimation(.easeInOut) {
+                                showLeaderboard = true
+                            }
                         }, label: {
                             Image("crownButton")
                                 .resizable()
                                 .frame(width: 40, height: 40)
                         })
                         Button(action: {
-                            withAnimation(.bouncy) {
+                            withAnimation(.easeInOut) {
                                 showSettings = true
                             }
                         }, label: {

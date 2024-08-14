@@ -11,8 +11,10 @@ struct SettingView: View {
     @Binding var showSettings: Bool
     
     var body: some View {
-        Color.black.opacity(0.7).ignoresSafeArea()
+        Color.black.opacity(0.7)
+            .ignoresSafeArea()
             .transition(.opacity)
+        
         PaperScroll(show: $showSettings) {
             VStack {
                 Text("Settings")
@@ -41,7 +43,7 @@ struct SettingView: View {
                 
             }.padding(.vertical, 16)
         }
-            .pirateShadow(y: 24)
+        .pirateShadow(y: 24)
     }
     
     func ButtonLabel(imageName: String, title: String, frame: CGSize? = nil) -> some View {

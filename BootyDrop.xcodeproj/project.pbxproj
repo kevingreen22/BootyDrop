@@ -11,7 +11,7 @@
 		C75850D82C6C27DC001C6A05 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7CC62462C508459005D9F48 /* GameScene.swift */; };
 		C75850D92C6C27DC001C6A05 /* GameCenterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C796E5632C6BE921002E0423 /* GameCenterManager.swift */; };
 		C75850DA2C6C27DC001C6A05 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7CC623A2C507A3E005D9F48 /* ContentView.swift */; };
-		C75850DB2C6C27DC001C6A05 /* RankingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C796E5602C683868002E0423 /* RankingsView.swift */; };
+		C75850DB2C6C27DC001C6A05 /* LeaderboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C796E5602C683868002E0423 /* LeaderboardView.swift */; };
 		C75850DC2C6C27DC001C6A05 /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78A55CB2C602F6700630C56 /* SettingView.swift */; };
 		C75850DD2C6C27DC001C6A05 /* PaperScroll.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7FB00412C66A47B00C8AC70 /* PaperScroll.swift */; };
 		C75850DE2C6C27DC001C6A05 /* Image Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7FB00432C66A71300C8AC70 /* Image Extensions.swift */; };
@@ -45,7 +45,7 @@
 
 /* Begin PBXFileReference section */
 		C78A55CB2C602F6700630C56 /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
-		C796E5602C683868002E0423 /* RankingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankingsView.swift; sourceTree = "<group>"; };
+		C796E5602C683868002E0423 /* LeaderboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderboardView.swift; sourceTree = "<group>"; };
 		C796E5622C6BE68E002E0423 /* BootyDrop.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BootyDrop.entitlements; sourceTree = "<group>"; };
 		C796E5632C6BE921002E0423 /* GameCenterManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameCenterManager.swift; sourceTree = "<group>"; };
 		C7CC62352C507A3E005D9F48 /* BootyDrop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BootyDrop.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -177,7 +177,7 @@
 			isa = PBXGroup;
 			children = (
 				C7CC623A2C507A3E005D9F48 /* ContentView.swift */,
-				C796E5602C683868002E0423 /* RankingsView.swift */,
+				C796E5602C683868002E0423 /* LeaderboardView.swift */,
 				C78A55CB2C602F6700630C56 /* SettingView.swift */,
 			);
 			path = Views;
@@ -302,7 +302,7 @@
 				C75850D82C6C27DC001C6A05 /* GameScene.swift in Sources */,
 				C75850D92C6C27DC001C6A05 /* GameCenterManager.swift in Sources */,
 				C75850DA2C6C27DC001C6A05 /* ContentView.swift in Sources */,
-				C75850DB2C6C27DC001C6A05 /* RankingsView.swift in Sources */,
+				C75850DB2C6C27DC001C6A05 /* LeaderboardView.swift in Sources */,
 				C75850DC2C6C27DC001C6A05 /* SettingView.swift in Sources */,
 				C75850DD2C6C27DC001C6A05 /* PaperScroll.swift in Sources */,
 				C75850DE2C6C27DC001C6A05 /* Image Extensions.swift in Sources */,
