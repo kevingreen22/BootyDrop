@@ -7,6 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C75850D72C6C27DC001C6A05 /* BootyDropApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7CC62382C507A3E005D9F48 /* BootyDropApp.swift */; };
+		C75850D82C6C27DC001C6A05 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7CC62462C508459005D9F48 /* GameScene.swift */; };
+		C75850D92C6C27DC001C6A05 /* GameCenterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C796E5632C6BE921002E0423 /* GameCenterManager.swift */; };
+		C75850DA2C6C27DC001C6A05 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7CC623A2C507A3E005D9F48 /* ContentView.swift */; };
+		C75850DB2C6C27DC001C6A05 /* RankingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C796E5602C683868002E0423 /* RankingsView.swift */; };
+		C75850DC2C6C27DC001C6A05 /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78A55CB2C602F6700630C56 /* SettingView.swift */; };
+		C75850DD2C6C27DC001C6A05 /* PaperScroll.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7FB00412C66A47B00C8AC70 /* PaperScroll.swift */; };
+		C75850DE2C6C27DC001C6A05 /* Image Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7FB00432C66A71300C8AC70 /* Image Extensions.swift */; };
+		C75850DF2C6C27DC001C6A05 /* CustomFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7EFD0F42C5433CE00B883B4 /* CustomFonts.swift */; };
+		C75850E02C6C2836001C6A05 /* Shape(Not Used but good to save).swift in Sources */ = {isa = PBXBuildFile; fileRef = C7CC62592C50BAC6005D9F48 /* Shape(Not Used but good to save).swift */; };
 		C7CC623D2C507A40005D9F48 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C7CC623C2C507A40005D9F48 /* Assets.xcassets */; };
 		C7CC62402C507A40005D9F48 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C7CC623F2C507A40005D9F48 /* Preview Assets.xcassets */; };
 		C7DDA40A2C559E27005E6663 /* potion.png in Resources */ = {isa = PBXBuildFile; fileRef = C7DDA4012C559E25005E6663 /* potion.png */; };
@@ -131,10 +141,11 @@
 				C796E5622C6BE68E002E0423 /* BootyDrop.entitlements */,
 				C7CC62382C507A3E005D9F48 /* BootyDropApp.swift */,
 				C7CC62462C508459005D9F48 /* GameScene.swift */,
+				C796E5632C6BE921002E0423 /* GameCenterManager.swift */,
 				C7FB73592C6C10C500DC4DBB /* Views */,
 				C7FB00452C66A73400C8AC70 /* Components */,
-				C7FB735A2C6C10F600DC4DBB /* Font */,
 				C7FB735B2C6C110F00DC4DBB /* Helper Files */,
+				C7FB735A2C6C10F600DC4DBB /* Font */,
 				C78A55CA2C602CB100630C56 /* Images */,
 				C7CC623C2C507A40005D9F48 /* Assets.xcassets */,
 				C7EFD0F32C54338100B883B4 /* Info.plist */,
@@ -142,7 +153,6 @@
 				C7FB735D2C6C117000DC4DBB /* merge.sks */,
 				C7FB735E2C6C117000DC4DBB /* ripple_ring.png */,
 				C7CC623E2C507A40005D9F48 /* Preview Content */,
-				C796E5632C6BE921002E0423 /* GameCenterManager.swift */,
 			);
 			path = BootyDrop;
 			sourceTree = "<group>";
@@ -200,6 +210,7 @@
 			buildPhases = (
 				C7CC62322C507A3E005D9F48 /* Frameworks */,
 				C7CC62332C507A3E005D9F48 /* Resources */,
+				C75850D62C6C27B9001C6A05 /* Sources */,
 			);
 			buildRules = (
 			);
@@ -280,6 +291,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C75850D62C6C27B9001C6A05 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C75850E02C6C2836001C6A05 /* Shape(Not Used but good to save).swift in Sources */,
+				C75850D72C6C27DC001C6A05 /* BootyDropApp.swift in Sources */,
+				C75850D82C6C27DC001C6A05 /* GameScene.swift in Sources */,
+				C75850D92C6C27DC001C6A05 /* GameCenterManager.swift in Sources */,
+				C75850DA2C6C27DC001C6A05 /* ContentView.swift in Sources */,
+				C75850DB2C6C27DC001C6A05 /* RankingsView.swift in Sources */,
+				C75850DC2C6C27DC001C6A05 /* SettingView.swift in Sources */,
+				C75850DD2C6C27DC001C6A05 /* PaperScroll.swift in Sources */,
+				C75850DE2C6C27DC001C6A05 /* Image Extensions.swift in Sources */,
+				C75850DF2C6C27DC001C6A05 /* CustomFonts.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
 		C7CC62412C507A40005D9F48 /* Debug */ = {
