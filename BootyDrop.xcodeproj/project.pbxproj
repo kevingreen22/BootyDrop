@@ -16,7 +16,7 @@
 		C75850DD2C6C27DC001C6A05 /* PaperScroll.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7FB00412C66A47B00C8AC70 /* PaperScroll.swift */; };
 		C75850DE2C6C27DC001C6A05 /* Image Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7FB00432C66A71300C8AC70 /* Image Extensions.swift */; };
 		C75850DF2C6C27DC001C6A05 /* CustomFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7EFD0F42C5433CE00B883B4 /* CustomFonts.swift */; };
-		C75850E02C6C2836001C6A05 /* Shape(Not Used but good to save).swift in Sources */ = {isa = PBXBuildFile; fileRef = C7CC62592C50BAC6005D9F48 /* Shape(Not Used but good to save).swift */; };
+		C75850E02C6C2836001C6A05 /* Shape.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7CC62592C50BAC6005D9F48 /* Shape.swift */; };
 		C7CC623D2C507A40005D9F48 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C7CC623C2C507A40005D9F48 /* Assets.xcassets */; };
 		C7CC62402C507A40005D9F48 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C7CC623F2C507A40005D9F48 /* Preview Assets.xcassets */; };
 		C7DDA40A2C559E27005E6663 /* potion.png in Resources */ = {isa = PBXBuildFile; fileRef = C7DDA4012C559E25005E6663 /* potion.png */; };
@@ -54,7 +54,7 @@
 		C7CC623C2C507A40005D9F48 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C7CC623F2C507A40005D9F48 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		C7CC62462C508459005D9F48 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
-		C7CC62592C50BAC6005D9F48 /* Shape(Not Used but good to save).swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Shape(Not Used but good to save).swift"; sourceTree = "<group>"; };
+		C7CC62592C50BAC6005D9F48 /* Shape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shape.swift; sourceTree = "<group>"; };
 		C7DDA4012C559E25005E6663 /* potion.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = potion.png; sourceTree = "<group>"; };
 		C7DDA4022C559E26005E6663 /* skull.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = skull.png; sourceTree = "<group>"; };
 		C7DDA4032C559E26005E6663 /* gem3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gem3.png; sourceTree = "<group>"; };
@@ -143,7 +143,6 @@
 				C7CC62462C508459005D9F48 /* GameScene.swift */,
 				C796E5632C6BE921002E0423 /* GameCenterManager.swift */,
 				C7FB73592C6C10C500DC4DBB /* Views */,
-				C7FB00452C66A73400C8AC70 /* Components */,
 				C7FB735B2C6C110F00DC4DBB /* Helper Files */,
 				C7FB735A2C6C10F600DC4DBB /* Font */,
 				C78A55CA2C602CB100630C56 /* Images */,
@@ -179,6 +178,7 @@
 				C7CC623A2C507A3E005D9F48 /* ContentView.swift */,
 				C796E5602C683868002E0423 /* LeaderboardView.swift */,
 				C78A55CB2C602F6700630C56 /* SettingView.swift */,
+				C7FB00452C66A73400C8AC70 /* Components */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -196,7 +196,7 @@
 			isa = PBXGroup;
 			children = (
 				C7FB00432C66A71300C8AC70 /* Image Extensions.swift */,
-				C7CC62592C50BAC6005D9F48 /* Shape(Not Used but good to save).swift */,
+				C7CC62592C50BAC6005D9F48 /* Shape.swift */,
 			);
 			path = "Helper Files";
 			sourceTree = "<group>";
@@ -297,7 +297,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C75850E02C6C2836001C6A05 /* Shape(Not Used but good to save).swift in Sources */,
+				C75850E02C6C2836001C6A05 /* Shape.swift in Sources */,
 				C75850D72C6C27DC001C6A05 /* BootyDropApp.swift in Sources */,
 				C75850D82C6C27DC001C6A05 /* GameScene.swift in Sources */,
 				C75850D92C6C27DC001C6A05 /* GameCenterManager.swift in Sources */,
