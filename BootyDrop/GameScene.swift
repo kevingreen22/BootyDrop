@@ -46,7 +46,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         
         addStartLine()
         
-        dropGuide = createDropGuide(position: CGPoint(x: scene.frame.width/2, y: 0))
+        dropGuide = createDropGuide(xPosition: scene.frame.width/2)
         
         dropObject = addDropObjectNode(dropObjectSize: .random, position: CGPoint(x: scene.frame.width/2, y: dropY))
                 
@@ -147,7 +147,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     func resetGame() {
         // Remove all drop-objects
         scene?.children.forEach({ node in
-            if node.name != "background" || node.name != dropGuide.name || node.name != startLine.name {
+            if node.name != "background" && node.name != dropGuide.name && node.name != startLine.name {
                 if let child = node as? SKSpriteNode {
                     child.removeFromParent()
                 }
@@ -166,6 +166,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         
         // Reset gameOverTime amount
         gameOverTime = 20
+        
+        // Reset first drop-object
+        dropObject = addDropObjectNode(dropObjectSize: .random, position: CGPoint(x: (scene?.frame.width ?? 450)/2, y: dropY))
+        dropGuide.position.x = (scene?.frame.width ?? 450)/2
         
     }
     
@@ -279,9 +283,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         addChild(startLine)
     }
         
-    private func createDropGuide(position: CGPoint) -> SKNode {
+    private func createDropGuide(xPosition: Double) -> SKNode {
         let guideLine = SKSpriteNode(color: .clear, size: CGSize(width: 3, height: dropY))
-        guideLine.position.x = position.x
+        guideLine.position.x = xPosition
         guideLine.position.y = dropY/2
         guideLine.name = "guide_line"
         

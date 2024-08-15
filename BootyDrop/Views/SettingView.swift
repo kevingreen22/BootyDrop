@@ -42,6 +42,9 @@ struct SettingView: View {
                 
                 Button(action: {
                     game.resetGame()
+                    withAnimation(.easeInOut) {
+                        showSettings = false
+                    }
                 }, label: {
                     ButtonLabel(imageName: "trophy", title: "Restart")
                 }).buttonStyle(.borderedProminent)

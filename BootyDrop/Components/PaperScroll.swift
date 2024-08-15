@@ -56,7 +56,7 @@ struct PaperScroll<Content: View>: View {
         }
     }
     
-    var pullChevron: some View {
+    private var pullChevron: some View {
         Image(systemName: "chevron.down")
             .resizable()
             .foregroundStyle(Color.gray)
@@ -67,7 +67,7 @@ struct PaperScroll<Content: View>: View {
             .animation(.easeInOut(duration: 0.5).repeatForever(autoreverses: true), value: chevronOffset)
     }
     
-    var dragToClose: some Gesture {
+    private var dragToClose: some Gesture {
         return DragGesture()
             .onChanged { value in
                 // only allow drag after the paper scroll is opened.
@@ -94,7 +94,7 @@ struct PaperScroll<Content: View>: View {
             }
     }
     
-    var tapToClose: some Gesture {
+    private var tapToClose: some Gesture {
         TapGesture(count: 1)
             .onEnded { value in
                 dismissPaperScroll()
@@ -138,6 +138,7 @@ struct PaperScroll<Content: View>: View {
         Color.black.opacity(0.7)
             .ignoresSafeArea()
             .transition(.opacity)
+        
         PaperScroll(show: $showSettings) {
             VStack {
                 Text("Settings")
