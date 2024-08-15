@@ -12,11 +12,11 @@ struct ContentView: View {
     @StateObject var game: GameScene = {
         let scene = GameScene(size: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
         scene.scaleMode = .fill
-//        scene.backgroundColor = GameScene.backgoundColor
         return scene
     }()
     @State private var showSettings: Bool = false
-    @State private var showLeaderboard: Bool = false
+    @State private var showRankings: Bool = false
+    
     
     var body: some View {
         VStack(spacing: 0) {
@@ -25,8 +25,9 @@ struct ContentView: View {
         }.ignoresSafeArea()
         
         .overlay(alignment: .top) {
-            Header(showSettings: $showSettings, showLeaderboard: $showLeaderboard).environmentObject(game)
-        }
+            Header(showSettings: $showSettings, showRankings: $showRankings)
+                .environmentObject(game)
+        } // Header View
         
         .overlay {
             if showSettings {
@@ -34,14 +35,14 @@ struct ContentView: View {
                     .environmentObject(game)
                     .transition(.asymmetric(insertion: .move(edge: .leading), removal: .move(edge: .trailing)))
             }
-        }
+        } // Settings View
         
         .overlay {
-            if showLeaderboard {
-                LeaderboardView(showLeaderboard: $showLeaderboard)
+            if showRankings {
+                RankingsView(showRankings: $showRankings)
                     .transition(.asymmetric(insertion: .move(edge: .leading), removal: .move(edge: .trailing)))
             }
-        }
+        } // Rankings View
     }
 }
 
@@ -57,12 +58,14 @@ struct ContentView: View {
 }
 
 
+
+
 // MARK: Views
 
 struct Header: View {
     @EnvironmentObject var game: GameScene
     @Binding var showSettings: Bool
-    @Binding var showLeaderboard: Bool
+    @Binding var showRankings: Bool
     
     var body: some View {
         ZStack {
@@ -79,24 +82,8 @@ struct Header: View {
                 }
                 .overlay(alignment: .topTrailing) {
                     HStack {
-                        Button(action: {
-                            withAnimation(.easeInOut) {
-                                showLeaderboard = true
-                            }
-                        }, label: {
-                            Image("crownButton")
-                                .resizable()
-                                .frame(width: 40, height: 40)
-                        })
-                        Button(action: {
-                            withAnimation(.easeInOut) {
-                                showSettings = true
-                            }
-                        }, label: {
-                            Image("settingsButton")
-                                .resizable()
-                                .frame(width: 40, height: 40)
-                        })
+                        RankingsButton($showRankings)
+                        SettingsButton($showSettings)
                     }
                     .padding([.top, .trailing])
                 }
@@ -195,22 +182,3 @@ struct Footer: View {
 }
 
 
-
-
-
-
-
-
-private struct PirateShadow: ViewModifier {
-    var x: CGFloat = 0
-    var y: CGFloat = 0
-    func body(content: Content) -> some View {
-        content.shadow(color: .black.opacity(0.4), radius: 5, x: x, y: y)
-    }
-}
-
-extension View {
-    func pirateShadow(x: CGFloat = 0, y: CGFloat = 0) -> some View {
-        self.modifier(PirateShadow(x: x, y: y))
-    }
-}

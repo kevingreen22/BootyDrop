@@ -20,53 +20,25 @@ struct SettingView: View {
         
         PaperScroll(show: $showSettings) {
             VStack {
-                Text("Settings")
-                    .font(.custom(CustomFont.rum, size: 30, relativeTo: .largeTitle))
-                    .pirateShadow()
+                PirateText("Settings")
                 
                 VStack {
-                    Button(action: {
-                        
-                    }, label: {
-                        ButtonLabel(imageName: "trophy", title: "Music")
-                    })
-                    
-                    Button(action: {}, label: {
-                        ButtonLabel(imageName: "trophy", title: "Sound")
-                    })
-                    
-                    Button(action: {}, label: {
-                        ButtonLabel(imageName: "trophy", title: "Vibrate")
-                    })
+                    MusicButton()
+                    SoundButton()
+                    VibrateButton()
                 }.padding(.bottom, 20)
                 
-                Button(action: {
+                RestartButton() {
                     game.resetGame()
                     withAnimation(.easeInOut) {
                         showSettings = false
                     }
-                }, label: {
-                    ButtonLabel(imageName: "trophy", title: "Restart")
-                }).buttonStyle(.borderedProminent)
+                }
                 
             }.padding(.vertical, 16)
         }
         .pirateShadow(y: 24)
-    }
-    
-    func ButtonLabel(imageName: String, title: String, frame: CGSize? = nil) -> some View {
-        VStack {
-            Image(imageName)
-                .resizable()
-                .frame(width: frame?.width ?? 20, height: frame?.height ?? 20)
-            Text(title)
-                .font(.custom(CustomFont.rum, size: 16, relativeTo: .subheadline))
-                .foregroundStyle(Color.orange.gradient)
-                .pirateShadow(y: 4)
-            
-        }
-    }
-    
+    }    
 }
 
 #Preview {

@@ -1,5 +1,5 @@
 //
-//  LeaderboardView.swift
+//  RankingsViewView.swift
 //  BootyDrop
 //
 //  Created by Kevin Green on 8/10/24.
@@ -8,8 +8,8 @@
 import SwiftUI
 import GameKit
 
-struct LeaderboardView: View {
-    @Binding var showLeaderboard: Bool
+struct RankingsView: View {
+    @Binding var showRankings: Bool
     
     @State private var leaderboardEntries: (GKLeaderboard.Entry?, [GKLeaderboard.Entry], Int) = (nil,[],0)
     let accessPoint = GKAccessPoint.shared
@@ -20,30 +20,28 @@ struct LeaderboardView: View {
             .ignoresSafeArea()
             .transition(.opacity)
         
-        PaperScroll(show: $showLeaderboard) {
+        PaperScroll(show: $showRankings) {
             VStack {
                 VStack {
-                    Text("Leaderboard")
-                        .font(.custom(CustomFont.rum, size: 26, relativeTo: .largeTitle))
-                        .pirateShadow()
+                    PirateText("Rankings")
                     
                     HStack {
                         Button(action: {
                             
                         }, label: {
-                            ButtonLabel(imageName: "trophy", title: "Today")
+                            HM.ButtonLabel(imageName: "trophy", title: "Today")
                         })
                         
                         Button(action: {
                             
                         }, label: {
-                            ButtonLabel(imageName: "trophy", title: "Weekly")
+                            HM.ButtonLabel(imageName: "trophy", title: "Weekly")
                         })
                         
                         Button(action: {
                             
                         }, label: {
-                            ButtonLabel(imageName: "trophy", title: "All-time")
+                            HM.ButtonLabel(imageName: "trophy", title: "All-time")
                         })
                     }.padding(.bottom, 8)
                     
@@ -69,7 +67,7 @@ struct LeaderboardView: View {
                 Button {
                     accessPoint.isActive.toggle()
                 } label: {
-                    ButtonLabel(imageName: "trophy", title: "Game Center")
+                    HM.ButtonLabel(imageName: "trophy", title: "Leaderboards")
                 }
                 .buttonStyle(.borderedProminent)
                 .offset(y: -30)
@@ -86,26 +84,14 @@ struct LeaderboardView: View {
         }
     }
     
-    func ButtonLabel(imageName: String, title: String, frame: CGSize? = nil) -> some View {
-        VStack {
-            Image(imageName)
-                .resizable()
-                .frame(width: frame?.width ?? 20, height: frame?.height ?? 20)
-            Text(title)
-                .font(.custom(CustomFont.rum, size: 16, relativeTo: .subheadline))
-                .foregroundStyle(Color.orange.gradient)
-                .pirateShadow(y: 4)
-            
-        }
-    }
     
 }
 
 
 #Preview {
-    @State var showLeaderboard: Bool = true
+    @State var showRankings: Bool = true
     
     return ZStack {
-        LeaderboardView(showLeaderboard: $showLeaderboard)
+        RankingsView(showRankings: $showRankings)
     }
 }
