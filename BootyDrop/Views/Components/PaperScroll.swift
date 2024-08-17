@@ -10,6 +10,7 @@ import SwiftUI
 struct PaperScroll<Content: View>: View {
     @Binding var show: Bool
     var height: CGFloat = 400
+    var pullText: String? = nil
     @ViewBuilder var content: Content
     
     @State private var scrollTopOffset: CGFloat = -36
@@ -37,8 +38,8 @@ struct PaperScroll<Content: View>: View {
                 .resizable()
                 .scaledToFit()
                 .overlay(alignment: .bottom) {
-                    pullChevron
-                }
+                    pullChevron(withText: pullText)
+                } // pull chevron
                 .offset(y: scrollBottomOffset)
                 .offset(dragAmount)
                 .gesture(dragToClose)
@@ -56,26 +57,41 @@ struct PaperScroll<Content: View>: View {
         }
     }
     
-    private var pullChevron: some View {
-        Image(systemName: "chevron.down")
-            .resizable()
-            .foregroundStyle(Color.gray)
-            .frame(width: 36, height: 15)
-            .opacity(scrollMiddleHeight == 30 ? 0 : 1)
-            .offset(y: chevronOffset)
-            .scaleEffect(chevronScale)
-            .animation(.easeInOut(duration: 0.5).repeatForever(autoreverses: true), value: chevronOffset)
+    private func pullChevron(withText: String? = nil) -> some View {
+        VStack {
+            Image(systemName: "chevron.down")
+                .resizable()
+                .frame(width: 36, height: 15)
+                .scaleEffect(chevronScale)
+                .opacity(scrollMiddleHeight == 30 ? 0 : 1)
+                .offset(y: chevronOffset)
+                .foregroundStyle(Color.gray)
+                .animation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true), value: chevronOffset)
+            
+            if let withText {
+                Text(withText)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(Color.gray)
+                    .offset(y: chevronOffset)
+                    .opacity(scrollMiddleHeight == 30 ? 0 : 1)
+                    .animation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true), value: chevronOffset)
+            }
+        }
+        .offset(y: 24)
     }
     
     private var dragToClose: some Gesture {
         return DragGesture()
             .onChanged { value in
                 // only allow drag after the paper scroll is opened.
-                if value.location.y > value.startLocation.y && value.translation.height <= 70 {
-                    // adjusts the middle scroll's height to stretch with the drag.
-                    let distance = value.translation.height - dragAmount.height
-                    scrollMiddleHeight += distance*2
-                    scrollMiddleOffset += distance
+                if scrollMiddleHeight >= height {
+                    // keep the draggable area within a range.
+                    if value.location.y > value.startLocation.y && value.translation.height <= 70 {
+                        // adjusts the middle scroll's height to stretch with the drag.
+                        let distance = value.translation.height - dragAmount.height
+                        scrollMiddleHeight += distance*2
+                        scrollMiddleOffset += distance
+                    }
                 }
             }
             .updating($dragAmount) { value, state, transaction in
@@ -123,7 +139,7 @@ struct PaperScroll<Content: View>: View {
                 scrollBottomOffset = (height/2)+18
                 scrollMiddleHeight = height
             }
-            chevronOffset = 5
+            chevronOffset = 8
             chevronScale = 1.4
         }
     }
@@ -139,47 +155,17 @@ struct PaperScroll<Content: View>: View {
             .ignoresSafeArea()
             .transition(.opacity)
         
-        PaperScroll(show: $showSettings) {
+        PaperScroll(show: $showSettings, pullText: "Pull to Close") {
             VStack {
-                Text("Settings")
-                    .font(.custom(CustomFont.rum, size: 30, relativeTo: .largeTitle))
-                    .pirateShadow()
-                
-                VStack(spacing: 18) {
-                    Button(action: {
-                        
-                    }, label: {
-                        ButtonLabel(imageName: "trophy", title: "Music")
-                    })
-                    
-                    Button(action: {}, label: {
-                        ButtonLabel(imageName: "trophy", title: "Sound")
-                    })
-                    
-                    Button(action: {}, label: {
-                        ButtonLabel(imageName: "trophy", title: "Vibrate")
-                    })
-                    
+                PirateText("Paper Scroll").padding(.horizontal, 4)
+                VStack(spacing: 10) {
+                    MusicButton()
+                    SoundButton()
+                    VibrateButton()
                 }.padding(.bottom, 20)
                 
-                Button(action: {}, label: {
-                    ButtonLabel(imageName: "trophy", title: "Restart")
-                })
-                .buttonStyle(.borderedProminent)
+                RestartButton { }
             }
-        }
-    }
-    
-    func ButtonLabel(imageName: String, title: String, frame: CGSize? = nil) -> some View {
-        VStack {
-            Image(imageName)
-                .resizable()
-                .frame(width: frame?.width ?? 20, height: frame?.height ?? 20)
-            Text(title)
-                .font(.custom(CustomFont.rum, size: 16, relativeTo: .subheadline))
-                .foregroundStyle(Color.orange.gradient)
-                .pirateShadow(y: 4)
-            
         }
     }
     

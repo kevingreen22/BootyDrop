@@ -9,12 +9,15 @@ import Foundation
 import SwiftUI
 import UIKit
 import SpriteKit
+import KGToolbelt
 
 // A simple game scene with falling pirate booty.
 class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     @Published var score: Int = 0
     @Published var nextDropObject: DropObject = .init(size: DropObjectSize.random)
-        
+    @Published var isGameOver: Bool = false { didSet { prepareForScreenshot() } }
+    public var screenshot: UIImage = UIImage(systemName: "questionmark")!
+
     private var startLine: SKShapeNode!
     private var dropObject: SKNode!
     private var dropGuide: SKNode!
@@ -25,6 +28,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
 //    private var physicsBodies: PhysicsBodies!
     private var timer: Timer?
     private var gameOverTime: Int = 20
+    
     
     
 // MARK: SKScene
@@ -122,6 +126,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     }
     
     
+    
 // MARK: SKPhysicsContactDelegate
 
     // Called when there is a collision
@@ -193,10 +198,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
                     self?.gameOverTime -= 1
                     
                     if self?.gameOverTime == 0 {
+                        self?.isGameOver = true
                         self?.timer?.invalidate()
-                        self?.timer = nil
-                        self?.gameOverTime = 20
-                        self?.startLine.strokeColor = .darkGray
                     }
                 }
                 RunLoop.current.add(timer!, forMode: .common)
@@ -278,7 +281,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     private func addStartLine() {
         startLine = SKShapeNode(rect: CGRect(x: 0, y: dropY, width: UIScreen.main.bounds.width, height: 1))
         startLine.strokeColor = .darkGray
-//        startLine.fillColor = .darkGray
         startLine.name = "start_line"
         addChild(startLine)
     }
@@ -323,7 +325,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     }
     
     private func incrementScore(with dropObjectSize: DropObjectSize) {
-//        print("\(type(of: self)).\(#function).score_increased:\(Int(Double(dropObjectSize.rawValue)*0.1))")
+        print("\(type(of: self)).\(#function).score_increased:\(Int(Double(dropObjectSize.rawValue)*0.1))")
         score += Int(Double(dropObjectSize.rawValue)*0.1)
     }
     
@@ -348,6 +350,54 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         }
     }
     
+    private func prepareForScreenshot() {
+        print("\(type(of: self)).\(#function)")
+        if isGameOver {
+            self.dropObject.removeFromParent()
+            self.dropGuide.removeFromParent()
+            if let snapshot = snapshot() {
+                screenshot = snapshot
+                print("snapshot set")
+            }
+        }
+    }
+    
+    /// Creates a screen shot from the SKView with the size passed in.
+    private func snapshot() -> UIImage? {
+        print("\(type(of: self)).\(#function)")
+        guard let scene = self.scene, let view = scene.view else { return nil }
+        
+        let targetSize = CGSize(width: view.bounds.width, height: view.bounds.height)
+        view.bounds.origin = CGPoint(x: 0, y: 0)
+        
+        print("screenshot rendering...")
+        let image = UIGraphicsImageRenderer(size: targetSize).image { context in
+            view.drawHierarchy(in: view.bounds, afterScreenUpdates: true)
+        }
+        return cropImage(
+            image,
+            toRect:
+                CGRect(
+                    origin:
+                        CGPoint(
+                            x: 0,
+                            y: startLine.frame.origin.y
+                        ),
+                    size:
+                        CGSize(
+                            width: view.bounds.width * 100,
+                            height: view.bounds.height * 100
+                        )
+                )
+        )
+    }
+    
+    private func cropImage(_ image: UIImage, toRect: CGRect) -> UIImage? {
+        let cgImage: CGImage! = image.cgImage
+        let croppedCGImage: CGImage! = cgImage.cropping(to: toRect)
+        return UIImage(cgImage: croppedCGImage)
+    }
+    
 }
 
 
@@ -355,8 +405,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
 // MARK: SKNode Extension
 extension SKNode  {
     var dropObjectSize: DropObjectSize {
-        print(self.frame.height)
-        let sprite = self.childNode(withName: "dropObject")
+        let sprite = self.childNode(withName: "drop_object")
         return DropObjectSize.sizeFor(float: sprite?.frame.height ?? self.frame.height)
     }
 }

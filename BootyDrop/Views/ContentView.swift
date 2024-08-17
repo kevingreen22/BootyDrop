@@ -43,6 +43,20 @@ struct ContentView: View {
                     .transition(.asymmetric(insertion: .move(edge: .leading), removal: .move(edge: .trailing)))
             }
         } // Rankings View
+        
+        .fullScreenCover(isPresented: $game.isGameOver, onDismiss: {
+            game.resetGame()
+        }) {
+            GameOverView($game.isGameOver, score: game.score)
+                .environmentObject(game)
+        } // GameOver View
+        
+        .overlay {
+            #warning("temp overlay")
+            Button("game over") {
+                game.isGameOver = true
+            }
+        }
     }
 }
 

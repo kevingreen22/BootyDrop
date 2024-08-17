@@ -17,6 +17,8 @@
 		C75850DE2C6C27DC001C6A05 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7FB00432C66A71300C8AC70 /* Extensions.swift */; };
 		C75850DF2C6C27DC001C6A05 /* CustomFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7EFD0F42C5433CE00B883B4 /* CustomFonts.swift */; };
 		C75850E02C6C2836001C6A05 /* Shape.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7CC62592C50BAC6005D9F48 /* Shape.swift */; };
+		C76F5B392C6FC63400F42E90 /* KGToolbelt in Frameworks */ = {isa = PBXBuildFile; productRef = C76F5B382C6FC63400F42E90 /* KGToolbelt */; };
+		C76F5B3C2C6FC65100F42E90 /* KGViews in Frameworks */ = {isa = PBXBuildFile; productRef = C76F5B3B2C6FC65100F42E90 /* KGViews */; };
 		C7CC623D2C507A40005D9F48 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C7CC623C2C507A40005D9F48 /* Assets.xcassets */; };
 		C7CC62402C507A40005D9F48 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C7CC623F2C507A40005D9F48 /* Preview Assets.xcassets */; };
 		C7DDA40A2C559E27005E6663 /* potion.png in Resources */ = {isa = PBXBuildFile; fileRef = C7DDA4012C559E25005E6663 /* potion.png */; };
@@ -36,7 +38,7 @@
 		C7EFD0FE2C547F9B00B883B4 /* crownButton.png in Resources */ = {isa = PBXBuildFile; fileRef = C7EFD0FC2C547F9B00B883B4 /* crownButton.png */; };
 		C7EFD0FF2C547F9B00B883B4 /* settingsButton.png in Resources */ = {isa = PBXBuildFile; fileRef = C7EFD0FD2C547F9B00B883B4 /* settingsButton.png */; };
 		C7F512EE2C6E7E96003315FF /* GameOverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F512ED2C6E7E96003315FF /* GameOverView.swift */; };
-		C7F512F22C6E9FB7003315FF /* Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F512F12C6E9FB7003315FF /* Buttons.swift */; };
+		C7F512F22C6E9FB7003315FF /* ButtonsAndMore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F512F12C6E9FB7003315FF /* ButtonsAndMore.swift */; };
 		C7FB00382C642BDF00C8AC70 /* scroll_top.png in Resources */ = {isa = PBXBuildFile; fileRef = C7FB00352C642BDE00C8AC70 /* scroll_top.png */; };
 		C7FB00392C642BDF00C8AC70 /* scroll_middle.png in Resources */ = {isa = PBXBuildFile; fileRef = C7FB00362C642BDF00C8AC70 /* scroll_middle.png */; };
 		C7FB003A2C642BDF00C8AC70 /* scroll_bottom.png in Resources */ = {isa = PBXBuildFile; fileRef = C7FB00372C642BDF00C8AC70 /* scroll_bottom.png */; };
@@ -76,7 +78,7 @@
 		C7EFD0FC2C547F9B00B883B4 /* crownButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = crownButton.png; sourceTree = "<group>"; };
 		C7EFD0FD2C547F9B00B883B4 /* settingsButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settingsButton.png; sourceTree = "<group>"; };
 		C7F512ED2C6E7E96003315FF /* GameOverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameOverView.swift; sourceTree = "<group>"; };
-		C7F512F12C6E9FB7003315FF /* Buttons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Buttons.swift; sourceTree = "<group>"; };
+		C7F512F12C6E9FB7003315FF /* ButtonsAndMore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonsAndMore.swift; sourceTree = "<group>"; };
 		C7FB00352C642BDE00C8AC70 /* scroll_top.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = scroll_top.png; sourceTree = "<group>"; };
 		C7FB00362C642BDF00C8AC70 /* scroll_middle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = scroll_middle.png; sourceTree = "<group>"; };
 		C7FB00372C642BDF00C8AC70 /* scroll_bottom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = scroll_bottom.png; sourceTree = "<group>"; };
@@ -92,6 +94,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C76F5B392C6FC63400F42E90 /* KGToolbelt in Frameworks */,
+				C76F5B3C2C6FC65100F42E90 /* KGViews in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -142,7 +146,6 @@
 		C7CC62372C507A3E005D9F48 /* BootyDrop */ = {
 			isa = PBXGroup;
 			children = (
-				C796E5622C6BE68E002E0423 /* BootyDrop.entitlements */,
 				C7CC62382C507A3E005D9F48 /* BootyDropApp.swift */,
 				C7CC62462C508459005D9F48 /* GameScene.swift */,
 				C796E5632C6BE921002E0423 /* GameCenterManager.swift */,
@@ -150,6 +153,7 @@
 				C7FB735B2C6C110F00DC4DBB /* Helper Files */,
 				C7FB735A2C6C10F600DC4DBB /* Font */,
 				C78A55CA2C602CB100630C56 /* Images */,
+				C796E5622C6BE68E002E0423 /* BootyDrop.entitlements */,
 				C7CC623C2C507A40005D9F48 /* Assets.xcassets */,
 				C7EFD0F32C54338100B883B4 /* Info.plist */,
 				C7FB735C2C6C117000DC4DBB /* finger_touch.sks */,
@@ -172,7 +176,7 @@
 			isa = PBXGroup;
 			children = (
 				C7FB00412C66A47B00C8AC70 /* PaperScroll.swift */,
-				C7F512F12C6E9FB7003315FF /* Buttons.swift */,
+				C7F512F12C6E9FB7003315FF /* ButtonsAndMore.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -224,6 +228,8 @@
 			);
 			name = BootyDrop;
 			packageProductDependencies = (
+				C76F5B382C6FC63400F42E90 /* KGToolbelt */,
+				C76F5B3B2C6FC65100F42E90 /* KGViews */,
 			);
 			productName = BootyDrop;
 			productReference = C7CC62352C507A3E005D9F48 /* BootyDrop.app */;
@@ -254,6 +260,8 @@
 			);
 			mainGroup = C7CC622C2C507A3E005D9F48;
 			packageReferences = (
+				C76F5B372C6FC63400F42E90 /* XCRemoteSwiftPackageReference "KGToolbelt" */,
+				C76F5B3A2C6FC65100F42E90 /* XCRemoteSwiftPackageReference "KGViews" */,
 			);
 			productRefGroup = C7CC62362C507A3E005D9F48 /* Products */;
 			projectDirPath = "";
@@ -305,7 +313,7 @@
 			files = (
 				C75850E02C6C2836001C6A05 /* Shape.swift in Sources */,
 				C7F512EE2C6E7E96003315FF /* GameOverView.swift in Sources */,
-				C7F512F22C6E9FB7003315FF /* Buttons.swift in Sources */,
+				C7F512F22C6E9FB7003315FF /* ButtonsAndMore.swift in Sources */,
 				C75850D72C6C27DC001C6A05 /* BootyDropApp.swift in Sources */,
 				C75850D82C6C27DC001C6A05 /* GameScene.swift in Sources */,
 				C75850D92C6C27DC001C6A05 /* GameCenterManager.swift in Sources */,
@@ -524,6 +532,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		C76F5B372C6FC63400F42E90 /* XCRemoteSwiftPackageReference "KGToolbelt" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kevingreen22/KGToolbelt";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.4;
+			};
+		};
+		C76F5B3A2C6FC65100F42E90 /* XCRemoteSwiftPackageReference "KGViews" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kevingreen22/KGViews";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		C76F5B382C6FC63400F42E90 /* KGToolbelt */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C76F5B372C6FC63400F42E90 /* XCRemoteSwiftPackageReference "KGToolbelt" */;
+			productName = KGToolbelt;
+		};
+		C76F5B3B2C6FC65100F42E90 /* KGViews */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C76F5B3A2C6FC65100F42E90 /* XCRemoteSwiftPackageReference "KGViews" */;
+			productName = KGViews;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = C7CC622D2C507A3E005D9F48 /* Project object */;
 }

@@ -6,20 +6,38 @@
 //
 
 import SwiftUI
+import KGViews
 
 struct GameOverView: View {
-    @State private var showGameOver = false
+    @Binding var showGameOver: Bool
+    var score: Int
+    
     @EnvironmentObject var game: GameScene
+    
+    init(_ showGameOver: Binding<Bool>, score: Int) {
+        _showGameOver = showGameOver
+        self.score = score
+    }
     
     
     var body: some View {
-        PaperScroll(show: $showGameOver, height: 546) {
+        let shareSnapshot: Image = Image(uiImage: game.screenshot)
+        
+        return PaperScroll(show: $showGameOver, height: 546, pullText: "Exit") {
             VStack {
                 PirateText("Game Over")
+                PirateText("Score: \(score)", size: 16)
+                
+                shareSnapshot
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .cornerRadius(20)
+                    .bordered(shape: RoundedRectangle(cornerRadius: 20, style: .continuous), color: Color.white.opacity(0.7), lineWidth: 3)
+                    .padding(.vertical, 8)
+                    .padding(.horizontal, 8)
                 
                 HStack {
-                    MusicButton()
-                    SoundButton()
+                    ShareButton(item: shareSnapshot)
                     RestartButton {
                         game.resetGame()
                         withAnimation(.easeInOut) {
@@ -34,12 +52,14 @@ struct GameOverView: View {
 }
 
 #Preview {
+    @State var showGameOver = false
     @StateObject var game: GameScene = {
         let scene = GameScene()
         scene.size = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
         return scene
     }()
     
-    return GameOverView()
+    return GameOverView($showGameOver, score: game.score)
         .environmentObject(game)
 }
+

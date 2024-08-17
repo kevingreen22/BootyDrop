@@ -1,0 +1,24 @@
+{
+  "originHash" : "a1cf617fce06adc6217f47463e47c0f2f02d82825cf9dc50d4d072b0cbb7bb79",
+  "pins" : [
+    {
+      "identity" : "kgtoolbelt",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/kevingreen22/KGToolbelt",
+      "state" : {
+        "revision" : "c41303e24eff2c7429bd5ef5569e8943ead8d965",
+        "version" : "1.0.4"
+      }
+    },
+    {
+      "identity" : "kgviews",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/kevingreen22/KGViews",
+      "state" : {
+        "revision" : "20c2005034c1aa31171f202c15b474565d8abf70",
+        "version" : "1.1.0"
+      }
+    }
+  ],
+  "version" : 3
+}

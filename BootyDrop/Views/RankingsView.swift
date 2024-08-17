@@ -20,7 +20,7 @@ struct RankingsView: View {
             .ignoresSafeArea()
             .transition(.opacity)
         
-        PaperScroll(show: $showRankings) {
+        PaperScroll(show: $showRankings, pullText: "Close") {
             VStack {
                 VStack {
                     PirateText("Rankings")
