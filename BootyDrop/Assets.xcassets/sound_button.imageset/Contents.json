@@ -1,11 +1,11 @@
 {
   "images" : [
     {
+      "filename" : "sound_button.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "crownButton.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
