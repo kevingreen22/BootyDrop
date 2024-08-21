@@ -7,6 +7,7 @@
 
 import SwiftUI
 import GameKit
+import KGViews
 
 struct RankingsView: View {
     @Binding var showRankings: Bool
@@ -16,21 +17,21 @@ struct RankingsView: View {
 
     
     var body: some View {
-        Color.black.opacity(0.7)
+        RealBlur(style: .dark)
             .ignoresSafeArea()
             .transition(.opacity)
         
         PaperScroll(show: $showRankings, pullText: "Close") {
             VStack {
                 VStack {
-                    PirateText("Rankings")
+                    PirateText("Rankings").pirateShadow(y: 4)
                     
                     HStack {
-                        Button(action: {
+                        Button {
                             
-                        }, label: {
+                        } label: {
                             HM.ButtonLabel(imageName: "trophy", title: "Today")
-                        })
+                        }
                         
                         Button(action: {
                             
@@ -61,29 +62,37 @@ struct RankingsView: View {
                         }
                         .padding(.horizontal, 24)
                     }
-                }.padding(.vertical, 16)
-                
-                Spacer()
-                Button {
-                    accessPoint.isActive.toggle()
-                } label: {
-                    HM.ButtonLabel(imageName: "trophy", title: "Leaderboards")
                 }
-                .buttonStyle(.borderedProminent)
-                .offset(y: -30)
-            }
+                Spacer()
+                leaderBoardButton
+            }.padding(.vertical, 24)
         }
         .pirateShadow(y: 24)
         
         .task {
-            do {
-                leaderboardEntries = try await GameCenterManager.fetchLeaderboard()
-            } catch {
-                print("Failed to fetch leaderboard: \(error)")
-            }
+            await loadLeaderboards()
         }
     }
     
+    
+    var leaderBoardButton: some View {
+        Button {
+            accessPoint.isActive.toggle()
+        } label: {
+            HM.ButtonLabel(imageName: "trophy", title: "Leaderboards", frame: CGSize(width: 200, height: 40))
+                .frame(width: 200, height: 40)
+        }
+        .buttonStyle(.borderedProminent)
+        .pirateShadow(y: 4)
+    }
+    
+    fileprivate func loadLeaderboards() async {
+        do {
+            leaderboardEntries = try await GameCenterManager.fetchLeaderboard()
+        } catch {
+            print("Failed to fetch leaderboard: \(error)")
+        }
+    }
     
 }
 

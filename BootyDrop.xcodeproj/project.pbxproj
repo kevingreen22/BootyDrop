@@ -35,8 +35,12 @@
 		C7EFD0F72C543A3300B883B4 /* TheRumIsGone.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C7EFD0F22C54335100B883B4 /* TheRumIsGone.ttf */; };
 		C7EFD0F92C5463FE00B883B4 /* sand.png in Resources */ = {isa = PBXBuildFile; fileRef = C7EFD0F82C5463FE00B883B4 /* sand.png */; };
 		C7EFD0FB2C546D6200B883B4 /* trophy.png in Resources */ = {isa = PBXBuildFile; fileRef = C7EFD0FA2C546D6200B883B4 /* trophy.png */; };
-		C7EFD0FE2C547F9B00B883B4 /* crownButton.png in Resources */ = {isa = PBXBuildFile; fileRef = C7EFD0FC2C547F9B00B883B4 /* crownButton.png */; };
-		C7EFD0FF2C547F9B00B883B4 /* settingsButton.png in Resources */ = {isa = PBXBuildFile; fileRef = C7EFD0FD2C547F9B00B883B4 /* settingsButton.png */; };
+		C7F1BA9F2C767C19005CC0A4 /* sound_button.png in Resources */ = {isa = PBXBuildFile; fileRef = C7F1BA9A2C767C18005CC0A4 /* sound_button.png */; };
+		C7F1BAA02C767C19005CC0A4 /* settings_button.png in Resources */ = {isa = PBXBuildFile; fileRef = C7F1BA9B2C767C19005CC0A4 /* settings_button.png */; };
+		C7F1BAA12C767C19005CC0A4 /* rankings_button.png in Resources */ = {isa = PBXBuildFile; fileRef = C7F1BA9C2C767C19005CC0A4 /* rankings_button.png */; };
+		C7F1BAA22C767C19005CC0A4 /* music_button.png in Resources */ = {isa = PBXBuildFile; fileRef = C7F1BA9D2C767C19005CC0A4 /* music_button.png */; };
+		C7F1BAA32C767C19005CC0A4 /* vibrate_button.png in Resources */ = {isa = PBXBuildFile; fileRef = C7F1BA9E2C767C19005CC0A4 /* vibrate_button.png */; };
+		C7F1BAA52C76A28D005CC0A4 /* AppStorageKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F1BAA42C76A28D005CC0A4 /* AppStorageKey.swift */; };
 		C7F512EE2C6E7E96003315FF /* GameOverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F512ED2C6E7E96003315FF /* GameOverView.swift */; };
 		C7F512F22C6E9FB7003315FF /* ButtonsAndMore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F512F12C6E9FB7003315FF /* ButtonsAndMore.swift */; };
 		C7FB00382C642BDF00C8AC70 /* scroll_top.png in Resources */ = {isa = PBXBuildFile; fileRef = C7FB00352C642BDE00C8AC70 /* scroll_top.png */; };
@@ -75,8 +79,12 @@
 		C7EFD0F42C5433CE00B883B4 /* CustomFonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFonts.swift; sourceTree = "<group>"; };
 		C7EFD0F82C5463FE00B883B4 /* sand.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sand.png; sourceTree = "<group>"; };
 		C7EFD0FA2C546D6200B883B4 /* trophy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = trophy.png; sourceTree = "<group>"; };
-		C7EFD0FC2C547F9B00B883B4 /* crownButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = crownButton.png; sourceTree = "<group>"; };
-		C7EFD0FD2C547F9B00B883B4 /* settingsButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settingsButton.png; sourceTree = "<group>"; };
+		C7F1BA9A2C767C18005CC0A4 /* sound_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sound_button.png; sourceTree = "<group>"; };
+		C7F1BA9B2C767C19005CC0A4 /* settings_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settings_button.png; sourceTree = "<group>"; };
+		C7F1BA9C2C767C19005CC0A4 /* rankings_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rankings_button.png; sourceTree = "<group>"; };
+		C7F1BA9D2C767C19005CC0A4 /* music_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = music_button.png; sourceTree = "<group>"; };
+		C7F1BA9E2C767C19005CC0A4 /* vibrate_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = vibrate_button.png; sourceTree = "<group>"; };
+		C7F1BAA42C76A28D005CC0A4 /* AppStorageKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStorageKey.swift; sourceTree = "<group>"; };
 		C7F512ED2C6E7E96003315FF /* GameOverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameOverView.swift; sourceTree = "<group>"; };
 		C7F512F12C6E9FB7003315FF /* ButtonsAndMore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonsAndMore.swift; sourceTree = "<group>"; };
 		C7FB00352C642BDE00C8AC70 /* scroll_top.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = scroll_top.png; sourceTree = "<group>"; };
@@ -105,14 +113,17 @@
 		C78A55CA2C602CB100630C56 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				C7F1BA9D2C767C19005CC0A4 /* music_button.png */,
+				C7F1BA9C2C767C19005CC0A4 /* rankings_button.png */,
+				C7F1BA9B2C767C19005CC0A4 /* settings_button.png */,
+				C7F1BA9A2C767C18005CC0A4 /* sound_button.png */,
+				C7F1BA9E2C767C19005CC0A4 /* vibrate_button.png */,
 				C7EFD0DE2C51D5E000B883B4 /* background.jpg */,
 				C7EFD0F82C5463FE00B883B4 /* sand.png */,
 				C7EFD0FA2C546D6200B883B4 /* trophy.png */,
 				C7FB00372C642BDF00C8AC70 /* scroll_bottom.png */,
 				C7FB00362C642BDF00C8AC70 /* scroll_middle.png */,
 				C7FB00352C642BDE00C8AC70 /* scroll_top.png */,
-				C7EFD0FC2C547F9B00B883B4 /* crownButton.png */,
-				C7EFD0FD2C547F9B00B883B4 /* settingsButton.png */,
 				C7DDA4042C559E26005E6663 /* coin.png */,
 				C7DDA4132C559ED0005E6663 /* gem1.png */,
 				C7DDA4062C559E26005E6663 /* gem2.png */,
@@ -153,9 +164,9 @@
 				C7FB735B2C6C110F00DC4DBB /* Helper Files */,
 				C7FB735A2C6C10F600DC4DBB /* Font */,
 				C78A55CA2C602CB100630C56 /* Images */,
-				C796E5622C6BE68E002E0423 /* BootyDrop.entitlements */,
 				C7CC623C2C507A40005D9F48 /* Assets.xcassets */,
 				C7EFD0F32C54338100B883B4 /* Info.plist */,
+				C796E5622C6BE68E002E0423 /* BootyDrop.entitlements */,
 				C7FB735C2C6C117000DC4DBB /* finger_touch.sks */,
 				C7FB735D2C6C117000DC4DBB /* merge.sks */,
 				C7FB735E2C6C117000DC4DBB /* ripple_ring.png */,
@@ -207,6 +218,7 @@
 			children = (
 				C7FB00432C66A71300C8AC70 /* Extensions.swift */,
 				C7CC62592C50BAC6005D9F48 /* Shape.swift */,
+				C7F1BAA42C76A28D005CC0A4 /* AppStorageKey.swift */,
 			);
 			path = "Helper Files";
 			sourceTree = "<group>";
@@ -280,21 +292,24 @@
 				C7CC62402C507A40005D9F48 /* Preview Assets.xcassets in Resources */,
 				C7DDA40A2C559E27005E6663 /* potion.png in Resources */,
 				C7FB00382C642BDF00C8AC70 /* scroll_top.png in Resources */,
+				C7F1BAA22C767C19005CC0A4 /* music_button.png in Resources */,
 				C7DDA4112C559E27005E6663 /* nugget.png in Resources */,
 				C7DDA40F2C559E27005E6663 /* gem2.png in Resources */,
 				C7FB73612C6C117000DC4DBB /* ripple_ring.png in Resources */,
 				C7EFD0FB2C546D6200B883B4 /* trophy.png in Resources */,
-				C7EFD0FF2C547F9B00B883B4 /* settingsButton.png in Resources */,
 				C7DDA40D2C559E27005E6663 /* coin.png in Resources */,
 				C7FB735F2C6C117000DC4DBB /* finger_touch.sks in Resources */,
 				C7DDA4142C559ED0005E6663 /* gem1.png in Resources */,
 				C7EFD0F72C543A3300B883B4 /* TheRumIsGone.ttf in Resources */,
-				C7EFD0FE2C547F9B00B883B4 /* crownButton.png in Resources */,
 				C7DDA4102C559E27005E6663 /* diamond.png in Resources */,
 				C7DDA4122C559E27005E6663 /* gem4.png in Resources */,
 				C7CC623D2C507A40005D9F48 /* Assets.xcassets in Resources */,
+				C7F1BAA02C767C19005CC0A4 /* settings_button.png in Resources */,
 				C7DDA40C2C559E27005E6663 /* gem3.png in Resources */,
+				C7F1BAA32C767C19005CC0A4 /* vibrate_button.png in Resources */,
 				C7DDA40B2C559E27005E6663 /* skull.png in Resources */,
+				C7F1BAA12C767C19005CC0A4 /* rankings_button.png in Resources */,
+				C7F1BA9F2C767C19005CC0A4 /* sound_button.png in Resources */,
 				C7EFD0F92C5463FE00B883B4 /* sand.png in Resources */,
 				C7FB00392C642BDF00C8AC70 /* scroll_middle.png in Resources */,
 				C7FB003A2C642BDF00C8AC70 /* scroll_bottom.png in Resources */,
@@ -315,6 +330,7 @@
 				C7F512EE2C6E7E96003315FF /* GameOverView.swift in Sources */,
 				C7F512F22C6E9FB7003315FF /* ButtonsAndMore.swift in Sources */,
 				C75850D72C6C27DC001C6A05 /* BootyDropApp.swift in Sources */,
+				C7F1BAA52C76A28D005CC0A4 /* AppStorageKey.swift in Sources */,
 				C75850D82C6C27DC001C6A05 /* GameScene.swift in Sources */,
 				C75850D92C6C27DC001C6A05 /* GameCenterManager.swift in Sources */,
 				C75850DA2C6C27DC001C6A05 /* ContentView.swift in Sources */,

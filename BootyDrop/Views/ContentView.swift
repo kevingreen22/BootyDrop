@@ -83,23 +83,24 @@ struct Header: View {
     
     var body: some View {
         ZStack {
-            background
+            headerBackground
+                .overlay(alignment: .topLeading) {
+                    NextObjectView(dropObject: $game.nextDropObject)
+                        .padding([.leading, .top], 8)
+                }
                 .overlay(alignment: .top) {
                     VStack(spacing: 0) {
                         highScore
                         score
                     }
                 }
-                .overlay(alignment: .topLeading) {
-                    NextObjectView(dropObject: $game.nextDropObject)
-                    Spacer()
-                }
                 .overlay(alignment: .topTrailing) {
                     HStack {
                         RankingsButton($showRankings)
                         SettingsButton($showSettings)
                     }
-                    .padding([.top, .trailing])
+                    .padding(.trailing, 26)
+                    .padding(.top, 20)
                 }
         }
         .pirateShadow()
@@ -130,10 +131,10 @@ struct Header: View {
             .padding(.top, 4)
     }
     
-    var background: some View {
-        Image("scroll3")
+    var headerBackground: some View {
+        Image("scroll_middle")
             .resizable()
-            .frame(height: 80)
+            .frame(height: 84)
             .rotationEffect(.degrees(-0.5))
     }
 }

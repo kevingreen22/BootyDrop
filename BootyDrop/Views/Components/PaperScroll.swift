@@ -28,7 +28,7 @@ struct PaperScroll<Content: View>: View {
             Image("scroll_middle")
                 .resizable()
                 .overlay(alignment: .top) {
-                    content.padding(.top, 24)
+                    content.padding([.top, .bottom], 16)
                 } // Main Content
                 .frame(width: 310, height: scrollMiddleHeight)
                 .offset(y: scrollMiddleOffset)
@@ -157,12 +157,12 @@ struct PaperScroll<Content: View>: View {
         
         PaperScroll(show: $showSettings, pullText: "Pull to Close") {
             VStack {
-                PirateText("Paper Scroll").padding(.horizontal, 4)
+                PirateText("Paper Scroll", size: 20).padding(.horizontal, 4)
                 VStack(spacing: 10) {
                     MusicButton()
                     SoundButton()
                     VibrateButton()
-                }.padding(.bottom, 20)
+                }.padding(.bottom, 16)
                 
                 RestartButton { }
             }

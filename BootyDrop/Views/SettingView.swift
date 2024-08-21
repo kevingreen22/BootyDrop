@@ -6,34 +6,36 @@
 //
 
 import SwiftUI
+import KGViews
 
 struct SettingView: View {
     @Binding var showSettings: Bool
-    
     @EnvironmentObject var game: GameScene
     
-    
     var body: some View {
-        Color.black.opacity(0.7)
+        RealBlur(style: .dark)
             .ignoresSafeArea()
             .transition(.opacity)
         
-        PaperScroll(show: $showSettings) {
+        PaperScroll(show: $showSettings, height: 450, pullText: "Close") {
             VStack {
-                PirateText("Settings")
+                PirateText("Settings").pirateShadow(y: 4)
                 
-                VStack {
-                    MusicButton()
-                    SoundButton()
-                    VibrateButton()
-                }.padding(.bottom, 20)
+                HStack(spacing: 40) {
+                    MusicButton(frame: CGSize(width: 100, height: 100)).pirateShadow(y: 4)
+                    SoundButton(frame: CGSize(width: 100, height: 100)).pirateShadow(y: 4)
+                }.padding(.bottom, 16)
                 
-                RestartButton() {
+                HStack {
+                    VibrateButton(frame: CGSize(width: 100, height: 100)).pirateShadow(y: 4)
+                }.padding(.bottom, 16)
+                
+                RestartButton(frame: CGSize(width: 130, height: 50)) {
                     game.resetGame()
                     withAnimation(.easeInOut) {
                         showSettings = false
                     }
-                }
+                }.pirateShadow(y: 4)
                 
             }.padding(.vertical, 16)
         }

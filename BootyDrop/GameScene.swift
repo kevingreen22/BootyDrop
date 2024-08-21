@@ -15,7 +15,13 @@ import KGToolbelt
 class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     @Published var score: Int = 0
     @Published var nextDropObject: DropObject = .init(size: DropObjectSize.random)
-    @Published var isGameOver: Bool = false { didSet { prepareForScreenshot() } }
+    @Published var isGameOver: Bool = false
+//    { willSet {
+//        print("willset: \(isGameOver)")
+//        if isGameOver {
+//            prepareForScreenshot()
+//        }
+//    } }
     public var screenshot: UIImage = UIImage(systemName: "questionmark")!
 
     private var startLine: SKShapeNode!
@@ -33,9 +39,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     
 // MARK: SKScene
     
+    /* Setup scene here */
     override func didMove(to view: SKView) {
-        /* Setup scene here */
-//        print("\(type(of: self)).\(#function)")
+        print("\(type(of: self)).\(#function)")
         guard let scene, let view = scene.view else { return }
         print("scene size:\(scene.frame) - view size\(view.frame)")
         scene.anchorPoint.x = 0
@@ -53,7 +59,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         dropGuide = createDropGuide(xPosition: scene.frame.width/2)
         
         dropObject = addDropObjectNode(dropObjectSize: .random, position: CGPoint(x: scene.frame.width/2, y: dropY))
-                
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -150,14 +155,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
 // MARK: Helper Methods
     
     func resetGame() {
+        print("\(type(of: self)).\(#function)")
+        guard let scene = scene else { return }
         // Remove all drop-objects
-        scene?.children.forEach({ node in
+        scene.children.forEach { node in
             if node.name != "background" && node.name != dropGuide.name && node.name != startLine.name {
                 if let child = node as? SKSpriteNode {
                     child.removeFromParent()
                 }
             }
-        })
+        }
+        
+        // reset startLine color
+        startLine.strokeColor = .darkGray
         
         // reset drop position
         lastDropPosition = nil
@@ -173,21 +183,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         gameOverTime = 20
         
         // Reset first drop-object
-        dropObject = addDropObjectNode(dropObjectSize: .random, position: CGPoint(x: (scene?.frame.width ?? 450)/2, y: dropY))
-        dropGuide.position.x = (scene?.frame.width ?? 450)/2
-        
+        dropObject = addDropObjectNode(dropObjectSize: .random, position: CGPoint(x: scene.frame.width/2, y: dropY))
+        dropGuide.alpha = 1
+        dropGuide.position.x = scene.frame.width/2
     }
     
     func startGameEndingSequence(_ scene: SKScene) {
-//        print("\(type(of: self)).\(#function)")
-        // if any drop object's y position is greater than or equal to the start line,
+        // If any drop object's y position is greater than or equal to the start line,
         if !scene.children.filter({
-            $0 != dropObject &&
             $0.name != "background" &&
-            $0.name != dropGuide.name &&
-            $0.name != startLine.name &&
-            $0.position.y <= startLine.position.y
+            $0 != dropObject &&
+            $0 != dropGuide &&
+            $0 != startLine &&
+            $0.position.y >= dropY // startLine.position.y
         }).isEmpty {
+            print("\(type(of: self)).\(#function)")
             // Then start a timer (turn start line color red)
             if timer == nil {
                 startLine.strokeColor = .red
@@ -200,6 +210,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
                     if self?.gameOverTime == 0 {
                         self?.isGameOver = true
                         self?.timer?.invalidate()
+                        self?.prepareForScreenshot()
                     }
                 }
                 RunLoop.current.add(timer!, forMode: .common)
@@ -242,7 +253,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     }
     
     func destroy(object: SKNode) {
-//        print("\(type(of: self)).\(#function)")
+        print("\(type(of: self)).\(#function)")
         object.removeFromParent()
     }
     
@@ -352,13 +363,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     
     private func prepareForScreenshot() {
         print("\(type(of: self)).\(#function)")
-        if isGameOver {
-            self.dropObject.removeFromParent()
-            self.dropGuide.removeFromParent()
-            if let snapshot = snapshot() {
-                screenshot = snapshot
-                print("snapshot set")
-            }
+        destroy(object: dropObject)
+        dropGuide.alpha = 0
+        if let snapshot = snapshot() {
+            screenshot = snapshot
+            print("snapshot set")
         }
     }
     
@@ -393,6 +402,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     }
     
     private func cropImage(_ image: UIImage, toRect: CGRect) -> UIImage? {
+        print("\(type(of: self)).\(#function)")
         let cgImage: CGImage! = image.cgImage
         let croppedCGImage: CGImage! = cgImage.cropping(to: toRect)
         return UIImage(cgImage: croppedCGImage)

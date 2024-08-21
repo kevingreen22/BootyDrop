@@ -31,23 +31,29 @@ struct GameOverView: View {
                 shareSnapshot
                     .resizable()
                     .aspectRatio(contentMode: .fit)
+                    .frame(height: 300)
                     .cornerRadius(20)
                     .bordered(shape: RoundedRectangle(cornerRadius: 20, style: .continuous), color: Color.white.opacity(0.7), lineWidth: 3)
                     .padding(.vertical, 8)
                     .padding(.horizontal, 8)
                 
                 HStack {
-                    ShareButton(item: shareSnapshot)
-                    RestartButton {
+                    ShareButton(item: shareSnapshot, frame: CGSize(width: 65, height: 40))
+                        .buttonStyle(.borderedProminent)
+                        .pirateShadow(y: 4)
+                    
+                    RestartButton(frame: CGSize(width: 85, height: 40)) {
                         game.resetGame()
                         withAnimation(.easeInOut) {
                             showGameOver = false
                         }
-                    }
+                    }.pirateShadow(y: 4)
+                    
                 }.padding(.bottom, 20)
             }.padding(.vertical, 16)
         }
         .pirateShadow(y: 24)
+        .presentationBackground(Color.accentColor)
     }
 }
 

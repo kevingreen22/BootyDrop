@@ -29,8 +29,7 @@ class GameCenterManager {
                 return
             }
             print("Authenticated as \(GKLocalPlayer.local.displayName)")
-            GKAccessPoint.shared.location = .topLeading
-            GKAccessPoint.shared.isActive = localPlayer.isAuthenticated
+            GKAccessPoint.shared.isActive = false
         }
     }
     
