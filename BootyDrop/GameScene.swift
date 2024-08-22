@@ -136,7 +136,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
 
     // Called when there is a collision
     func didBegin(_ contact: SKPhysicsContact) {
-//        print("\(type(of: self)).\(#function)")
+//        print("\(type(of: self)).\(#function).impulse:\(contact.collisionImpulse)")
+        if contact.collisionImpulse > 5 {
+            HapticManager.instance.impact(PirateHaptic.collision, intensity: contact.collisionImpulse)
+        }
         guard let nodeA = contact.bodyA.node else { return }
         guard let nodeB = contact.bodyB.node else { return }
         guard nodeA.name != DropObjectIDName.largest.rawValue && nodeB.name != DropObjectIDName.largest.rawValue else { return }
@@ -244,7 +247,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
             destroy(object: objectA)
             destroy(object: objectB)
             let newObject = addDropObjectNode(dropObjectSize: newSize, position: position, isDynamic: true)
-            newObject?.physicsBody?.applyImpulse(CGVector(dx: 15, dy: -10)) // adds explosion push
+            newObject?.physicsBody?.applyImpulse(CGVector(dx: Int.random(in: -15...15), dy: Int.random(in: -15...15))) // adds explosion push
+            HapticManager.instance.impact(PirateHaptic.merge)
             
             DispatchQueue.main.asyncAfter(deadline: .now()+0.4) {
                 self.destroy(object: emitter)

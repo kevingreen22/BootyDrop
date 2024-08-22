@@ -11,9 +11,9 @@ import KGViews
 
 struct RankingsView: View {
     @Binding var showRankings: Bool
+    @State private var showGamecenterView = false
     
     @State private var leaderboardEntries: (GKLeaderboard.Entry?, [GKLeaderboard.Entry], Int) = (nil,[],0)
-    let accessPoint = GKAccessPoint.shared
 
     
     var body: some View {
@@ -69,6 +69,10 @@ struct RankingsView: View {
         }
         .pirateShadow(y: 24)
         
+        .fullScreenCover(isPresented: $showGamecenterView) {
+            GameCenterView()
+        }
+        
         .task {
             await loadLeaderboards()
         }
@@ -77,7 +81,7 @@ struct RankingsView: View {
     
     var leaderBoardButton: some View {
         Button {
-            accessPoint.isActive.toggle()
+            showGamecenterView.toggle()
         } label: {
             HM.ButtonLabel(imageName: "trophy", title: "Leaderboards", frame: CGSize(width: 200, height: 40))
                 .frame(width: 200, height: 40)
