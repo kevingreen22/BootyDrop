@@ -204,15 +204,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     }
     
     func startGameEndingSequence(_ scene: SKScene) {
-        // If any drop object's y position is greater than or equal to the start line,
-        if !scene.children.filter({
+//        print("\(type(of: self)).\(#function)")
+        // If any drop object's y position is greater than or equal to the start line, and there's at least 3,
+        if scene.children.filter({
             $0.name != "background" &&
             $0 != dropObject &&
             $0 != dropGuide &&
             $0 != startLine &&
-            $0.position.y >= dropY // startLine.position.y
-        }).isEmpty {
-            print("\(type(of: self)).\(#function)")
+            $0.position.y >= dropY-200
+        }).count >= 3 {
             // Then start a timer (turn start line color red)
             if timer == nil {
                 startLine.strokeColor = .red
