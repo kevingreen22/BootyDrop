@@ -36,14 +36,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     private var gameOverTime: Int = 20
     
     
+    struct CollisionCategory {
+//        static var all: UInt32    = 0xFFFFFFFF // all bit sets
+        static var none: UInt32   = 0x00000000 // 0
+//        static var ground: UInt32 = 0x00000001 // 1
+        static var booty: UInt32  = 0x00000010 // 2
+//        static var walls: UInt32  = 0x00000100 // 4
+    }
     
 // MARK: SKScene
     
     /* Setup scene here */
     override func didMove(to view: SKView) {
-        print("\(type(of: self)).\(#function)")
-        guard let scene, let view = scene.view else { return }
-        print("scene size:\(scene.frame) - view size\(view.frame)")
+//        print("\(type(of: self)).\(#function)")
+        guard let scene else { return }
+//        print("scene size:\(scene.frame) - view size\(view.frame)")
         scene.anchorPoint.x = 0
         scene.anchorPoint.y = 0
         scene.physicsBody = SKPhysicsBody(edgeLoopFrom: scene.frame)
@@ -55,6 +62,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         addBackgroundImage(position: CGPoint(x: scene.frame.width/2, y: scene.frame.height/2), scene: scene)
         
         addStartLine()
+        
+//        addWalls()
         
         dropGuide = createDropGuide(xPosition: scene.frame.width/2)
         
@@ -81,16 +90,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         // Makes it so that the drop-object does not go beyond the scene/screen's edge/
         if dropObject.frame.minX < scene.frame.minX {
             dropObject.position.x = scene.frame.minX + (dropObject.frame.width/2)
-            dropGuide.position.x = dropObject.position.x
             lastDropPosition = dropObject.position
-        }
-        
-        if dropObject.frame.maxX > scene.frame.maxX {
+            dropGuide.position.x = dropObject.position.x
+        } else if dropObject.frame.maxX > scene.frame.maxX {
             dropObject.position.x = scene.frame.maxX - (dropObject.frame.width/2)
-            dropGuide.position.x = dropObject.position.x
             lastDropPosition = dropObject.position
+            dropGuide.position.x = dropObject.position.x
+        } else {
+            lastDropPosition = nil
         }
-        
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -98,18 +106,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         guard let scene, let view = scene.view else { return }
         guard let touch = touches.first else { return }
         let location = CGPoint(x: touch.location(in: self).x, y: dropY)
-        lastDropPosition = dropObject.position
-        dropObject.position = location
+
         dropObject.physicsBody?.isDynamic = true
+        dropObject.physicsBody?.categoryBitMask = CollisionCategory.booty
+        dropObject.physicsBody?.collisionBitMask = CollisionCategory.booty
+        dropObject.physicsBody?.contactTestBitMask = CollisionCategory.booty
         dropGuide.alpha = 0
         
         if let emmiter = SKEmitterNode(fileNamed: "finger_touch") {
             emmiter.position = touch.location(in: self)
+            let action = SKAction.wait(forDuration: 0.6)
+            emmiter.run(action) { emmiter.removeFromParent() }
             addChild(emmiter)
         }
         
         view.isUserInteractionEnabled = false
-        DispatchQueue.main.asyncAfter(deadline: .now()+0.6) { [self] in
+        DispatchQueue.main.asyncAfter(deadline: .now()+0.6) { [unowned self] in
             view.isUserInteractionEnabled = true
             
             let size = self.nextDropObject.dropObjectSize
@@ -121,7 +133,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
             
             self.dropGuide.position.x = self.dropObject.position.x
             
-            self.nextDropObject = .init(size: .random)
+            self.nextDropObject = .init(size: ._150/*.random*/)
         }
     }
     
@@ -134,7 +146,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     
 // MARK: SKPhysicsContactDelegate
 
-    // Called when there is a collision
+    /// Called when there is a collision notification.
     func didBegin(_ contact: SKPhysicsContact) {
 //        print("\(type(of: self)).\(#function).impulse:\(contact.collisionImpulse)")
         if contact.collisionImpulse > 5 {
@@ -143,13 +155,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         guard let nodeA = contact.bodyA.node else { return }
         guard let nodeB = contact.bodyB.node else { return }
         guard nodeA.name != DropObjectIDName.largest.rawValue && nodeB.name != DropObjectIDName.largest.rawValue else { return }
-        if let nameA = nodeA.name, let nameB = nodeB.name {
-            print("collision detected for: \(nameA) & \(nameB)")
-        }
+//        if let nameA = nodeA.name, let nameB = nodeB.name {
+//            print("collision detected for: \(nameA) & \(nameB)")
+//        }
         
         if nodeA.name == nodeB.name {
             print("matched collision detected")
-            collision(between: nodeA, objectB: nodeB)
+            handleCollision(between: nodeA, objectB: nodeB)
         }
     }
     
@@ -230,52 +242,69 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         }
     }
     
-    func collision(between objectA: SKNode, objectB: SKNode) {
+    /// Combines both dropObjects into next dropObjectSize if they are a matching pair (i.e. destroy both and create a new one)
+    func handleCollision(between objectA: SKNode, objectB: SKNode) {
 //        print("\(type(of: self)).\(#function)")
-        // Combine both dropObjects into next dropObject size if they are a matching pair (i.e. destroy both and create a new one)
+        
         let newSize = objectA.dropObjectSize.nextSize
         print("currentSize: \(objectA.dropObjectSize.rawValue) - newSize: \(newSize.rawValue)\n")
         let newX = objectA.position.x + abs(objectA.position.x - objectB.position.x)/2
-        let position = CGPoint(x: newX, y: objectA.position.y)
+        let newY = objectA.position.y + abs(objectA.position.y - objectB.position.y)/2
+        let position = CGPoint(x: newX, y: newY)
         
         incrementScore(with: objectA.dropObjectSize)
         
         if let emitter = SKEmitterNode(fileNamed: "merge") {
             emitter.position = position
             emitter.particleSize = CGSize(width: newSize.rawValue, height: newSize.rawValue)
+            let action = SKAction.wait(forDuration: 0.4)
+            emitter.run(action) { self.destroy(object: emitter) }
             addChild(emitter)
-            destroy(object: objectA)
-            destroy(object: objectB)
-            let newObject = addDropObjectNode(dropObjectSize: newSize, position: position, isDynamic: true)
-            newObject?.physicsBody?.applyImpulse(CGVector(dx: Int.random(in: -15...15), dy: Int.random(in: -15...15))) // adds explosion push
-            HapticManager.instance.impact(PirateHaptic.merge)
-            
-            DispatchQueue.main.asyncAfter(deadline: .now()+0.4) {
-                self.destroy(object: emitter)
-            }
         }
+        
+        destroy(object: objectA)
+        destroy(object: objectB)
+        let newObject = addDropObjectNode(dropObjectSize: newSize, position: position, isDynamic: true)
+        newObject?.physicsBody?.categoryBitMask = CollisionCategory.booty
+        newObject?.physicsBody?.collisionBitMask = CollisionCategory.booty
+        newObject?.physicsBody?.contactTestBitMask = CollisionCategory.booty
+        newObject?.physicsBody?.applyImpulse(CGVector(dx: Int.random(in: -15...15), dy: Int.random(in: -15...15))) // adds explosion push
+        HapticManager.instance.impact(PirateHaptic.merge)
     }
     
     func destroy(object: SKNode) {
-        print("\(type(of: self)).\(#function)")
+//        print("\(type(of: self)).\(#function)")
         object.removeFromParent()
     }
     
-    @discardableResult private func addDropObjectNode(dropObjectSize: DropObjectSize, position: CGPoint, isDynamic: Bool = false) -> SKSpriteNode? {
+    @discardableResult private func addDropObjectNode(dropObjectSize: DropObjectSize, position: CGPoint, isDynamic: Bool = false, withCollision: Bool = false) -> SKSpriteNode? {
 //        print("\(type(of: self)).\(#function)")
         let dropObject = DropObject(size: dropObjectSize)
         let texture = SKTexture(imageNamed: dropObject.imageName.rawValue)
         let node = SKSpriteNode(texture: texture, size: dropObject.size)
         
         node.physicsBody = SKPhysicsBody(texture: texture, size: dropObject.size)
-        #warning("This next line replaces the above line. Make sure to fix the actual image file's sizes to their respective size (in points). Otherwise the size of the objects as your playing the game are all wrong.")
+        #warning("This next line replaces the above line. Make sure to fix the actual image-file's sizes to their respective size (in points). Otherwise the size of the objects as your playing the game are all wrong.")
         // node.physicsBody = physicsBodies.getPhysicsBody(for: dropObject.imageName)
         
         node.physicsBody?.restitution = 0
-        node.physicsBody?.friction = 0.7
+        node.physicsBody?.friction = 0.2
         node.physicsBody?.angularDamping = 6
         node.physicsBody?.linearDamping = 0.3
-        node.physicsBody?.contactTestBitMask = node.physicsBody?.collisionBitMask ?? 0
+        
+        if withCollision {
+            // WILL collide with everything
+            node.physicsBody?.categoryBitMask = CollisionCategory.booty
+            node.physicsBody?.collisionBitMask = CollisionCategory.booty
+            node.physicsBody?.contactTestBitMask = CollisionCategory.booty
+            // node.physicsBody?.contactTestBitMask = node.physicsBody?.collisionBitMask ?? 0 // collides with everything and send notifications for all collisions.
+        } else {
+            // will NOT collide
+            node.physicsBody?.categoryBitMask = CollisionCategory.none
+            node.physicsBody?.collisionBitMask = CollisionCategory.none
+            node.physicsBody?.contactTestBitMask = CollisionCategory.none
+        }
+        
         node.physicsBody?.isDynamic = isDynamic
         node.position = position
         node.name = dropObject.idName
@@ -284,6 +313,29 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         return node
     }
         
+    private func addWalls() {
+//        guard let scene = scene else { return }
+//        var leftPoints = [CGPoint(x: 0, y: 0), CGPoint(x: 0, y: scene.frame.maxY)]
+//        let leftWall = SKShapeNode(points: &leftPoints, count: leftPoints.count)
+//        leftWall.physicsBody = SKPhysicsBody(edgeFrom: leftPoints[0], to: leftPoints[1])
+//        leftWall.physicsBody?.restitution = 0.0
+//        leftWall.physicsBody?.categoryBitMask = CollisionCategory.walls
+//        leftWall.physicsBody?.collisionBitMask = CollisionCategory.booty
+//        leftWall.strokeColor = .clear
+//        
+//        addChild(leftWall)
+//        
+//        var rightPoints = [CGPoint(x: scene.frame.maxX, y: 0), CGPoint(x: scene.frame.maxX, y: scene.frame.maxY)]
+//        let rightWall = SKShapeNode(points: &rightPoints, count: rightPoints.count)
+//        rightWall.physicsBody = SKPhysicsBody(edgeFrom: rightPoints[0], to: rightPoints[1])
+//        rightWall.physicsBody?.restitution = 0.0
+//        rightWall.physicsBody?.categoryBitMask = CollisionCategory.walls
+//        rightWall.physicsBody?.collisionBitMask = CollisionCategory.booty
+//        rightWall.strokeColor = .clear
+//        
+//        addChild(rightWall)
+    }
+    
     private func addBackgroundImage(position: CGPoint, scene: SKScene) {
         let background = SKSpriteNode(imageNamed: "background.jpg")
         background.position = position
@@ -346,7 +398,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     
     /// THIS FIXES THE NEXT OBJECT'S EDGE OVERLAY. So the new drop object bounds does not extend beyond the edge of the scene/screen
     private func calculateLastDropPositionForLargerDropObject(in scene: SKScene) {
-        print("\(type(of: self)).\(#function)")
+//        print("\(type(of: self)).\(#function)")
         if self.lastDropPosition != nil {
             // Check if next drop-object size is bigger or smaller than previous
             if nextDropObject.dropObjectSize > dropObject.dropObjectSize {
