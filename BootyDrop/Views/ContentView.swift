@@ -50,13 +50,6 @@ struct ContentView: View {
             GameOverView($game.isGameOver, score: game.score)
                 .environmentObject(game)
         } // GameOver View
-        
-        .overlay {
-            #warning("temp overlay")
-            Button("game over") {
-                game.isGameOver = true
-            }
-        }
     }
 }
 
