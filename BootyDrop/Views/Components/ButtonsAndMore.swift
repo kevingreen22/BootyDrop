@@ -141,6 +141,7 @@ struct PirateText: View {
     
     var body: some View {
         Text(text)
+            .foregroundStyle(Color.black)
             .font(.custom(CustomFont.rum, size: size, relativeTo: textStyle))
             .pirateShadow()
     }

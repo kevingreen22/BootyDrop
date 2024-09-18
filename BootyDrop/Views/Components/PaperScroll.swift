@@ -162,7 +162,7 @@ struct PaperScroll<Content: View>: View {
                     MusicButton()
                     SoundButton()
                     VibrateButton()
-                }.padding(.bottom, 16)
+                }.padding(.vertical, 16)
                 
                 RestartButton { }
             }
