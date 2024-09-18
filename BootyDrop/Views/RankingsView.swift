@@ -102,7 +102,7 @@ struct RankingsView: View {
 
 
 #Preview {
-    @State var showRankings: Bool = true
+    @Previewable @State var showRankings: Bool = true
     
     return ZStack {
         RankingsView(showRankings: $showRankings)

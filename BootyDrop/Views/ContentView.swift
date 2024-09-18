@@ -54,7 +54,7 @@ struct ContentView: View {
 }
 
 #Preview {
-    @StateObject var game: GameScene = {
+    @Previewable @StateObject var game: GameScene = {
         let scene = GameScene()
         scene.size = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
         return scene

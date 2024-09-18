@@ -18,13 +18,13 @@ import KGToolbelt
 // A simple game scene with falling pirate booty.
 class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     @Published var score: Int = 0
-    @Published var nextDropObject: DropObject = .init(size: DropObjectSize.random)
+    @Published var nextDropObject: DropObject = DropObject(DOSize: DropObjectSize.random)
     @Published var isGameOver: Bool = false
     
     public var screenshot: UIImage = UIImage(systemName: "questionmark")!
 
     private var startLine: SKShapeNode!
-    private var currentDropObject: SKNode!
+    private var currentDropObject: DropObject!
     private var dropGuide: SKNode!
     private var lastDropPosition: CGPoint?
     
@@ -55,9 +55,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         addBackgroundImage(position: CGPoint(x: scene.frame.width/2, y: scene.frame.height/2), scene: scene)
         
         addStartLine()
-        
-//        addWalls()
-        
+                
         dropGuide = createDropGuide(xPosition: scene.frame.width/2)
         
         currentDropObject = addDropObjectNode(dropObjectSize: .random, position: CGPoint(x: scene.frame.width/2, y: dropY))
@@ -124,7 +122,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
             
             self.dropGuide.position.x = self.currentDropObject.position.x
             
-            self.nextDropObject = .init(size: .random)
+            self.nextDropObject = DropObject(DOSize: DropObjectSize.random)
         }
     }
     
@@ -246,13 +244,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     func handleCollision(between objectA: SKSpriteNode, and objectB: SKSpriteNode) {
         print("\(type(of: self)).\(#function)")
         
-        let newSize = objectA.dropObject.dropObjectSize.nextSize
-        print("currentSize: \(objectA.dropObject.dropObjectSize.rawValue) - newSize: \(newSize.rawValue)\n")
+        guard let DONode = objectA as? DropObject else { return }
+        let newSize = DONode.dropObjectSize.nextSize
+        print("currentSize: \(DONode.dropObjectSize.rawValue) - newSize: \(newSize.rawValue)\n")
         let newX = objectA.position.x + abs(objectA.position.x - objectB.position.x)/2
         let newY = objectA.position.y + abs(objectA.position.y - objectB.position.y)/2
         let position = CGPoint(x: newX, y: newY)
         
-        incrementScore(with: objectA.dropObject.dropObjectSize)
+        incrementScore(with: DONode.dropObjectSize)
         
         if let emitter = SKEmitterNode(fileNamed: "merge") {
             emitter.position = position
@@ -275,12 +274,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         object.removeFromParent()
     }
     
-    @discardableResult private func addDropObjectNode(dropObjectSize: DropObjectSize, position: CGPoint, isDynamic: Bool = false, withCollision: Bool = false) -> SKSpriteNode? {
+    @discardableResult private func addDropObjectNode(dropObjectSize: DropObjectSize, position: CGPoint, isDynamic: Bool = false, withCollision: Bool = false) -> DropObject? {
 //        print("\(type(of: self)).\(#function)")
-        let node = SKSpriteNode(dropObject: DropObject(size: dropObjectSize), position: position)
+        let node = DropObject(DOSize: dropObjectSize, position: position)
         guard let nodeTex = node.texture else { return nil }
         
-        node.physicsBody = SKPhysicsBody(texture: nodeTex, size: node.dropObject.dropObjectSize.actual)
+        node.physicsBody = SKPhysicsBody(texture: nodeTex, size: node.dropObjectSize.actual)
         #warning("This next line replaces the above line. Make sure to fix the actual image-file's sizes to their respective size (in points). Otherwise the size of the objects as your playing the game are all wrong.")
         // node.physicsBody = physicsBodies.getPhysicsBody(for: dropObject.imageName)
         
@@ -303,29 +302,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         addChild(node)
         return node
     }
-        
-//    private func addWalls() {
-//        guard let scene = scene else { return }
-//        var leftPoints = [CGPoint(x: 0, y: 0), CGPoint(x: 0, y: scene.frame.maxY)]
-//        let leftWall = SKShapeNode(points: &leftPoints, count: leftPoints.count)
-//        leftWall.physicsBody = SKPhysicsBody(edgeFrom: leftPoints[0], to: leftPoints[1])
-//        leftWall.physicsBody?.restitution = 0.0
-//        leftWall.physicsBody?.categoryBitMask = CollisionCategory.walls
-//        leftWall.physicsBody?.collisionBitMask = CollisionCategory.booty
-//        leftWall.strokeColor = .clear
-//        
-//        addChild(leftWall)
-//        
-//        var rightPoints = [CGPoint(x: scene.frame.maxX, y: 0), CGPoint(x: scene.frame.maxX, y: scene.frame.maxY)]
-//        let rightWall = SKShapeNode(points: &rightPoints, count: rightPoints.count)
-//        rightWall.physicsBody = SKPhysicsBody(edgeFrom: rightPoints[0], to: rightPoints[1])
-//        rightWall.physicsBody?.restitution = 0.0
-//        rightWall.physicsBody?.categoryBitMask = CollisionCategory.walls
-//        rightWall.physicsBody?.collisionBitMask = CollisionCategory.booty
-//        rightWall.strokeColor = .clear
-//        
-//        addChild(rightWall)
-//    }
     
     private func addBackgroundImage(position: CGPoint, scene: SKScene) {
         let background = SKSpriteNode(imageNamed: "background.jpg")
@@ -387,22 +363,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         score += Int(Double(dropObjectSize.rawValue)*0.1)
     }
     
-    /// THIS FIXES THE NEXT OBJECT'S EDGE OVERLAY. So the new drop object bounds does not extend beyond the edge of the scene/screen
+    /// THIS FIXES THE NEXT-OBJECT'S EDGE OVERLAY. So the new drop object bounds does not extend beyond the edge of the scene/screen
     private func calculateLastDropPositionForLargerDropObject(in scene: SKScene) {
 //        print("\(type(of: self)).\(#function)")
         if self.lastDropPosition != nil {
             // Check if next drop-object size is bigger or smaller than previous
-            if nextDropObject.dropObjectSize > dropObject.dropObjectSize {
+            if nextDropObject.dropObjectSize > currentDropObject.dropObjectSize {
                                     
                 // Check for leading edge of scene frame
                 if lastDropPosition!.x - (nextDropObject.dropObjectSize.rawValue/2) <= scene.frame.minX {
                     // add half the size of the next drop-object size to the lastDropPosition
-                    self.lastDropPosition!.x += abs(self.dropObject.dropObjectSize.rawValue/2 - nextDropObject.dropObjectSize.rawValue/2)
+                    self.lastDropPosition!.x += abs(self.currentDropObject.dropObjectSize.rawValue/2 - nextDropObject.dropObjectSize.rawValue/2)
                     
                 // Check for trailing edge of scene
                 } else if lastDropPosition!.x + (nextDropObject.dropObjectSize.rawValue/2) >= scene.frame.maxX {
                     // subtract half the size of the next drop-object size to the lastDropPosition
-                    self.lastDropPosition!.x -= abs(self.dropObject.dropObjectSize.rawValue/2 - nextDropObject.dropObjectSize.rawValue/2)
+                    self.lastDropPosition!.x -= abs(self.currentDropObject.dropObjectSize.rawValue/2 - nextDropObject.dropObjectSize.rawValue/2)
                 }
             }
         }
@@ -460,17 +436,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
 
 
 // MARK: SKNode Extension
-extension SKNode  {
+extension SKNode {
     /// A specific set of sizes that DropObject can be only. If you need the actuat CGSize of a DropObject, use DropObjectSize.actual
 //    var dropObjectSize: DropObjectSize {
 //        let sprite = self as! SKSpriteNode
 //        return DropObjectSize.sizeFor(float: sprite.size.height)
 //    }
-    
-    var dropObject: DropObject {
-        get { return self.dropObject }
-        set { self.dropObject = newValue }
-    }
     
     /// Sets category, collision, and contactTest bit masks to the passed in value.
     func setBitMasks(to mask: CollisionCategory) {
@@ -480,39 +451,43 @@ extension SKNode  {
     }
 }
 
-extension SKSpriteNode {
-    /// Initializes a new SKSpriteNode with a DropObject instance and a position.
-    convenience init(dropObject: DropObject, position: CGPoint) {
-        let texture = SKTexture(imageNamed: dropObject.imageName.rawValue)
-        self.init(texture: texture, size: dropObject.size)
-        self.dropObject = dropObject
-        self.position = position
-        self.name = dropObject.name
-    }
-}
+//extension SKSpriteNode {
+//    /// Initializes a new SKSpriteNode with a DropObject instance and a position.
+//    convenience init(dropObject: DropObject, position: CGPoint) {
+//        let texture = SKTexture(imageNamed: dropObject.imageName.rawValue)
+//        self.init(texture: texture, size: dropObject.size)
+//        self.dropObject = dropObject
+//        self.position = position
+//        self.name = dropObject.name
+//    }
+//}
 
 
 
 // MARK: DropObject Model
 
-/// A model containing all information for a Sprite node to be initialized with.
-struct DropObject {
-    var dropObjectSize: DropObjectSize
-    var size: CGSize = .zero
-    var name: String = ""
+class DropObject: SKSpriteNode {
+    var dropObjectSize: DropObjectSize = ._30
     var imageName: DropObjectImageName = .coin
     var shape: CGPath = CGPath(ellipseIn: .zero, transform: .none)
+    
+    init(DOSize: DropObjectSize, position: CGPoint = .zero) {
+        super.init(texture: nil, color: .clear, size: DOSize.actual)
 
-    init(size: DropObjectSize) {
-        self.name = DropObjectImageName.asName(for: size)
-        self.dropObjectSize = size
-        self.size = size.actual
-        self.imageName = _imageName
+        self.dropObjectSize = DOSize
+        self.imageName = getImageName(for: dropObjectSize)
+        self.texture = SKTexture(imageNamed: self.imageName.rawValue)
+        self.name = DropObjectImageName.asString(for: dropObjectSize)
         self.shape = _shape
+        self.position = position
     }
     
-    private var _imageName: DropObjectImageName {
-        switch self.dropObjectSize {
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func getImageName(for size: DropObjectSize) -> DropObjectImageName {
+        switch size {
         case ._30: .coin
         case ._40: .gem1
         case ._50: .gem2
@@ -546,6 +521,59 @@ struct DropObject {
     
 }
 
+
+
+/// A model containing all information for a Sprite node to be initialized with.
+//struct DropObject {
+//    var dropObjectSize: DropObjectSize
+//    var size: CGSize = .zero
+//    var name: String = ""
+//    var imageName: DropObjectImageName = .coin
+//    var shape: CGPath = CGPath(ellipseIn: .zero, transform: .none)
+//
+//    init(size: DropObjectSize) {
+//        self.name = DropObjectImageName.asName(for: size)
+//        self.dropObjectSize = size
+//        self.size = size.actual
+//        self.imageName = _imageName
+//        self.shape = _shape
+//    }
+//    
+//    private var _imageName: DropObjectImageName {
+//        switch self.dropObjectSize {
+//        case ._30: .coin
+//        case ._40: .gem1
+//        case ._50: .gem2
+//        case ._60: .gem3
+//        case ._70: .gem4
+//        case ._80: .gem5
+//        case ._100: .diamond
+//        case ._120: .goldNugget
+//        case ._130: .potion
+//        case ._150: .skull
+//        }
+//    }
+//    
+//    private var _shape: CGPath {
+//        switch self.imageName {
+////        case .coin: return MyShape.circle(center: .zero, size: size.height)
+////
+////        case .blueGem: return MyShape.octagon(center: .zero, radius: size.height)
+////
+////        case .greenGem: return MyShape.emeraldCut(center: .zero, width: size.width, height: size.height, cornerCut: size.height*0.33)
+////
+////        case .redGem: return MyShape.gemstoneProfile(center: .zero, size: size.height)
+////
+////        case .goldBrick: return MyShape.rectangle(rect: CGRect(origin: .zero, size: CGSize(width: size.width, height: size.height)))
+////
+////        case .skull: return MyShape.circle(center: .zero, size: size.height)
+//            
+//        default: return MyShape.circle(center: .zero, size: size.height)
+//        }
+//    }
+//    
+//}
+
 enum DropObjectImageName: String, RawRepresentable {
     case coin = "coin"
     case gem1 = "gem1"
@@ -558,7 +586,7 @@ enum DropObjectImageName: String, RawRepresentable {
     case goldNugget = "nugget"
     case skull = "skull"
     
-    static func asName(for size: DropObjectSize) -> String {
+    static func asString(for size: DropObjectSize) -> String {
         switch size {
         case ._30: DropObjectImageName.coin.rawValue
         case ._40: DropObjectImageName.gem1.rawValue
@@ -775,7 +803,7 @@ class PhysicsBodies {
 
 
 #Preview {
-    @StateObject var game: GameScene = {
+    @Previewable @StateObject var game: GameScene = {
         let scene = GameScene()
         scene.size = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
         return scene

@@ -58,8 +58,8 @@ struct GameOverView: View {
 }
 
 #Preview {
-    @State var showGameOver = false
-    @StateObject var game: GameScene = {
+    @Previewable @State var showGameOver = false
+    @Previewable @StateObject var game: GameScene = {
         let scene = GameScene()
         scene.size = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
         return scene

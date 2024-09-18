@@ -148,7 +148,7 @@ struct PaperScroll<Content: View>: View {
 
 
 #Preview {
-    @State var showSettings: Bool = true
+    @Previewable @State var showSettings: Bool = true
     
     return ZStack {
         Color.black.opacity(0.7)

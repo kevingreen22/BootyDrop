@@ -44,12 +44,12 @@ struct SettingView: View {
 }
 
 #Preview {
-    @StateObject var game: GameScene = {
+    @Previewable @StateObject var game: GameScene = {
         let scene = GameScene()
         scene.size = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
         return scene
     }()
-    @State var showSettings: Bool = true
+    @Previewable @State var showSettings: Bool = true
     
     return ZStack {
         SettingView(showSettings: $showSettings)
