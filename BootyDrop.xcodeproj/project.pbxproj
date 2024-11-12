@@ -29,6 +29,7 @@
 		C76F5B3C2C6FC65100F42E90 /* KGViews in Frameworks */ = {isa = PBXBuildFile; productRef = C76F5B3B2C6FC65100F42E90 /* KGViews */; };
 		C7CC623D2C507A40005D9F48 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C7CC623C2C507A40005D9F48 /* Assets.xcassets */; };
 		C7CC62402C507A40005D9F48 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C7CC623F2C507A40005D9F48 /* Preview Assets.xcassets */; };
+		C7CF22B32CD3F64100DA22C5 /* theme_song.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C7CF22B22CD3F64100DA22C5 /* theme_song.mp3 */; };
 		C7D24EB82C9B51690006B9EF /* theme_song.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C7D24EB72C9B51690006B9EF /* theme_song.mp3 */; };
 		C7D24EBA2C9CBD7B0006B9EF /* sound_effect_drop.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C7D24EB92C9CBD7B0006B9EF /* sound_effect_drop.mp3 */; };
 		C7D24EBC2C9CC28A0006B9EF /* button_click.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C7D24EBB2C9CC28A0006B9EF /* button_click.mp3 */; };
@@ -87,6 +88,7 @@
 		C7CC623F2C507A40005D9F48 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		C7CC62462C508459005D9F48 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		C7CC62592C50BAC6005D9F48 /* Shape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shape.swift; sourceTree = "<group>"; };
+		C7CF22B22CD3F64100DA22C5 /* theme_song.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = theme_song.mp3; sourceTree = "<group>"; };
 		C7D24EB72C9B51690006B9EF /* theme_song.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = theme_song.mp3; sourceTree = "<group>"; };
 		C7D24EB92C9CBD7B0006B9EF /* sound_effect_drop.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = sound_effect_drop.mp3; sourceTree = "<group>"; };
 		C7D24EBB2C9CC28A0006B9EF /* button_click.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = button_click.mp3; sourceTree = "<group>"; };
@@ -216,6 +218,7 @@
 				C7FB735C2C6C117000DC4DBB /* finger_touch.sks */,
 				C7FB735D2C6C117000DC4DBB /* merge.sks */,
 				C7FB735E2C6C117000DC4DBB /* ripple_ring.png */,
+				C7CF22B22CD3F64100DA22C5 /* theme_song.mp3 */,
 				C729AA242CA60FD50083557C /* welcome_music_effects.mp3 */,
 				C7D24EB72C9B51690006B9EF /* theme_song.mp3 */,
 				C7D24EB92C9CBD7B0006B9EF /* sound_effect_drop.mp3 */,
@@ -367,7 +370,7 @@
 				C7CC623D2C507A40005D9F48 /* Assets.xcassets in Resources */,
 				C7F1BAA02C767C19005CC0A4 /* settings_button.png in Resources */,
 				C7DDA40C2C559E27005E6663 /* gem3.png in Resources */,
-				C7D24EB82C9B51690006B9EF /* theme_song.mp3 in Resources */,
+				C7CF22B32CD3F64100DA22C5 /* theme_song.mp3 in Resources */,
 				C7F1BAA32C767C19005CC0A4 /* vibrate_button.png in Resources */,
 				C7DDA40B2C559E27005E6663 /* skull.png in Resources */,
 				C7F1BAA12C767C19005CC0A4 /* rankings_button.png in Resources */,
