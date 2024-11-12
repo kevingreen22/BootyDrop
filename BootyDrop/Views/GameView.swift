@@ -8,12 +8,9 @@
 import SwiftUI
 import SpriteKit
 
-struct ContentView: View {
-    @StateObject var game: GameScene = {
-        let scene = GameScene(size: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
-        scene.scaleMode = .fill
-        return scene
-    }()
+struct GameView: View {
+    @EnvironmentObject var game: GameScene
+    @EnvironmentObject var router: ViewRouter
     @State private var showSettings: Bool = false
     @State private var showRankings: Bool = false
     
@@ -31,8 +28,8 @@ struct ContentView: View {
         
         .overlay {
             if showSettings {
-                SettingView(showSettings: $showSettings)
-                    .environmentObject(game)
+                SettingView(showSettings: $showSettings, game: game)
+                    .environmentObject(router)
                     .transition(.asymmetric(insertion: .move(edge: .leading), removal: .move(edge: .trailing)))
             }
         } // Settings View
@@ -44,24 +41,25 @@ struct ContentView: View {
             }
         } // Rankings View
         
-        .fullScreenCover(isPresented: $game.isGameOver, onDismiss: {
-            game.resetGame()
-        }) {
+        .fullScreenCover(isPresented: $game.isGameOver) {
             GameOverView($game.isGameOver, score: game.score)
                 .environmentObject(game)
+                .environmentObject(router)
         } // GameOver View
     }
 }
 
 #Preview {
     @Previewable @StateObject var game: GameScene = {
-        let scene = GameScene()
-        scene.size = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+        let scene = GameScene(size: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
+        scene.isActive = true
         return scene
     }()
+    @Previewable @StateObject var router = ViewRouter()
     
-    return ContentView()
+    GameView()
         .environmentObject(game)
+        .environmentObject(router)
 }
 
 
@@ -89,8 +87,8 @@ struct Header: View {
                 }
                 .overlay(alignment: .topTrailing) {
                     HStack {
-                        RankingsButton($showRankings)
-                        SettingsButton($showSettings)
+                        RankingsButton($showRankings).environmentObject(game)
+                        SettingsButton($showSettings).environmentObject(game)
                     }
                     .padding(.trailing, 26)
                     .padding(.top, 20)

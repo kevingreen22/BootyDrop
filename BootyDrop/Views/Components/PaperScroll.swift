@@ -7,12 +7,15 @@
 
 import SwiftUI
 
-struct PaperScroll<Content: View>: View {
+public struct PaperScroll<Content>: View where Content: View {
     @Binding var show: Bool
     var height: CGFloat = 400
     var pullText: String? = nil
-    @ViewBuilder var content: Content
+    var onDismiss: (()->())?
+    @ViewBuilder var content: ()->Content
     
+    @State private var screenFrame: CGRect? = .zero
+    @State var isStatic: Bool = false
     @State private var scrollTopOffset: CGFloat = -36
     @State private var scrollBottomOffset: CGFloat = 36
     @State private var scrollMiddleHeight: CGFloat = 30
@@ -22,13 +25,21 @@ struct PaperScroll<Content: View>: View {
     @State private var isAnimatingChevron: Bool = false
     @State private var chevronScale: CGFloat = 1
     
+    init(show: Binding<Bool>, height: CGFloat = 400, pullText: String? = nil, onDismiss: (()->())? = nil, content: @escaping ()->Content) {
+        _show = show
+        self.height = height
+        self.pullText = pullText
+        self.onDismiss = onDismiss
+        self.content = content
+    }
+    
         
-    var body: some View {
+    public var body: some View {
         ZStack {
             Image("scroll_middle")
                 .resizable()
                 .overlay(alignment: .top) {
-                    content.padding([.top, .bottom], 16)
+                    content().padding([.top, .bottom], 16)
                 } // Main Content
                 .frame(width: 310, height: scrollMiddleHeight)
                 .offset(y: scrollMiddleOffset)
@@ -38,12 +49,14 @@ struct PaperScroll<Content: View>: View {
                 .resizable()
                 .scaledToFit()
                 .overlay(alignment: .bottom) {
-                    pullChevron(withText: pullText)
+                    if isStatic == false {
+                        pullChevron(withText: pullText)
+                    }
                 } // pull chevron
                 .offset(y: scrollBottomOffset)
                 .offset(dragAmount)
                 .gesture(dragToClose)
-                .gesture(tapToClose.simultaneously(with: dragToClose))
+                .gesture(isStatic == true ? tapToClose.simultaneously(with: dragToClose) : nil)
             
             Image("scroll_top")
                 .resizable()
@@ -51,10 +64,15 @@ struct PaperScroll<Content: View>: View {
                 .offset(y: scrollTopOffset)
             
         } // end paper scroll
-        .frame(width: UIScreen.main.bounds.width*0.85)
+        .frame(width: (screenFrame?.width ?? UIScreen.main.bounds.width)*0.85)
         .onAppear {
+            screenFrame = windowSceneFrame
             openPaperScroll()
         }
+    }
+    
+    private var windowSceneFrame: CGRect? {
+        return  (UIApplication.shared.connectedScenes.first as? UIWindowScene)?.screen.bounds
     }
     
     private func pullChevron(withText: String? = nil) -> some View {
@@ -128,6 +146,8 @@ struct PaperScroll<Content: View>: View {
                         show = false
                     }
                 }
+            } completion: {
+                onDismiss?()
             }
         }
     }
@@ -147,10 +167,95 @@ struct PaperScroll<Content: View>: View {
 }
 
 
+public struct StaticPaperScroll<Content>: View where Content: View {
+    var height: CGFloat = 400
+    var openOnAppear: Bool = true
+    @ViewBuilder var content: ()->Content
+    
+    @State private var screenFrame: CGRect? = .zero
+    @State private var scrollTopOffset: CGFloat = -36
+    @State private var scrollBottomOffset: CGFloat = 36
+    @State private var scrollMiddleHeight: CGFloat = 30
+    @State private var scrollMiddleOffset: CGFloat = 0
+    
+    init(height: CGFloat = 400, openOnAppear: Bool = true, content: @escaping ()->Content) {
+        self.openOnAppear = openOnAppear
+        self.height = height
+        self.content = content
+    }
+    
+        
+    public var body: some View {
+        ZStack {
+            Image("scroll_middle")
+                .resizable()
+                .overlay(alignment: .top) {
+                    content().padding([.top, .bottom], 16)
+                } // Main Content
+                .frame(width: 310, height: scrollMiddleHeight)
+                .offset(y: scrollMiddleOffset)
+                .clipped()
+            
+            Image("scroll_bottom")
+                .resizable()
+                .scaledToFit()
+                .offset(y: scrollBottomOffset)
+                
+            Image("scroll_top")
+                .resizable()
+                .scaledToFit()
+                .offset(y: scrollTopOffset)
+            
+        } // end paper scroll
+        .frame(width: (screenFrame?.width ?? UIScreen.main.bounds.width)*0.85)
+        .onAppear {
+            screenFrame = windowSceneFrame
+            if openOnAppear {
+                openPaperScroll()
+            }
+        }
+    }
+    
+    private var windowSceneFrame: CGRect? {
+        return  (UIApplication.shared.connectedScenes.first as? UIWindowScene)?.screen.bounds
+    }
+    
+    public func dismissPaperScroll(delay: Double = 0.3) {
+        DispatchQueue.main.asyncAfter(deadline: .now()+delay) {
+            withAnimation(.easeInOut) {
+                scrollTopOffset = -36
+                scrollBottomOffset = 36
+                scrollMiddleHeight = 30
+//                DispatchQueue.main.asyncAfter(deadline: .now()+delay) {
+//                    withAnimation(.easeInOut) {
+//                        show = false
+//                    }
+//                }
+            }
+        }
+    }
+    
+    public func openPaperScroll(delay: Double = 0.3) {
+        DispatchQueue.main.asyncAfter(deadline: .now()+delay) {
+            withAnimation(.easeInOut) {
+                scrollTopOffset = (-height/2)-18
+                scrollBottomOffset = (height/2)+18
+                scrollMiddleHeight = height
+            }
+        }
+    }
+    
+}
+
+
 #Preview {
     @Previewable @State var showSettings: Bool = true
+    @Previewable @StateObject var game: GameScene = {
+        let scene = GameScene(size: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
+        return scene
+    }()
     
-    return ZStack {
+    ZStack {
         Color.black.opacity(0.7)
             .ignoresSafeArea()
             .transition(.opacity)
@@ -167,6 +272,18 @@ struct PaperScroll<Content: View>: View {
                 RestartButton { }
             }
         }
+        
+//        StaticPaperScroll(show: $showSettings) {
+//            VStack {
+//                PirateText("Paper Scroll", size: 20).padding(.horizontal, 4)
+//                VStack(spacing: 10) {
+//                    MusicButton().environmentObject(game)
+//                    SoundButton().environmentObject(game)
+//                    VibrateButton()
+//                }.padding(.vertical, 16)
+//                
+//                RestartButton { }
+//            }
+//        }
     }
-    
 }

@@ -1,6 +1,15 @@
 {
-  "originHash" : "a1cf617fce06adc6217f47463e47c0f2f02d82825cf9dc50d4d072b0cbb7bb79",
+  "originHash" : "dd28ce6f89b7d2c4fa4bb1a49968f9aeba9522e549dbb200afdd16e0020c315f",
   "pins" : [
+    {
+      "identity" : "appinfo",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/kevingreen22/AppInfo",
+      "state" : {
+        "revision" : "7c8810e42961addb7e6e1d5c55786d4c5164e4f9",
+        "version" : "1.0.2"
+      }
+    },
     {
       "identity" : "kgtoolbelt",
       "kind" : "remoteSourceControl",

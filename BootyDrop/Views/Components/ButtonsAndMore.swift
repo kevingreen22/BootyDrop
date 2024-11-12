@@ -6,10 +6,13 @@
 //
 
 import SwiftUI
+import SpriteKit
 
 struct RankingsButton: View {
     @Binding var showRankings: Bool
     
+    @AppStorage(AppStorageKey.sound) var shouldPlaySoundEffects: Bool = true
+
     init(_ showRankings: Binding<Bool>) {
         _showRankings = showRankings
     }
@@ -18,6 +21,9 @@ struct RankingsButton: View {
         Button(action: {
             withAnimation(.easeInOut) {
                 showRankings = true
+            }
+            if shouldPlaySoundEffects {
+                try? SoundManager.playeffect(SoundResourceName.soundEffectClick)
             }
         }, label: {
             HM.ButtonLabel(imageName: "rankings_button")
@@ -28,6 +34,8 @@ struct RankingsButton: View {
 struct SettingsButton: View {
     @Binding var showSettings: Bool
     
+    @AppStorage(AppStorageKey.sound) var shouldPlaySoundEffects: Bool = true
+
     init(_ showSettings: Binding<Bool>) {
         _showSettings = showSettings
     }
@@ -37,6 +45,9 @@ struct SettingsButton: View {
             withAnimation(.easeInOut) {
                 showSettings = true
             }
+            if shouldPlaySoundEffects {
+                try? SoundManager.playeffect(SoundResourceName.soundEffectClick)
+            }
         }, label: {
             HM.ButtonLabel(imageName: "settings_button")
         })
@@ -45,13 +56,26 @@ struct SettingsButton: View {
 
 struct MusicButton: View {
     var frame: CGSize? = nil
-    @AppStorage(AppStorageKey.music) var music: Bool = false
+    var action: (()->())? = nil
+    
+    @AppStorage(AppStorageKey.sound) var shouldPlaySoundEffects: Bool = true
+    @AppStorage(AppStorageKey.music) var music: Bool = true
+    
+    init(frame: CGSize? = nil, action: (()->())? = nil) {
+        self.frame = frame
+        self.action = action
+    }
     
     var body: some View {
         Button {
-            #warning("Toggle music on/off here")
-            withAnimation { music.toggle() }
-            
+            withAnimation {
+                music.toggle()
+            } completion: {
+                action?()
+            }
+            if shouldPlaySoundEffects {
+                try? SoundManager.playeffect(SoundResourceName.soundEffectClick)
+            }
         } label: {
             HM.ButtonLabel(imageName: "music_button", title: "Music", isOff: $music, frame: frame)
         }
@@ -60,30 +84,37 @@ struct MusicButton: View {
 
 struct SoundButton: View {
     var frame: CGSize? = nil
-    @AppStorage(AppStorageKey.sound) var sound: Bool = false
-    
+    @AppStorage(AppStorageKey.sound) var shouldPlaySoundEffects: Bool = true
+        
     var body: some View {
         Button(action: {
-            #warning("Toggle sound effects on/off here")
-            withAnimation { sound.toggle() }
-            
+            withAnimation {
+                shouldPlaySoundEffects.toggle()
+            }
+            if shouldPlaySoundEffects {
+                try? SoundManager.playeffect(SoundResourceName.soundEffectClick)
+            }
         }, label: {
-            HM.ButtonLabel(imageName: "sound_button", title: "Sound", isOff: $sound, frame: frame)
+            HM.ButtonLabel(imageName: "sound_button", title: "Sound", isOff: Binding(get: { !shouldPlaySoundEffects }, set: { val in shouldPlaySoundEffects = val }) , frame: frame)
         })
     }
 }
 
 struct VibrateButton: View {
     var frame: CGSize? = nil
-    @AppStorage(AppStorageKey.vibrate) var vibrate: Bool = false
+    @AppStorage(AppStorageKey.sound) var shouldPlaySoundEffects: Bool = true
+    @AppStorage(AppStorageKey.vibrate) var shouldVibrate: Bool = true
     
     var body: some View {
         Button(action: {
-            #warning("Toggle vibrate(haptics) on/off here")
-            withAnimation { vibrate.toggle() }
-            
+            if shouldPlaySoundEffects {
+                try? SoundManager.playeffect(SoundResourceName.soundEffectClick)
+            }
+            withAnimation {
+                shouldVibrate.toggle()
+            }
         }, label: {
-            HM.ButtonLabel(imageName: "vibrate_button", title: "Vibrate", isOff: $vibrate, frame: frame)
+            HM.ButtonLabel(imageName: "vibrate_button", title: "Vibrate", isOff: $shouldVibrate, frame: frame)
         })
     }
 }
@@ -92,10 +123,18 @@ struct ShareButton: View {
     var item: Image
     var frame: CGSize? = nil
     
+    @AppStorage(AppStorageKey.sound) var shouldPlaySoundEffects: Bool = true
+    @EnvironmentObject var game: GameScene
+    
     var body: some View {
         ShareLink(item: item, preview: SharePreview("BootyDrop", image: item)) {
             HM.ButtonLabel(systemName: "square.and.arrow.up", title: "Share", fontSize: 14, frame: frame)
                 .foregroundStyle(Color.black.opacity(0.8))
+        }
+        .onTapGesture {
+            if shouldPlaySoundEffects {
+                try? SoundManager.playeffect(SoundResourceName.soundEffectClick)
+            }
         }
     }
 }
@@ -104,10 +143,14 @@ struct RestartButton: View {
     var frame: CGSize? = nil
     var action: ()->Void
     
+    @AppStorage(AppStorageKey.sound) var shouldPlaySoundEffects: Bool = true
     @State private var rotation: Double = 0
     
     var body: some View {
         Button {
+            if shouldPlaySoundEffects {
+                try? SoundManager.playeffect(SoundResourceName.soundEffectClick)
+            }
             withAnimation {
                 rotation = -360
             } completion: {
@@ -116,9 +159,9 @@ struct RestartButton: View {
         } label: {
             HM.ButtonLabel(image:
                             Image(systemName: "exclamationmark.arrow.circlepath")
-                                .resizable()
-                                .rotationEffect(.degrees(rotation)
-                            ),
+                .resizable()
+                .rotationEffect(
+                    .degrees(rotation)),
                            title: "Restart",
                            fontSize: 14,
                            frame: frame)
@@ -127,6 +170,74 @@ struct RestartButton: View {
         .buttonStyle(.borderedProminent)
     }
 }
+
+struct ExitGameButton: View {
+    var frame: CGSize? = nil
+    var action: ()->Void
+    
+    @AppStorage(AppStorageKey.sound) var shouldPlaySoundEffects: Bool = true
+    @State private var rotation: Double = 0
+
+    var body: some View {
+        Button {
+            if shouldPlaySoundEffects {
+                try? SoundManager.playeffect(SoundResourceName.soundEffectClick)
+            }
+            withAnimation {
+                rotation = -360
+            } completion: {
+                action()
+            }
+        } label: {
+            HM.ButtonLabel(image:
+                            Image(systemName: "arrow.uturn.backward")
+                .resizable()
+                .rotationEffect(
+                    .degrees(rotation)),
+                           title: "Exit",
+                           fontSize: 14,
+                           frame: frame)
+            .foregroundStyle(Color.black.opacity(0.8))
+        }
+        .buttonStyle(.borderedProminent)
+    }
+}
+
+struct StartButton: View {
+    @EnvironmentObject var router: ViewRouter
+    @EnvironmentObject var game: GameScene
+    
+    @AppStorage(AppStorageKey.sound) var shouldPlaySoundEffects: Bool = true
+        
+    var body: some View {
+        Button {
+            if shouldPlaySoundEffects {
+                try? SoundManager.playeffect(SoundResourceName.soundEffectClick)
+            }
+            
+            // go to GameView and start game
+            withAnimation {
+                game.isActive = true
+//                router.view = .game
+            } completion: {
+                game.resetGame(isActive: true)
+            }
+        } label: {
+            HM.ButtonLabel(image:
+                            Image("coin")
+                .resizable()
+                .scaledToFit(),
+                           title: "Start",
+                           fontSize: 30,
+                           frame: CGSize(width: 150, height: 80))
+            .foregroundStyle(Color.black.opacity(0.8))
+        }
+        .buttonStyle(.borderedProminent)
+    }
+}
+
+
+
 
 struct PirateText: View {
     var text: String
