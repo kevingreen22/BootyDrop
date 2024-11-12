@@ -8,10 +8,16 @@
 import SwiftUI
 import AVKit
 
+struct SoundResourceName {
+    static var soundEffectClick = "button_click"
+    
+}
+
+ 
+
+
 public class SoundManager {
-    
-//    static let instance = SoundManager()
-    
+        
     private static var player: AVAudioPlayer?
     
     private init() { }

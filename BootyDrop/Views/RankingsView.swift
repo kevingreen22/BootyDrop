@@ -23,48 +23,10 @@ struct RankingsView: View {
         
         PaperScroll(show: $showRankings, pullText: "Close") {
             VStack {
-                VStack {
-                    PirateText("Rankings").pirateShadow(y: 4)
-                    
-                    HStack {
-                        Button {
-                            
-                        } label: {
-                            HM.ButtonLabel(imageName: "trophy", title: "Today")
-                        }
-                        
-                        Button(action: {
-                            
-                        }, label: {
-                            HM.ButtonLabel(imageName: "trophy", title: "Weekly")
-                        })
-                        
-                        Button(action: {
-                            
-                        }, label: {
-                            HM.ButtonLabel(imageName: "trophy", title: "All-time")
-                        })
-                    }.padding(.bottom, 8)
-                    
-                    ZStack {
-                        Text("loading...")
-                            .font(.custom(CustomFont.rum, size: 16, relativeTo: .subheadline))
-                            .opacity(leaderboardEntries.1.isEmpty ? 1 : 0)
-                            .offset(y: 20)
-                            .pirateShadow()
-                        
-                        ForEach(leaderboardEntries.1, id: \.player.gamePlayerID) { entry in
-                            HStack {
-                                Text("\(entry.player.displayName)")
-                                Spacer()
-                                Text("\(entry.formattedScore)")
-                            }
-                        }
-                        .padding(.horizontal, 24)
-                    }
-                }
                 Spacer()
-                leaderBoardButton
+                comingSoon
+                Spacer()
+//                rankingsViews
             }.padding(.vertical, 24)
         }
         .pirateShadow(y: 24)
@@ -98,6 +60,57 @@ struct RankingsView: View {
         }
     }
     
+    fileprivate var comingSoon: some View {
+        VStack {
+            PirateText("Coming", size: 30)
+            PirateText("Soon!", size: 30)
+        }
+    }
+    
+    @ViewBuilder fileprivate var rankingsViews: some View {
+        VStack {
+            PirateText("Rankings").pirateShadow(y: 4)
+            
+            HStack {
+                Button {
+                    
+                } label: {
+                    HM.ButtonLabel(imageName: "trophy", title: "Today")
+                }
+                
+                Button(action: {
+                    
+                }, label: {
+                    HM.ButtonLabel(imageName: "trophy", title: "Weekly")
+                })
+                
+                Button(action: {
+                    
+                }, label: {
+                    HM.ButtonLabel(imageName: "trophy", title: "All-time")
+                })
+            }.padding(.bottom, 8)
+            
+            ZStack {
+                Text("loading...")
+                    .font(.custom(CustomFont.rum, size: 16, relativeTo: .subheadline))
+                    .opacity(leaderboardEntries.1.isEmpty ? 1 : 0)
+                    .offset(y: 20)
+                    .pirateShadow()
+                
+                ForEach(leaderboardEntries.1, id: \.player.gamePlayerID) { entry in
+                    HStack {
+                        Text("\(entry.player.displayName)")
+                        Spacer()
+                        Text("\(entry.formattedScore)")
+                    }
+                }
+                .padding(.horizontal, 24)
+            }
+        }
+        Spacer()
+        leaderBoardButton
+    }
 }
 
 

@@ -15,14 +15,32 @@ import UIKit
 import SpriteKit
 import KGToolbelt
 
+//enum GameState: Identifiable {
+//    var id: Int {
+//        switch self {
+//        case .welcome: 0
+//        case .playing: 1
+//        case .dead: 2
+//        }
+//    }
+//    case welcome
+//    case playing
+//    case dead
+//}
+
 // A simple game scene with falling pirate booty.
 class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     @Published var score: Int = 0
     @Published var nextDropObject: DropObject = DropObject(DOSize: DropObjectSize.random)
     @Published var isGameOver: Bool = false
-    
-    public var screenshot: UIImage = UIImage(systemName: "questionmark")!
+    @Published var isActive: Bool = false
 
+    @AppStorage(AppStorageKey.music) var shouldPlayMusic: Bool = true
+    @AppStorage(AppStorageKey.vibrate) var shouldVibrate: Bool = true
+    @AppStorage(AppStorageKey.sound) var shouldPlaySoundEffects: Bool = true
+        
+    public var screenshot: UIImage = UIImage(systemName: "questionmark")!
+    
     private var startLine: SKShapeNode!
     private var currentDropObject: DropObject!
     private var dropGuide: SKNode!
@@ -32,16 +50,29 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     private let dashSize = CGSize(width: 3, height: 60)
 //    private var physicsBodies: PhysicsBodies!
     private var timer: Timer?
-    private var gameOverTime: Int = 20
+    private var gameOverTime: Int = 14
+    
+    private var backgroundMusic: SKAudioNode!
+    private var soundEffectDrop: SKAudioNode!
+    private var soundEffectMerge: SKAudioNode!
     
     
+    override init(size: CGSize) {
+        super.init(size: size)
+        let scene = SKScene(size: size)
+        scene.scaleMode = .fill
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     
 // MARK: SKScene
     
-    /* Setup scene here */
+    /* Initial scene setup here */
     override func didMove(to view: SKView) {
-//        print("\(type(of: self)).\(#function)")
+        print("\(type(of: self)).\(#function)")
         guard let scene else { return }
 //        print("scene size:\(scene.frame) - view size\(view.frame)")
         scene.anchorPoint.x = 0
@@ -50,9 +81,154 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         scene.physicsWorld.contactDelegate = self
         scene.physicsWorld.gravity = CGVector(dx: 0, dy: -5)
         
+        addBackgroundImage(position: CGPoint(x: scene.frame.width/2, y: scene.frame.height/2), scene: scene)
+        
+        if isActive {
+            setupActualGameScene(scene)
+        } else {
+            setupWelcomeScene()
+        }
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        print("\(type(of: self)).\(#function)")
+        
+        switch isActive {
+        case true:
+            guard let touch = touches.first else { return }
+            let location = CGPoint(x: touch.location(in: self).x, y: dropY)
+            currentDropObject.position = location
+            dropGuide.position.x = location.x
+           
+        case false:
+            break
+        }
+    }
+    
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        print("\(type(of: self)).\(#function)")
+        
+        switch isActive {
+        case false:
+            break
+            
+        case true:
+            guard let scene else { return }
+            guard let touch = touches.first else { return }
+            let location = CGPoint(x: touch.location(in: self).x, y: dropY)
+            
+            currentDropObject.position = location
+            dropGuide.position.x = location.x
+            
+            // Makes it so that the drop-object does not go beyond the scene/screen's edge/
+            if currentDropObject.frame.minX < scene.frame.minX {
+                currentDropObject.position.x = scene.frame.minX + (currentDropObject.frame.width/2)
+                lastDropPosition = currentDropObject.position
+                dropGuide.position.x = currentDropObject.position.x
+            } else if currentDropObject.frame.maxX > scene.frame.maxX {
+                currentDropObject.position.x = scene.frame.maxX - (currentDropObject.frame.width/2)
+                lastDropPosition = currentDropObject.position
+                dropGuide.position.x = currentDropObject.position.x
+            } else {
+                lastDropPosition = nil
+            }
+        }
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        print("\(type(of: self)).\(#function)")
+        switch isActive {
+        case false:
+            break
+            
+        case true:
+            guard let scene, let view = scene.view else { return }
+            guard let touch = touches.first else { return }
+            let location = CGPoint(x: touch.location(in: self).x, y: dropY)
+            
+            currentDropObject.physicsBody?.isDynamic = true
+            currentDropObject.setBitMasks(to: .booty)
+            dropGuide.alpha = 0
+            
+            if let emmiter = SKEmitterNode(fileNamed: "finger_touch") {
+                emmiter.position = touch.location(in: self)
+                let action = SKAction.wait(forDuration: 0.6)
+                emmiter.run(action) { self.destroy(object: emmiter) }
+                addChild(emmiter)
+            }
+            playDropSoundEffect()
+            
+            view.isUserInteractionEnabled = false
+            DispatchQueue.main.asyncAfter(deadline: .now()+0.6) { [unowned self] in
+                view.isUserInteractionEnabled = true
+                
+                let size = self.nextDropObject.dropObjectSize
+                self.dropGuide.alpha = 1
+                
+                calculateLastDropPositionForLargerDropObject(in: scene)
+                
+                self.currentDropObject = self.addDropObjectNode(dropObjectSize: size, position: lastDropPosition ?? location)
+                
+                self.dropGuide.position.x = self.currentDropObject.position.x
+                
+                self.nextDropObject = DropObject(DOSize: DropObjectSize.random)
+            }
+        }
+    }
+    
+    override func update(_ currentTime: TimeInterval) {
+        switch isActive {
+        case false:
+            break
+            
+        case true:
+            guard let scene = scene else { return }
+            startGameEndingSequence(scene)
+        }
+    }
+    
+
+    
+// MARK: SKPhysicsContactDelegate
+
+    /// Called when there is a collision notification.
+    func didBegin(_ contact: SKPhysicsContact) {
+//        print("\(type(of: self)).\(#function)")
+        
+        switch isActive {
+        case false:
+            break
+            
+        case true:
+//            print("\(type(of: self)).\(#function).impulse:\(contact.collisionImpulse)")
+            if contact.collisionImpulse > 5 && !shouldVibrate {
+                HapticManager.instance.impact(PirateHaptic.collision, intensity: contact.collisionImpulse)
+            }
+            guard let nodeA = contact.bodyA.node as? SKSpriteNode else { return }
+            guard let nodeB = contact.bodyB.node as? SKSpriteNode else { return }
+            guard nodeA.size.height != DropObjectSize.largest.rawValue && nodeB.size.height != DropObjectSize.largest.rawValue else { return }
+            
+            if nodeA.size == nodeB.size && nodeA.name == nodeB.name {
+                print("matched collision detected:\n  \(nodeA) \nAND\n  \(nodeB)\n")
+                handleCollision(between: nodeA, and: nodeB)
+            }
+        }
+    }
+    
+    
+// MARK: High level helper methods
+    private func setupWelcomeScene() {
+        addWelcomeEffectSongNode()
+        addStaticDropObjectNodes()
+    }
+    
+    private func setupActualGameScene(_ scene: SKScene) {
+        print("\(type(of: self)).\(#function)")
 //        physicsBodies = PhysicsBodies()
         
-        addBackgroundImage(position: CGPoint(x: scene.frame.width/2, y: scene.frame.height/2), scene: scene)
+        addThemeSongNode()
+        
+        addSoundEffectsNodes()
         
         addStartLine()
                 
@@ -61,150 +237,137 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         currentDropObject = addDropObjectNode(dropObjectSize: .random, position: CGPoint(x: scene.frame.width/2, y: dropY))
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        print("\(type(of: self)).\(#function)")
-        guard let touch = touches.first else { return }
-        let location = CGPoint(x: touch.location(in: self).x, y: dropY)
-        currentDropObject.position = location
-        dropGuide.position.x = location.x
-    }
     
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        print("\(type(of: self)).\(#function)")
-        guard let scene else { return }
-        guard let touch = touches.first else { return }
-        let location = CGPoint(x: touch.location(in: self).x, y: dropY)
-        
-        currentDropObject.position = location
-        dropGuide.position.x = location.x
-        
-        // Makes it so that the drop-object does not go beyond the scene/screen's edge/
-        if currentDropObject.frame.minX < scene.frame.minX {
-            currentDropObject.position.x = scene.frame.minX + (currentDropObject.frame.width/2)
-            lastDropPosition = currentDropObject.position
-            dropGuide.position.x = currentDropObject.position.x
-        } else if currentDropObject.frame.maxX > scene.frame.maxX {
-            currentDropObject.position.x = scene.frame.maxX - (currentDropObject.frame.width/2)
-            lastDropPosition = currentDropObject.position
-            dropGuide.position.x = currentDropObject.position.x
-        } else {
-            lastDropPosition = nil
+// MARK: Welcome scene methods
+    private func addWelcomeEffectSongNode() {
+        if let musicURL = Bundle.main.url(forResource: "welcome_music_effects", withExtension: "mp3") {
+            backgroundMusic = SKAudioNode(url: musicURL)
+            toggleThemeMusic()
+            addChild(backgroundMusic)
         }
     }
     
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        print("\(type(of: self)).\(#function)")
-        guard let scene, let view = scene.view else { return }
-        guard let touch = touches.first else { return }
-        let location = CGPoint(x: touch.location(in: self).x, y: dropY)
-        
-        currentDropObject.physicsBody?.isDynamic = true
-        currentDropObject.setBitMasks(to: .booty)
-        dropGuide.alpha = 0
-        
-        if let emmiter = SKEmitterNode(fileNamed: "finger_touch") {
-            emmiter.position = touch.location(in: self)
-            let action = SKAction.wait(forDuration: 0.6)
-            emmiter.run(action) { self.destroy(object: emmiter) }
-            addChild(emmiter)
-        }
-        
-        view.isUserInteractionEnabled = false
-        DispatchQueue.main.asyncAfter(deadline: .now()+0.6) { [unowned self] in
-            view.isUserInteractionEnabled = true
-            
-            let size = self.nextDropObject.dropObjectSize
-            self.dropGuide.alpha = 1
-            
-            calculateLastDropPositionForLargerDropObject(in: scene)
-            
-            self.currentDropObject = self.addDropObjectNode(dropObjectSize: size, position: lastDropPosition ?? location)
-            
-            self.dropGuide.position.x = self.currentDropObject.position.x
-            
-            self.nextDropObject = DropObject(DOSize: DropObjectSize.random)
-        }
-    }
-    
-    override func update(_ currentTime: TimeInterval) {
+    private func addStaticDropObjectNodes() {
         guard let scene = scene else { return }
-        startGameEndingSequence(scene)
-    }
-    
-    
-    
-// MARK: SKPhysicsContactDelegate
-
-    /// Called when there is a collision notification.
-    func didBegin(_ contact: SKPhysicsContact) {
-//        print("\(type(of: self)).\(#function).impulse:\(contact.collisionImpulse)")
-        if contact.collisionImpulse > 5 {
-            HapticManager.instance.impact(PirateHaptic.collision, intensity: contact.collisionImpulse)
-        }
-        guard let nodeA = contact.bodyA.node as? SKSpriteNode else { return }
-        guard let nodeB = contact.bodyB.node as? SKSpriteNode else { return }
-        guard nodeA.size.height != DropObjectSize.largest.rawValue && nodeB.size.height != DropObjectSize.largest.rawValue else { return }
-        
-        if nodeA.size == nodeB.size && nodeA.name == nodeB.name {
-            print("matched collision detected:\n  \(nodeA) \nAND\n  \(nodeB)\n")
-            handleCollision(between: nodeA, and: nodeB)
-        }
-    }
-    
-    
-    
-// MARK: Helper Methods
-    
-    func resetGame() {
-//        print("\(type(of: self)).\(#function)")
-        guard let scene = scene else { return }
-        // Remove all drop-objects
-        scene.children.forEach { node in
-            if node.name != "background" && node.name != dropGuide.name && node.name != startLine.name {
-                if let child = node as? SKSpriteNode {
-                    self.destroy(object: child)
-                }
+        var sizes: [DropObjectSize] = DropObjectSize.allCases.shuffled()
+        var positions: [CGPoint] = {
+            var points: [CGPoint] = []
+            let range: Range<Double> = Range(uncheckedBounds: (lower: 100, upper: scene.frame.width-100))
+            for size in sizes {
+                points.append(CGPoint(x: Double.random(in: range), y: scene.frame.height-size.actual.height))
             }
+            return points
+        }()
+        
+        let wait = SKAction.wait(forDuration: 1, withRange: 2)
+        
+        let block = SKAction.run { [unowned self] in
+            //Debug
+//            let now = Date()
+//            if let lastSpawnTime = self.lastSpawnTime {
+//                let elapsed = now.timeIntervalSince(lastSpawnTime)
+//                print("Sprite spawned after : \(elapsed)")
+//            }
+//            self.lastSpawnTime = now
+            //End Debug
+            
+            let node = DropObject(DOSize: sizes.removeFirst(), position: positions.removeFirst())
+            guard let nodeTexture = node.texture else { return }
+            node.physicsBody = SKPhysicsBody(texture: nodeTexture, size: node.dropObjectSize.actual)
+            node.physicsBody?.restitution = 0
+            node.physicsBody?.friction = 0.2
+            node.physicsBody?.angularDamping = 6
+            node.physicsBody?.linearDamping = 0.3
+            node.physicsBody?.isDynamic = true
+            
+            // collides with everything and send notifications for all collisions.
+            node.physicsBody?.contactTestBitMask = node.physicsBody?.collisionBitMask ?? 0
+            self.addChild(node)
         }
         
-        // reset startLine color
-        startLine.strokeColor = .darkGray
+        let sequence = SKAction.sequence([block, wait])
+        let loop = SKAction.repeat(sequence, count: 10)
+        run(loop, withKey: "addNodesInSequencedTime")
+    }
+
+    
+    
+    
+// MARK: Actual game play methods
+    func resetGame(isActive: Bool) {
+        print("\(type(of: self)).\(#function)")
+                
+        let fadeOut = SKAction.fadeOut(withDuration: 0.5)
+        let wait = SKAction.wait(forDuration: 0.5)
+        let sequence = SKAction.sequence([fadeOut, wait])
+        scene?.run(sequence) { [unowned self] in
+            self.removeAllChildren()
+            self.removeAllActions()
+        }
         
-        // reset drop position
-        lastDropPosition = nil
+        let scene = GameScene(size: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
+        scene.scaleMode = .fill
+        scene.isActive = isActive
+        let transition = SKTransition.crossFade(withDuration: 1)
+        view?.presentScene(scene, transition: transition)
         
-        // Reset timer
-        timer?.invalidate()
-        timer = nil
-        
-        // Reset score
-        score = 0
-        
-        // Reset gameOverTime amount
-        gameOverTime = 20
-        
-        // Reset first drop-object
-        currentDropObject = addDropObjectNode(dropObjectSize: .random, position: CGPoint(x: scene.frame.width/2, y: dropY))
-        dropGuide.alpha = 1
-        dropGuide.position.x = scene.frame.width/2
+//        guard let scene = scene else { return }
+//        // Remove all drop-objects
+//        scene.children.forEach { node in
+//            if node.name != "background" && node.name != dropGuide.name && node.name != startLine.name {
+//                if let child = node as? SKSpriteNode {
+//                    self.destroy(object: child)
+//                }
+//            }
+//        }
+//        
+//        // reset startLine color
+//        startLine.strokeColor = .darkGray
+//        
+//        // reset drop position
+//        lastDropPosition = nil
+//        
+//        // Reset timer
+//        timer?.invalidate()
+//        timer = nil
+//        
+//        // Reset score
+//        score = 0
+//        
+//        // Reset gameOverTime amount
+//        gameOverTime = 20
+//        
+//        // Reset first drop-object
+//        currentDropObject = addDropObjectNode(dropObjectSize: .random, position: CGPoint(x: scene.frame.width/2, y: dropY))
+//        dropGuide.alpha = 1
+//        dropGuide.position.x = scene.frame.width/2
+//        
+//        // set game isActive bool to false
+//        isActive = false
     }
     
     func startGameEndingSequence(_ scene: SKScene) {
 //        print("\(type(of: self)).\(#function)")
+        guard currentDropObject != nil,
+              dropGuide != nil,
+              startLine != nil else { return }
+        
         // Set startLine color according to how close objects are to the fail line (i.e. startLine).
         if (scene.children.filter({
             $0.name != "background" &&
             $0 != currentDropObject &&
             $0 != dropGuide &&
             $0 != startLine &&
-            $0.position.y >= dropY-200
+            $0.position.y >= dropY-100
         }).count >= 3) {
             startLine.strokeColor = .red
+            startLine.lineWidth = 6
         } else {
             startLine.strokeColor = .darkGray
+            startLine.lineWidth = 3
         }
                 
-        // If any drop object's y position is greater than or equal to the start line, and there's at least 3.
+        // If any drop object's y position is greater than or equal to the start line, and there's at least 3 of them.
         if scene.children.filter({
             $0.name != "background" &&
             $0 != currentDropObject &&
@@ -217,7 +380,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
 //                print("creating timer")
                 timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] timer in
 //                    print("timer running \(timer)")
-                    // When the timer runs out the game ends.
+                    // When the timer runs out, the game ends.
                     self?.gameOverTime -= 1
                     
                     if self?.gameOverTime == 0 {
@@ -235,19 +398,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
 //                print("invalidating timer")
                 timer?.invalidate()
                 timer = nil
-                gameOverTime = 20
+                gameOverTime = 14
             }
         }
     }
     
     /// Combines both dropObjects into next dropObjectSize if they are a matching pair (i.e. destroy both and create a new one)
     func handleCollision(between objectA: SKSpriteNode, and objectB: SKSpriteNode) {
-        print("\(type(of: self)).\(#function)")
-        
-        guard let DONode = objectA as? DropObject else { return }
+//        print("\(type(of: self)).\(#function)")
+        guard let DONode = objectA as? DropObject, let scene = scene else { return }
         let newSize = DONode.dropObjectSize.nextSize
-        print("currentSize: \(DONode.dropObjectSize.rawValue) - newSize: \(newSize.rawValue)\n")
-        let newX = objectA.position.x + abs(objectA.position.x - objectB.position.x)/2
+//        print("currentSize: \(DONode.dropObjectSize.rawValue) - newSize: \(newSize.rawValue)\n")
+        let mergeXposition = objectA.position.x + abs(objectA.position.x - objectB.position.x)/2
+        let sceneWidth = scene.frame.width-(newSize.rawValue/2)
+        let newX = min(mergeXposition, sceneWidth)
         let newY = objectA.position.y + abs(objectA.position.y - objectB.position.y)/2
         let position = CGPoint(x: newX, y: newY)
         
@@ -266,12 +430,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         let newObject = addDropObjectNode(dropObjectSize: newSize, position: position, isDynamic: true)
         newObject?.setBitMasks(to: .booty)
         newObject?.physicsBody?.applyImpulse(CGVector(dx: Int.random(in: -15...15), dy: Int.random(in: -15...15))) // adds explosion push
-        HapticManager.instance.impact(PirateHaptic.merge)
+        if shouldVibrate { HapticManager.instance.impact(PirateHaptic.merge) }
+        playMergeSoundEffect()
     }
     
     func destroy(object: SKNode) {
 //        print("\(type(of: self)).\(#function)")
         object.removeFromParent()
+    }
+    
+    func toggleThemeMusic() {
+        shouldPlayMusic ? backgroundMusic.run(SKAction.stop()) : backgroundMusic.run(SKAction.play())
+    }
+    
+    func playMergeSoundEffect() {
+        if shouldPlaySoundEffects { soundEffectMerge.run(SKAction.play()) }
+    }
+    
+    func playDropSoundEffect() {
+        if shouldPlaySoundEffects { soundEffectDrop.run(SKAction.play()) }
     }
     
     @discardableResult private func addDropObjectNode(dropObjectSize: DropObjectSize, position: CGPoint, isDynamic: Bool = false, withCollision: Bool = false) -> DropObject? {
@@ -312,6 +489,27 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         addChild(background)
     }
     
+    private func addThemeSongNode() {
+        if let musicURL = Bundle.main.url(forResource: "theme_song", withExtension: "mp3") {
+            backgroundMusic = SKAudioNode(url: musicURL)
+            toggleThemeMusic()
+            addChild(backgroundMusic)
+        }
+    }
+    
+    private func addSoundEffectsNodes() {
+        if let soundEffect1URL = Bundle.main.url(forResource: "sound_effect_drop", withExtension: "mp3") {
+            soundEffectDrop = SKAudioNode(url: soundEffect1URL)
+            soundEffectDrop.autoplayLooped = false
+            addChild(soundEffectDrop)
+        }
+        if let soundEffect2URL = Bundle.main.url(forResource: "sound_effect_merge", withExtension: "mp3") {
+            soundEffectMerge = SKAudioNode(url: soundEffect2URL)
+            soundEffectMerge.autoplayLooped = false
+            addChild(soundEffectMerge)
+        }
+    }
+    
     private func addStartLine() {
         startLine = SKShapeNode(rect: CGRect(x: 0, y: dropY, width: UIScreen.main.bounds.width, height: 1))
         startLine.strokeColor = .darkGray
@@ -320,50 +518,60 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     }
         
     private func createDropGuide(xPosition: Double) -> SKNode {
-        let guideLine = SKSpriteNode(color: .clear, size: CGSize(width: 3, height: dropY))
+        let guideLine = SKSpriteNode(color: .white.withAlphaComponent(0.6), size: CGSize(width: 3, height: dropY))
         guideLine.position.x = xPosition
         guideLine.position.y = dropY/2
         guideLine.name = "guide_line"
         
-        // Add initial dashes
-        for y in stride(from: -dropY/2, to: dropY, by: CGFloat(dashSize.height*2)) {
-            guideLine.addChild(addGuideDash(position: CGPoint(x: 0, y: -y), size: dashSize))
-        }
-        
-        let move = SKAction.moveBy(x: 0, y: -dashSize.height*2, duration: 1)
-
-        // Animate dashes down and add a new dash at the top.
-        Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { [weak self] _ in
-            guard let self = self else { return }
-            let dashLine = self.addGuideDash(position: CGPoint(x: 0, y: self.dropY/2+120), size: self.dashSize)
-            dashLine.alpha = 1
-            guideLine.addChild(dashLine)
-            
-            for child in guideLine.children {
-                child.run(move)
-                if child.position.y < -self.dropY/2 {
-                    self.destroy(object: child)
-                }
-            }
-        })
-        
         addChild(guideLine)
         return guideLine
     }
-    
-    private func addGuideDash(position: CGPoint, size: CGSize) -> SKNode {
-        let dash = SKSpriteNode(color: .white.withAlphaComponent(0.7), size: size)
-        dash.name = "dash"
-        dash.position = position
-        return dash
-    }
+
+//    private func createDropGuide(xPosition: Double) -> SKNode {
+//        let guideLine = SKSpriteNode(color: .clear, size: CGSize(width: 3, height: dropY))
+//        guideLine.position.x = xPosition
+//        guideLine.position.y = dropY/2
+//        guideLine.name = "guide_line"
+//        
+//        // Add initial dashes
+//        for y in stride(from: -dropY/2, to: dropY, by: CGFloat(dashSize.height*2)) {
+//            guideLine.addChild(addGuideDash(position: CGPoint(x: 0, y: -y), size: dashSize))
+//        }
+//        
+//        let move = SKAction.moveBy(x: 0, y: -dashSize.height*2, duration: 1)
+//
+//        // Animate dashes down and add a new dash at the top.
+//        Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { [weak self] _ in
+//            guard let self = self else { return }
+//            let dashLine = self.addGuideDash(position: CGPoint(x: 0, y: self.dropY/2+120), size: self.dashSize)
+//            dashLine.alpha = 1
+//            guideLine.addChild(dashLine)
+//            
+//            for child in guideLine.children {
+//                child.run(move)
+//                if child.position.y < -self.dropY/2 {
+//                    self.destroy(object: child)
+//                }
+//            }
+//        })
+//        
+//        addChild(guideLine)
+//        return guideLine
+//    }
+//    
+//    private func addGuideDash(position: CGPoint, size: CGSize) -> SKNode {
+//        let dash = SKSpriteNode(color: .white.withAlphaComponent(0.7), size: size)
+//        dash.name = "dash"
+//        dash.position = position
+//        return dash
+//    }
     
     private func incrementScore(with dropObjectSize: DropObjectSize) {
 //        print("\(type(of: self)).\(#function).score_increased:\(Int(Double(dropObjectSize.rawValue)*0.1))")
         score += Int(Double(dropObjectSize.rawValue)*0.1)
     }
     
-    /// THIS FIXES THE NEXT-OBJECT'S EDGE OVERLAY. So the new drop object bounds does not extend beyond the edge of the scene/screen
+    /// THIS FIXES THE NEXT-OBJECT'S EDGE OVERLAY. So the new drop object bounds does not extend beyond the edge of the scene/screen for dragging.
     private func calculateLastDropPositionForLargerDropObject(in scene: SKScene) {
 //        print("\(type(of: self)).\(#function)")
         if self.lastDropPosition != nil {
@@ -435,295 +643,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
 
 
 
-// MARK: SKNode Extension
-extension SKNode {
-    /// A specific set of sizes that DropObject can be only. If you need the actuat CGSize of a DropObject, use DropObjectSize.actual
-//    var dropObjectSize: DropObjectSize {
-//        let sprite = self as! SKSpriteNode
-//        return DropObjectSize.sizeFor(float: sprite.size.height)
-//    }
-    
-    /// Sets category, collision, and contactTest bit masks to the passed in value.
-    func setBitMasks(to mask: CollisionCategory) {
-        self.physicsBody?.categoryBitMask = mask.rawValue
-        self.physicsBody?.collisionBitMask = mask.rawValue
-        self.physicsBody?.contactTestBitMask = mask.rawValue
-    }
-}
-
-//extension SKSpriteNode {
-//    /// Initializes a new SKSpriteNode with a DropObject instance and a position.
-//    convenience init(dropObject: DropObject, position: CGPoint) {
-//        let texture = SKTexture(imageNamed: dropObject.imageName.rawValue)
-//        self.init(texture: texture, size: dropObject.size)
-//        self.dropObject = dropObject
-//        self.position = position
-//        self.name = dropObject.name
-//    }
-//}
 
 
 
-// MARK: DropObject Model
 
-class DropObject: SKSpriteNode {
-    var dropObjectSize: DropObjectSize = ._30
-    var imageName: DropObjectImageName = .coin
-    var shape: CGPath = CGPath(ellipseIn: .zero, transform: .none)
-    
-    init(DOSize: DropObjectSize, position: CGPoint = .zero) {
-        super.init(texture: nil, color: .clear, size: DOSize.actual)
-
-        self.dropObjectSize = DOSize
-        self.imageName = getImageName(for: dropObjectSize)
-        self.texture = SKTexture(imageNamed: self.imageName.rawValue)
-        self.name = DropObjectImageName.asString(for: dropObjectSize)
-        self.shape = _shape
-        self.position = position
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    private func getImageName(for size: DropObjectSize) -> DropObjectImageName {
-        switch size {
-        case ._30: .coin
-        case ._40: .gem1
-        case ._50: .gem2
-        case ._60: .gem3
-        case ._70: .gem4
-        case ._80: .gem5
-        case ._100: .diamond
-        case ._120: .goldNugget
-        case ._130: .potion
-        case ._150: .skull
-        }
-    }
-    
-    private var _shape: CGPath {
-        switch self.imageName {
-//        case .coin: return MyShape.circle(center: .zero, size: size.height)
-//
-//        case .blueGem: return MyShape.octagon(center: .zero, radius: size.height)
-//
-//        case .greenGem: return MyShape.emeraldCut(center: .zero, width: size.width, height: size.height, cornerCut: size.height*0.33)
-//
-//        case .redGem: return MyShape.gemstoneProfile(center: .zero, size: size.height)
-//
-//        case .goldBrick: return MyShape.rectangle(rect: CGRect(origin: .zero, size: CGSize(width: size.width, height: size.height)))
-//
-//        case .skull: return MyShape.circle(center: .zero, size: size.height)
-            
-        default: return MyShape.circle(center: .zero, size: size.height)
-        }
-    }
-    
-}
-
-
-
-/// A model containing all information for a Sprite node to be initialized with.
-//struct DropObject {
-//    var dropObjectSize: DropObjectSize
-//    var size: CGSize = .zero
-//    var name: String = ""
-//    var imageName: DropObjectImageName = .coin
-//    var shape: CGPath = CGPath(ellipseIn: .zero, transform: .none)
-//
-//    init(size: DropObjectSize) {
-//        self.name = DropObjectImageName.asName(for: size)
-//        self.dropObjectSize = size
-//        self.size = size.actual
-//        self.imageName = _imageName
-//        self.shape = _shape
-//    }
-//    
-//    private var _imageName: DropObjectImageName {
-//        switch self.dropObjectSize {
-//        case ._30: .coin
-//        case ._40: .gem1
-//        case ._50: .gem2
-//        case ._60: .gem3
-//        case ._70: .gem4
-//        case ._80: .gem5
-//        case ._100: .diamond
-//        case ._120: .goldNugget
-//        case ._130: .potion
-//        case ._150: .skull
-//        }
-//    }
-//    
-//    private var _shape: CGPath {
-//        switch self.imageName {
-////        case .coin: return MyShape.circle(center: .zero, size: size.height)
-////
-////        case .blueGem: return MyShape.octagon(center: .zero, radius: size.height)
-////
-////        case .greenGem: return MyShape.emeraldCut(center: .zero, width: size.width, height: size.height, cornerCut: size.height*0.33)
-////
-////        case .redGem: return MyShape.gemstoneProfile(center: .zero, size: size.height)
-////
-////        case .goldBrick: return MyShape.rectangle(rect: CGRect(origin: .zero, size: CGSize(width: size.width, height: size.height)))
-////
-////        case .skull: return MyShape.circle(center: .zero, size: size.height)
-//            
-//        default: return MyShape.circle(center: .zero, size: size.height)
-//        }
-//    }
-//    
-//}
-
-enum DropObjectImageName: String, RawRepresentable {
-    case coin = "coin"
-    case gem1 = "gem1"
-    case gem2 = "gem2"
-    case gem3 = "gem3"
-    case gem4 = "gem4"
-    case gem5 = "gem5"
-    case diamond = "diamond"
-    case potion = "potion"
-    case goldNugget = "nugget"
-    case skull = "skull"
-    
-    static func asString(for size: DropObjectSize) -> String {
-        switch size {
-        case ._30: DropObjectImageName.coin.rawValue
-        case ._40: DropObjectImageName.gem1.rawValue
-        case ._50: DropObjectImageName.gem2.rawValue
-        case ._60: DropObjectImageName.gem3.rawValue
-        case ._70: DropObjectImageName.gem4.rawValue
-        case ._80: DropObjectImageName.gem5.rawValue
-        case ._100: DropObjectImageName.diamond.rawValue
-        case ._120: DropObjectImageName.potion.rawValue
-        case ._130: DropObjectImageName.goldNugget.rawValue
-        case ._150: DropObjectImageName.skull.rawValue
-        }
-    }
-}
-
-enum DropObjectSize: CGFloat, CaseIterable, Comparable {
-    static func < (lhs: DropObjectSize, rhs: DropObjectSize) -> Bool {
-        return lhs.rawValue < rhs.rawValue
-    }
-    
-    case _30 = 30
-    case _40 = 40
-    case _50 = 50
-    case _60 = 60
-    case _70 = 70
-    case _80 = 80
-    case _100 = 100
-    case _120 = 120
-    case _130 = 130
-    case _150 = 150
-    
-    var actual: CGSize {
-        switch self {
-        case ._30: CGSize(width: 30, height: 30)
-        case ._40: CGSize(width: 40, height: 40)
-        case ._50: CGSize(width: 50, height: 50)
-        case ._60: CGSize(width: 60, height: 60)
-        case ._70: CGSize(width: 70, height: 70)
-        case ._80: CGSize(width: 80, height: 80)
-        case ._100: CGSize(width: 100, height: 100)
-        case ._120: CGSize(width: 120, height: 120)
-        case ._130: CGSize(width: 130, height: 130)
-        case ._150: CGSize(width: 150, height: 150)
-        }
-    }
-    
-    static var smallest: DropObjectSize {
-        return DropObjectSize.allCases.first!
-    }
-    
-    static var largest: DropObjectSize {
-        return DropObjectSize.allCases.last!
-    }
-    
-    /// Returns a random DropObjectSize from the specified range. Default range is the first 6 sizes.
-    static var random: DropObjectSize {
-        switch self.allCases.randomElement()! {
-        case ._30: return ._30
-        case ._40: return ._40
-        case ._50: return ._50
-        case ._60: return ._60
-        case ._70: return ._70
-        case ._80: return ._80
-        default: break
-        }
-        return self.random
-    }
-    
-    var nextSize: DropObjectSize {
-        switch self {
-        case ._30: return ._40
-        case ._40: return ._50
-        case ._50: return ._60
-        case ._60: return ._70
-        case ._70: return ._80
-        case ._80: return ._100
-        case ._100: return ._120
-        case ._120: return ._130
-        case ._130: return ._150
-        case ._150: return ._150
-        }
-    }
-    
-    static func sizeFor(float: CGFloat) -> DropObjectSize {
-        switch float {
-        case 0...39.999: return ._30
-        case 40...49.999: return ._40
-        case 50...59.999: return ._50
-        case 60...69.999: return ._60
-        case 70...79.999: return ._70
-        case 80...99.999: return ._80
-        case 100...119.999: return ._100
-        case 120...129.999: return ._120
-        case 130...139.999: return ._130
-        case 150...: return ._150
-        default: fatalError()
-        }
-    }
-    
-}
-
-//enum DropObjectIDName: String, RawRepresentable, CaseIterable {
-//    case _30 = "30"
-//    case _40 = "40"
-//    case _50 = "50"
-//    case _60 = "60"
-//    case _70 = "70"
-//    case _80 = "80"
-//    case _100 = "100"
-//    case _120 = "120"
-//    case _130 = "130"
-//    case _150 = "150"
-//    
-//    static var smallest: DropObjectIDName {
-//        return DropObjectIDName.allCases.first!
-//    }
-//    
-//    static var largest: DropObjectIDName {
-//        return DropObjectIDName.allCases.last!
-//    }
-//    
-//    static func getNameFor(size: DropObjectSize) -> String {
-//        switch size {
-//        case ._30: "30"
-//        case ._40: "40"
-//        case ._50: "50"
-//        case ._60: "60"
-//        case ._70: "70"
-//        case ._80: "80"
-//        case ._100: "100"
-//        case ._120: "120"
-//        case ._130: "130"
-//        case ._150: "150"
-//        }
-//    }
-//    
-//}
 
 enum CollisionCategory: UInt32 {
     case none   = 0x00000000 // 0
@@ -732,70 +655,85 @@ enum CollisionCategory: UInt32 {
     case all    = 0xFFFFFFFF // all bit sets
 }
 
-class PhysicsBodies {
-    var coinPhysics: SKPhysicsBody!
-    var gem1Physics: SKPhysicsBody!
-    var gem2Physics: SKPhysicsBody!
-    var gem3Physics: SKPhysicsBody!
-    var gem4Physics: SKPhysicsBody!
-    var gem5Physics: SKPhysicsBody!
-    var diamondPhysics: SKPhysicsBody!
-    var nuggetPhysics: SKPhysicsBody!
-    var potionPhysics: SKPhysicsBody!
-    var skullPhysics: SKPhysicsBody!
+// MARK: SKNode Extension
+extension SKNode {
     
-    init() {
-        createPhysicsBodies()
+    /// Sets category, collision, and contactTest bit masks to the passed in value.
+    func setBitMasks(to mask: CollisionCategory) {
+        self.physicsBody?.categoryBitMask = mask.rawValue
+        self.physicsBody?.collisionBitMask = mask.rawValue
+        self.physicsBody?.contactTestBitMask = mask.rawValue
     }
     
-    func getPhysicsBody(for object: DropObject) -> SKPhysicsBody! {
-        switch object.imageName {
-        case .coin: return coinPhysics.copy() as? SKPhysicsBody
-        case .gem1: return gem1Physics.copy() as? SKPhysicsBody
-        case .gem2: return gem2Physics.copy() as? SKPhysicsBody
-        case .gem3: return gem3Physics.copy() as? SKPhysicsBody
-        case .gem4: return gem4Physics.copy() as? SKPhysicsBody
-        case .gem5: return gem5Physics.copy() as? SKPhysicsBody
-        case .diamond: return diamondPhysics.copy() as? SKPhysicsBody
-        case .potion: return potionPhysics.copy() as? SKPhysicsBody
-        case .goldNugget: return nuggetPhysics.copy() as? SKPhysicsBody
-        case .skull: return skullPhysics.copy() as? SKPhysicsBody
-        }
-    }
-    
-    private func createPhysicsBodies() {
-        let coinTexture = SKTexture(imageNamed: "coin")
-        coinPhysics = SKPhysicsBody(texture: coinTexture, size: coinTexture.size())
-        
-        let gem1Texture = SKTexture(imageNamed: "gem1")
-        gem1Physics = SKPhysicsBody(texture: gem1Texture, size: gem1Texture.size())
-
-        let gem2Texture = SKTexture(imageNamed: "gem2")
-        gem2Physics = SKPhysicsBody(texture: gem2Texture, size: gem2Texture.size())
-
-        let gem3Texture = SKTexture(imageNamed: "gem3")
-        gem3Physics = SKPhysicsBody(texture: gem3Texture, size: gem3Texture.size())
-
-        let gem4Texture = SKTexture(imageNamed: "gem4")
-        gem4Physics = SKPhysicsBody(texture: gem4Texture, size: gem4Texture.size())
-
-        let gem5Texture = SKTexture(imageNamed: "gem5")
-        gem5Physics = SKPhysicsBody(texture: gem5Texture, size: gem5Texture.size())
-
-        let diamondTexture = SKTexture(imageNamed: "diamond")
-        diamondPhysics = SKPhysicsBody(texture: diamondTexture, size: diamondTexture.size())
-
-        let nuggetTexture = SKTexture(imageNamed: "nugget")
-        nuggetPhysics = SKPhysicsBody(texture: nuggetTexture, size: nuggetTexture.size())
-
-        let potionTexture = SKTexture(imageNamed: "potion")
-        potionPhysics = SKPhysicsBody(texture: potionTexture, size: potionTexture.size())
-
-        let skullTexture = SKTexture(imageNamed: "skull")
-        skullPhysics = SKPhysicsBody(texture: skullTexture, size: skullTexture.size())
-
-    }
 }
+
+//class PhysicsBodies {
+//    var coinPhysics: SKPhysicsBody!
+//    var gem1Physics: SKPhysicsBody!
+//    var gem2Physics: SKPhysicsBody!
+//    var gem3Physics: SKPhysicsBody!
+//    var gem4Physics: SKPhysicsBody!
+//    var gem5Physics: SKPhysicsBody!
+//    var diamondPhysics: SKPhysicsBody!
+//    var nuggetPhysics: SKPhysicsBody!
+//    var potionPhysics: SKPhysicsBody!
+//    var skullPhysics: SKPhysicsBody!
+//    
+//    init() {
+//        createPhysicsBodies()
+//    }
+//    
+//    func getPhysicsBody(for object: DropObject) -> SKPhysicsBody! {
+//        switch object.imageName {
+//        case .coin: return coinPhysics.copy() as? SKPhysicsBody
+//        case .gem1: return gem1Physics.copy() as? SKPhysicsBody
+//        case .gem2: return gem2Physics.copy() as? SKPhysicsBody
+//        case .gem3: return gem3Physics.copy() as? SKPhysicsBody
+//        case .gem4: return gem4Physics.copy() as? SKPhysicsBody
+//        case .gem5: return gem5Physics.copy() as? SKPhysicsBody
+//        case .diamond: return diamondPhysics.copy() as? SKPhysicsBody
+//        case .potion: return potionPhysics.copy() as? SKPhysicsBody
+//        case .goldNugget: return nuggetPhysics.copy() as? SKPhysicsBody
+//        case .skull: return skullPhysics.copy() as? SKPhysicsBody
+//        }
+//    }
+//    
+//    private func createPhysicsBodies() {
+//        let coinTexture = SKTexture(imageNamed: "coin")
+//        coinPhysics = SKPhysicsBody(texture: coinTexture, size: coinTexture.size())
+//        
+//        let gem1Texture = SKTexture(imageNamed: "gem1")
+//        gem1Physics = SKPhysicsBody(texture: gem1Texture, size: gem1Texture.size())
+//
+//        let gem2Texture = SKTexture(imageNamed: "gem2")
+//        gem2Physics = SKPhysicsBody(texture: gem2Texture, size: gem2Texture.size())
+//
+//        let gem3Texture = SKTexture(imageNamed: "gem3")
+//        gem3Physics = SKPhysicsBody(texture: gem3Texture, size: gem3Texture.size())
+//
+//        let gem4Texture = SKTexture(imageNamed: "gem4")
+//        gem4Physics = SKPhysicsBody(texture: gem4Texture, size: gem4Texture.size())
+//
+//        let gem5Texture = SKTexture(imageNamed: "gem5")
+//        gem5Physics = SKPhysicsBody(texture: gem5Texture, size: gem5Texture.size())
+//
+//        let diamondTexture = SKTexture(imageNamed: "diamond")
+//        diamondPhysics = SKPhysicsBody(texture: diamondTexture, size: diamondTexture.size())
+//
+//        let nuggetTexture = SKTexture(imageNamed: "nugget")
+//        nuggetPhysics = SKPhysicsBody(texture: nuggetTexture, size: nuggetTexture.size())
+//
+//        let potionTexture = SKTexture(imageNamed: "potion")
+//        potionPhysics = SKPhysicsBody(texture: potionTexture, size: potionTexture.size())
+//
+//        let skullTexture = SKTexture(imageNamed: "skull")
+//        skullPhysics = SKPhysicsBody(texture: skullTexture, size: skullTexture.size())
+//
+//    }
+//}
+
+
+
 
 
 
@@ -804,11 +742,10 @@ class PhysicsBodies {
 
 #Preview {
     @Previewable @StateObject var game: GameScene = {
-        let scene = GameScene()
-        scene.size = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+        let scene = GameScene(size: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
+        scene.isActive = true
         return scene
     }()
     
-    return ContentView()
-        .environmentObject(game)
+    GameView().environmentObject(game)
 }
