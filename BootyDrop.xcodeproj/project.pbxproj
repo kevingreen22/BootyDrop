@@ -30,7 +30,6 @@
 		C7CC623D2C507A40005D9F48 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C7CC623C2C507A40005D9F48 /* Assets.xcassets */; };
 		C7CC62402C507A40005D9F48 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C7CC623F2C507A40005D9F48 /* Preview Assets.xcassets */; };
 		C7CF22B32CD3F64100DA22C5 /* theme_song.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C7CF22B22CD3F64100DA22C5 /* theme_song.mp3 */; };
-		C7D24EB82C9B51690006B9EF /* theme_song.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C7D24EB72C9B51690006B9EF /* theme_song.mp3 */; };
 		C7D24EBA2C9CBD7B0006B9EF /* sound_effect_drop.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C7D24EB92C9CBD7B0006B9EF /* sound_effect_drop.mp3 */; };
 		C7D24EBC2C9CC28A0006B9EF /* button_click.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C7D24EBB2C9CC28A0006B9EF /* button_click.mp3 */; };
 		C7D24EBE2C9CF93D0006B9EF /* background.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C7D24EBD2C9CF93D0006B9EF /* background.jpg */; };
@@ -560,7 +559,8 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -591,7 +591,8 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

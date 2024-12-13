@@ -28,7 +28,7 @@ import KGToolbelt
 //    case dead
 //}
 
-// A simple game scene with falling pirate booty.
+/// A simple game scene with falling pirate booty.
 class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     @Published var score: Int = 0
     @Published var nextDropObject: DropObject = DropObject(DOSize: DropObjectSize.random)
@@ -95,7 +95,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         
         switch isActive {
         case true:
-            guard let touch = touches.first else { return }
+            guard let touch = touches.first, currentDropObject != nil else { return }
             let location = CGPoint(x: touch.location(in: self).x, y: dropY)
             currentDropObject.position = location
             dropGuide.position.x = location.x

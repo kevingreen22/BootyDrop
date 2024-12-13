@@ -223,13 +223,14 @@ struct StartButton: View {
                 game.resetGame(isActive: true)
             }
         } label: {
-            HM.ButtonLabel(image:
-                            Image("coin")
-                .resizable()
-                .scaledToFit(),
-                           title: "Start",
-                           fontSize: 30,
-                           frame: CGSize(width: 150, height: 80))
+            HM.ButtonLabel(
+                image:
+                    Image("coin")
+                    .resizable()
+                    .scaledToFit(),
+                title: "Start",
+                fontSize: 30,
+                frame: CGSize(width: 150, height: 80))
             .foregroundStyle(Color.black.opacity(0.8))
         }
         .buttonStyle(.borderedProminent)
