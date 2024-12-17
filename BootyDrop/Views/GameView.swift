@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  GameView.swift
 //  BootyDrop
 //
 //  Created by Kevin Green on 7/15/24.
@@ -10,63 +10,42 @@ import SpriteKit
 
 struct GameView: View {
     @EnvironmentObject var game: GameScene
-    @EnvironmentObject var router: ViewRouter
-    @State private var showSettings: Bool = false
-    @State private var showRankings: Bool = false
+    @Binding var showSettings: Bool
+    @Binding var showRankings: Bool
     
     
     var body: some View {
         VStack(spacing: 0) {
             SpriteView(scene: game)
-            Footer().frame(height: 85)
-        }.ignoresSafeArea()
+            if game.isActive == true {
+                Footer().frame(height: 85)
+            }
+        }.ignoresSafeArea() // Sprite View
         
         .overlay(alignment: .top) {
-            Header(showSettings: $showSettings, showRankings: $showRankings)
-                .environmentObject(game)
+            if game.isActive == true {
+                Header(showSettings: $showSettings, showRankings: $showRankings)
+                    .environmentObject(game)
+            }
         } // Header View
-        
-        .overlay {
-            if showSettings {
-                SettingView(showSettings: $showSettings, game: game)
-                    .environmentObject(router)
-                    .transition(.asymmetric(insertion: .move(edge: .leading), removal: .move(edge: .trailing)))
-            }
-        } // Settings View
-        
-        .overlay {
-            if showRankings {
-                RankingsView(showRankings: $showRankings)
-                    .transition(.asymmetric(insertion: .move(edge: .leading), removal: .move(edge: .trailing)))
-            }
-        } // Rankings View
-        
-        .fullScreenCover(isPresented: $game.isGameOver) {
-            GameOverView($game.isGameOver, score: game.score)
-                .environmentObject(game)
-                .environmentObject(router)
-        } // GameOver View
     }
 }
 
+
+
+// MARK: Preview
 #Preview {
-    @Previewable @StateObject var game: GameScene = {
-        let scene = GameScene(size: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
-        scene.isActive = true
-        return scene
-    }()
-    @Previewable @StateObject var router = ViewRouter()
+    @Previewable @State var showSettings = false
+    @Previewable @State var showRankings = false
     
-    GameView()
-        .environmentObject(game)
-        .environmentObject(router)
+    GameView(showSettings: $showSettings, showRankings: $showRankings)
+        .environmentObject(GameScene.Preview.gameScene(isActive: true))
 }
 
 
 
 
-// MARK: Views
-
+// MARK: GameView Subviews
 struct Header: View {
     @EnvironmentObject var game: GameScene
     @Binding var showSettings: Bool

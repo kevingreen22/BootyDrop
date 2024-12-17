@@ -14,8 +14,8 @@
             filePath = "BootyDrop/GameScene.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "432"
-            endingLineNumber = "432"
+            startingLineNumber = "433"
+            endingLineNumber = "433"
             landmarkName = "handleCollision(between:and:)"
             landmarkType = "7">
          </BreakpointContent>

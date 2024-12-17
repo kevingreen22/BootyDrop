@@ -14,6 +14,7 @@ import SwiftUI
 import UIKit
 import SpriteKit
 import KGToolbelt
+import Combine
 
 //enum GameState: Identifiable {
 //    var id: Int {
@@ -95,7 +96,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         
         switch isActive {
         case true:
-            guard let touch = touches.first, currentDropObject != nil else { return }
+            guard let touch = touches.first else { return }
             let location = CGPoint(x: touch.location(in: self).x, y: dropY)
             currentDropObject.position = location
             dropGuide.position.x = location.x
@@ -187,7 +188,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         }
     }
     
-
+    
     
 // MARK: SKPhysicsContactDelegate
 
@@ -440,14 +441,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     }
     
     func toggleThemeMusic() {
+        print("\(type(of: self)).\(#function)_toggling_theme_music: \(shouldPlayMusic)")
         shouldPlayMusic ? backgroundMusic.run(SKAction.stop()) : backgroundMusic.run(SKAction.play())
     }
     
     func playMergeSoundEffect() {
+        print("\(type(of: self)).\(#function)_toggling_merge_sound_effect: \(shouldPlaySoundEffects)")
         if shouldPlaySoundEffects { soundEffectMerge.run(SKAction.play()) }
     }
     
     func playDropSoundEffect() {
+        print("\(type(of: self)).\(#function)_toggling_drop_sound_effect: \(shouldPlaySoundEffects)")
         if shouldPlaySoundEffects { soundEffectDrop.run(SKAction.play()) }
     }
     
@@ -639,11 +643,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         return UIImage(cgImage: croppedCGImage)
     }
     
+    
+    
+    
+    struct Preview {
+        private init() { }
+        
+        static var score: Int = 3000
+        
+        static func gameScene(isActive: Bool = false, isGameOver: Bool = false) -> GameScene {
+            let scene = GameScene(size: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
+            scene.isActive = isActive
+            scene.isGameOver = isGameOver
+            return scene
+        }
+    }
+    
 }
-
-
-
-
 
 
 
@@ -740,12 +756,9 @@ extension SKNode {
 
 
 
+
+// MARK: Preview
 #Preview {
-    @Previewable @StateObject var game: GameScene = {
-        let scene = GameScene(size: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
-        scene.isActive = true
-        return scene
-    }()
-    
-    GameView().environmentObject(game)
+    GameView(showSettings: .constant(false), showRankings: .constant(false))
+        .environmentObject(GameScene.Preview.gameScene(isActive: true))
 }

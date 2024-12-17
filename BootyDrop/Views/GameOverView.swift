@@ -13,7 +13,6 @@ struct GameOverView: View {
     var score: Int
     
     @EnvironmentObject var game: GameScene
-    @EnvironmentObject var router: ViewRouter
     
     init(_ showGameOver: Binding<Bool>, score: Int) {
         _showGameOver = showGameOver
@@ -25,7 +24,7 @@ struct GameOverView: View {
         let shareSnapshot: Image = Image(uiImage: game.screenshot)
         
         return PaperScroll(show: $showGameOver, height: 546, pullText: "Exit", onDismiss: {
-            router.view = .welcome
+            game.isActive = false
         }) {
             VStack {
                 PirateText("Game Over")
@@ -60,16 +59,13 @@ struct GameOverView: View {
     }
 }
 
+
+
+// MARK: Preview
 #Preview {
     @Previewable @State var showGameOver = false
-    @Previewable @StateObject var game: GameScene = {
-        let scene = GameScene(size: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
-        return scene
-    }()
-    @Previewable @StateObject var router = ViewRouter()
-        
-    GameOverView($showGameOver, score: game.score)
-        .environmentObject(game)
-        .environmentObject(router)
+    
+    GameOverView($showGameOver, score: GameScene.Preview.score)
+        .environmentObject(GameScene.Preview.gameScene(isActive: true))
 }
 

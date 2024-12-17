@@ -11,12 +11,10 @@ import AppInfo
 
 struct SettingView: View {
     @Binding var showSettings: Bool
-    var game: GameScene?
-    @EnvironmentObject var router: ViewRouter
+    @EnvironmentObject var game: GameScene
     
-    init(showSettings: Binding<Bool>, game: GameScene?) {
+    init(showSettings: Binding<Bool>) {
         _showSettings = showSettings
-        self.game = game
     }
     
     var body: some View {
@@ -29,10 +27,9 @@ struct SettingView: View {
                 PirateText("Settings").pirateShadow(y: 4)
                 
                 HStack(spacing: 40) {
-                    MusicButton(frame: CGSize(width: 100, height: 100)) {
-                        game?.toggleThemeMusic()
-                    }
+                    MusicButton(frame: CGSize(width: 100, height: 100))
                         .pirateShadow(y: 4)
+                        .environmentObject(game)
                     
                     SoundButton(frame: CGSize(width: 100, height: 100))
                         .pirateShadow(y: 4)
@@ -43,27 +40,21 @@ struct SettingView: View {
                         .pirateShadow(y: 4)
                 }.padding(.bottom, 16)
                 
-                if let game = game {
+                if game.isActive {
                     HStack(spacing: 16) {
                         RestartButton(frame: CGSize(width: 90, height: 50)) {
-                            withAnimation(.easeInOut) {
-                                showSettings = false
-                            } completion: {
+                            withAnimation {
                                 game.resetGame(isActive: true)
+                                showSettings = false
                             }
-                        }
-                        .pirateShadow(y: 4)
+                        }.pirateShadow(y: 4)
                         
                         ExitGameButton(frame: CGSize(width: 90, height: 50)) {
-                            withAnimation(.easeInOut) {
+                            withAnimation {
+                                game.resetGame(isActive: false)
                                 showSettings = false
-                            } completion: {
-                                withAnimation(.easeInOut) {
-                                    router.view = .welcome
-                                }
                             }
-                        }
-                        .pirateShadow(y: 4)
+                        }.pirateShadow(y: 4)
                     }
                 }
                 
@@ -78,19 +69,20 @@ struct SettingView: View {
     }    
 }
 
+
+
+// MARK: Preview
 #Preview {
     @Previewable @StateObject var game: GameScene = {
         let scene = GameScene(size: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
-//        scene.isActive = true
         return scene
     }()
-    @Previewable @StateObject var router = ViewRouter()
     @Previewable @State var showSettings: Bool = true
     game.isActive = true
     
     return ZStack {
-        SettingView(showSettings: $showSettings, game: game)
-            .environmentObject(router)
+        SettingView(showSettings: $showSettings)
+            .environmentObject(game)
     }
 }
 

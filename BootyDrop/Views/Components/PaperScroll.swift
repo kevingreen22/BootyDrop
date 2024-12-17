@@ -248,6 +248,8 @@ public struct StaticPaperScroll<Content>: View where Content: View {
 }
 
 
+
+// MARK: Preview
 #Preview {
     @Previewable @State var showSettings: Bool = true
     @Previewable @StateObject var game: GameScene = {
@@ -269,21 +271,8 @@ public struct StaticPaperScroll<Content>: View where Content: View {
                     VibrateButton()
                 }.padding(.vertical, 16)
                 
-                RestartButton { }
+                RestartButton()
             }
         }
-        
-//        StaticPaperScroll(show: $showSettings) {
-//            VStack {
-//                PirateText("Paper Scroll", size: 20).padding(.horizontal, 4)
-//                VStack(spacing: 10) {
-//                    MusicButton().environmentObject(game)
-//                    SoundButton().environmentObject(game)
-//                    VibrateButton()
-//                }.padding(.vertical, 16)
-//                
-//                RestartButton { }
-//            }
-//        }
     }
 }

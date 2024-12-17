@@ -6,6 +6,11 @@
 //
 
 /*
+  
+ ~ exit button not exiting game. AND restart game not restarting game.
+ 
+ ~ settings view turning off sound not working while playing game.
+ 
  
  ~ Game ending sequence not really ending game properly
 

@@ -9,9 +9,8 @@
 /* Begin PBXBuildFile section */
 		C729AA252CA60FD50083557C /* welcome_music_effects.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C729AA242CA60FD50083557C /* welcome_music_effects.mp3 */; };
 		C729AA262CA60FD50083557C /* sound_effect_merge.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C729AA232CA60FD50083557C /* sound_effect_merge.mp3 */; };
-		C729AA2A2CA737E60083557C /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C729AA292CA737E60083557C /* MainView.swift */; };
+		C729AA2A2CA737E60083557C /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C729AA292CA737E60083557C /* WelcomeView.swift */; };
 		C753C0BB2CA485F700B4F1A7 /* TODOs.swift in Sources */ = {isa = PBXBuildFile; fileRef = C753C0BA2CA485F100B4F1A7 /* TODOs.swift */; };
-		C753C0BD2CA4B19C00B4F1A7 /* RoutingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C753C0BC2CA4B19C00B4F1A7 /* RoutingView.swift */; };
 		C753C0BF2CA4BCD000B4F1A7 /* WindowSceneEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C753C0BE2CA4BCD000B4F1A7 /* WindowSceneEnvironment.swift */; };
 		C753C0C22CA4C10B00B4F1A7 /* DropObjectNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = C753C0C12CA4C10B00B4F1A7 /* DropObjectNode.swift */; };
 		C753C0C52CA4CFFE00B4F1A7 /* AppInfo in Frameworks */ = {isa = PBXBuildFile; productRef = C753C0C42CA4CFFE00B4F1A7 /* AppInfo */; };
@@ -33,9 +32,7 @@
 		C7D24EBA2C9CBD7B0006B9EF /* sound_effect_drop.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C7D24EB92C9CBD7B0006B9EF /* sound_effect_drop.mp3 */; };
 		C7D24EBC2C9CC28A0006B9EF /* button_click.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C7D24EBB2C9CC28A0006B9EF /* button_click.mp3 */; };
 		C7D24EBE2C9CF93D0006B9EF /* background.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C7D24EBD2C9CF93D0006B9EF /* background.jpg */; };
-		C7D24EC02C9CFA6A0006B9EF /* WelcomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D24EBF2C9CFA6A0006B9EF /* WelcomeScreen.swift */; };
 		C7D24EC22C9E03020006B9EF /* Random Helper functions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D24EC12C9E03020006B9EF /* Random Helper functions.swift */; };
-		C7D24EC42C9F3A110006B9EF /* FakeGameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D24EC32C9F3A110006B9EF /* FakeGameScene.swift */; };
 		C7DDA40A2C559E27005E6663 /* potion.png in Resources */ = {isa = PBXBuildFile; fileRef = C7DDA4012C559E25005E6663 /* potion.png */; };
 		C7DDA40B2C559E27005E6663 /* skull.png in Resources */ = {isa = PBXBuildFile; fileRef = C7DDA4022C559E26005E6663 /* skull.png */; };
 		C7DDA40C2C559E27005E6663 /* gem3.png in Resources */ = {isa = PBXBuildFile; fileRef = C7DDA4032C559E26005E6663 /* gem3.png */; };
@@ -71,9 +68,8 @@
 /* Begin PBXFileReference section */
 		C729AA232CA60FD50083557C /* sound_effect_merge.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = sound_effect_merge.mp3; sourceTree = "<group>"; };
 		C729AA242CA60FD50083557C /* welcome_music_effects.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = welcome_music_effects.mp3; sourceTree = "<group>"; };
-		C729AA292CA737E60083557C /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		C729AA292CA737E60083557C /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
 		C753C0BA2CA485F100B4F1A7 /* TODOs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TODOs.swift; sourceTree = "<group>"; };
-		C753C0BC2CA4B19C00B4F1A7 /* RoutingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutingView.swift; sourceTree = "<group>"; };
 		C753C0BE2CA4BCD000B4F1A7 /* WindowSceneEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowSceneEnvironment.swift; sourceTree = "<group>"; };
 		C753C0C12CA4C10B00B4F1A7 /* DropObjectNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropObjectNode.swift; sourceTree = "<group>"; };
 		C78A55CB2C602F6700630C56 /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
@@ -92,9 +88,7 @@
 		C7D24EB92C9CBD7B0006B9EF /* sound_effect_drop.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = sound_effect_drop.mp3; sourceTree = "<group>"; };
 		C7D24EBB2C9CC28A0006B9EF /* button_click.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = button_click.mp3; sourceTree = "<group>"; };
 		C7D24EBD2C9CF93D0006B9EF /* background.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = background.jpg; sourceTree = "<group>"; };
-		C7D24EBF2C9CFA6A0006B9EF /* WelcomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeScreen.swift; sourceTree = "<group>"; };
 		C7D24EC12C9E03020006B9EF /* Random Helper functions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Random Helper functions.swift"; sourceTree = "<group>"; };
-		C7D24EC32C9F3A110006B9EF /* FakeGameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeGameScene.swift; sourceTree = "<group>"; };
 		C7DDA4012C559E25005E6663 /* potion.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = potion.png; sourceTree = "<group>"; };
 		C7DDA4022C559E26005E6663 /* skull.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = skull.png; sourceTree = "<group>"; };
 		C7DDA4032C559E26005E6663 /* gem3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gem3.png; sourceTree = "<group>"; };
@@ -204,7 +198,6 @@
 				C753C0BA2CA485F100B4F1A7 /* TODOs.swift */,
 				C7CC62382C507A3E005D9F48 /* BootyDropApp.swift */,
 				C7CC62462C508459005D9F48 /* GameScene.swift */,
-				C7D24EC32C9F3A110006B9EF /* FakeGameScene.swift */,
 				C796E5632C6BE921002E0423 /* GameCenterManager.swift */,
 				C7FB73592C6C10C500DC4DBB /* Views */,
 				C753C0C62CA4D62000B4F1A7 /* Models */,
@@ -248,14 +241,12 @@
 		C7FB73592C6C10C500DC4DBB /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				C753C0BC2CA4B19C00B4F1A7 /* RoutingView.swift */,
-				C7D24EBF2C9CFA6A0006B9EF /* WelcomeScreen.swift */,
+				C729AA292CA737E60083557C /* WelcomeView.swift */,
 				C7CC623A2C507A3E005D9F48 /* GameView.swift */,
 				C7F512ED2C6E7E96003315FF /* GameOverView.swift */,
-				C796E5602C683868002E0423 /* RankingsView.swift */,
 				C78A55CB2C602F6700630C56 /* SettingView.swift */,
+				C796E5602C683868002E0423 /* RankingsView.swift */,
 				C7FB00452C66A73400C8AC70 /* Components */,
-				C729AA292CA737E60083557C /* MainView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -394,7 +385,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C7D24EC02C9CFA6A0006B9EF /* WelcomeScreen.swift in Sources */,
 				C75850E02C6C2836001C6A05 /* Shape.swift in Sources */,
 				C7F512EE2C6E7E96003315FF /* GameOverView.swift in Sources */,
 				C753C0BB2CA485F700B4F1A7 /* TODOs.swift in Sources */,
@@ -402,18 +392,16 @@
 				C753C0BF2CA4BCD000B4F1A7 /* WindowSceneEnvironment.swift in Sources */,
 				C7F1BAA92C76AFCB005CC0A4 /* HapticsManager.swift in Sources */,
 				C75850D72C6C27DC001C6A05 /* BootyDropApp.swift in Sources */,
-				C753C0BD2CA4B19C00B4F1A7 /* RoutingView.swift in Sources */,
 				C7F1BAA52C76A28D005CC0A4 /* AppStorageKey.swift in Sources */,
 				C7F1BAA72C76AC39005CC0A4 /* SoundManager.swift in Sources */,
 				C75850D82C6C27DC001C6A05 /* GameScene.swift in Sources */,
 				C75850D92C6C27DC001C6A05 /* GameCenterManager.swift in Sources */,
 				C75850DA2C6C27DC001C6A05 /* GameView.swift in Sources */,
-				C7D24EC42C9F3A110006B9EF /* FakeGameScene.swift in Sources */,
 				C753C0C22CA4C10B00B4F1A7 /* DropObjectNode.swift in Sources */,
 				C7D24EC22C9E03020006B9EF /* Random Helper functions.swift in Sources */,
 				C75850DB2C6C27DC001C6A05 /* RankingsView.swift in Sources */,
 				C75850DC2C6C27DC001C6A05 /* SettingView.swift in Sources */,
-				C729AA2A2CA737E60083557C /* MainView.swift in Sources */,
+				C729AA2A2CA737E60083557C /* WelcomeView.swift in Sources */,
 				C75850DD2C6C27DC001C6A05 /* PaperScroll.swift in Sources */,
 				C75850DE2C6C27DC001C6A05 /* Extensions.swift in Sources */,
 				C75850DF2C6C27DC001C6A05 /* CustomFonts.swift in Sources */,
