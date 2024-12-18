@@ -9,10 +9,13 @@ import SwiftUI
 import SpriteKit
 
 struct WelcomeView: View {
-    @EnvironmentObject var game: GameScene
     @State private var showSettings: Bool = false
     @State private var showRankings: Bool = false
     
+    @EnvironmentObject var game: GameScene
+    
+    @AppStorage(AppStorageKey.sound) var shouldPlaySoundEffects: Bool = true
+
     
     var body: some View {
         ZStack {
@@ -43,9 +46,9 @@ struct WelcomeView: View {
         } // Rankings View
         
         .fullScreenCover(isPresented: $game.isGameOver) {
-            GameOverView($game.isGameOver, score: game.score)
+            GameoverView($game.isGameOver, score: game.score)
                 .environmentObject(game)
-        } // GameOver View
+        } // Gameover View
         
         .animation(.easeInOut, value: game.isActive)
     }
@@ -57,22 +60,43 @@ struct WelcomeView: View {
             PirateText("Pirate's", size: 40)
             PirateText("Booty Drop", size: 30)
             
-            StartButton()
+            StartButton {
+                withAnimation(.easeInOut) {
+                    game.resetGame(isActive: true)
+                }
+                if shouldPlaySoundEffects {
+                    try? SoundManager.playeffect(SoundResourceName.soundEffectClick)
+                }
+            }
                 .pirateShadow()
                 .padding(.vertical, 24)
                 .environmentObject(game)
             
             HStack(spacing: 40) {
                 VStack(spacing: 16) {
-                    RankingsButton($showRankings)
-                        .scaleEffect(1.5)
-                        .pirateShadow()
+                    RankingsButton {
+                        withAnimation(.easeInOut) {
+                            showRankings = true
+                        }
+                        if shouldPlaySoundEffects {
+                            try? SoundManager.playeffect(SoundResourceName.soundEffectClick)
+                        }
+                    }
+                    .scaleEffect(1.5)
+                    .pirateShadow()
                     PirateText("Rankings", size: 14)
                 }
                 VStack(spacing: 16) {
-                    SettingsButton($showSettings)
-                        .scaleEffect(1.5)
-                        .pirateShadow()
+                    SettingsButton {
+                        withAnimation(.easeInOut) {
+                            showSettings = true
+                        }
+                        if shouldPlaySoundEffects {
+                            try? SoundManager.playeffect(SoundResourceName.soundEffectClick)
+                        }
+                    }
+                    .scaleEffect(1.5)
+                    .pirateShadow()
                     PirateText("Settings", size: 14)
                 }
             }

@@ -9,26 +9,27 @@ import SwiftUI
 import SpriteKit
 
 struct GameView: View {
-    @EnvironmentObject var game: GameScene
     @Binding var showSettings: Bool
     @Binding var showRankings: Bool
     
+    @EnvironmentObject var game: GameScene
     
     var body: some View {
-        VStack(spacing: 0) {
-            SpriteView(scene: game)
-            if game.isActive == true {
-                Footer().frame(height: 85)
-            }
-        }.ignoresSafeArea() // Sprite View
-        
-        .overlay(alignment: .top) {
+        ZStack(alignment: .top) {
+            VStack(spacing: 0) {
+                SpriteView(scene: game)
+                if game.isActive == true {
+                    Footer().frame(height: 85)
+                }
+            }.ignoresSafeArea() // Sprite View
+            
             if game.isActive == true {
                 Header(showSettings: $showSettings, showRankings: $showRankings)
                     .environmentObject(game)
             }
-        } // Header View
+        }
     }
+    
 }
 
 
@@ -66,8 +67,16 @@ struct Header: View {
                 }
                 .overlay(alignment: .topTrailing) {
                     HStack {
-                        RankingsButton($showRankings).environmentObject(game)
-                        SettingsButton($showSettings).environmentObject(game)
+                        RankingsButton {
+                            withAnimation {
+                                showRankings.toggle()
+                            }
+                        }.environmentObject(game)
+                        SettingsButton {
+                            withAnimation {
+                                showSettings.toggle()
+                            }
+                        }.environmentObject(game)
                     }
                     .padding(.trailing, 26)
                     .padding(.top, 20)
@@ -122,7 +131,7 @@ struct NextObjectView: View {
                 .resizable()
                 .frame(width: 30, height: 30)
                 .pirateShadow(x: 3)
-                .animation(.bouncy, value: dropObject.size)
+                .animation(.smooth, value: dropObject)
         }
         .padding(.top, 8)
         .padding(.leading)

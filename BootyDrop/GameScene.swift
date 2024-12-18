@@ -16,7 +16,7 @@ import SpriteKit
 import KGToolbelt
 import Combine
 
-//enum GameState: Identifiable {
+//enum GameState: Identifiable, CaseIterable {
 //    var id: Int {
 //        switch self {
 //        case .welcome: 0
@@ -34,7 +34,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     @Published var score: Int = 0
     @Published var nextDropObject: DropObject = DropObject(DOSize: DropObjectSize.random)
     @Published var isGameOver: Bool = false
+    
     @Published var isActive: Bool = false
+//    @Published var gameState: GameState = .welcome
 
     @AppStorage(AppStorageKey.music) var shouldPlayMusic: Bool = true
     @AppStorage(AppStorageKey.vibrate) var shouldVibrate: Bool = true
@@ -62,6 +64,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         super.init(size: size)
         let scene = SKScene(size: size)
         scene.scaleMode = .fill
+        self.isActive = false
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -75,7 +78,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     override func didMove(to view: SKView) {
         print("\(type(of: self)).\(#function)")
         guard let scene else { return }
-//        print("scene size:\(scene.frame) - view size\(view.frame)")
+        print("  - scene: \(scene)")
+        print("  -scene size:\(scene.frame) - view size\(view.frame)")
         scene.anchorPoint.x = 0
         scene.anchorPoint.y = 0
         scene.physicsBody = SKPhysicsBody(edgeLoopFrom: scene.frame)
@@ -93,22 +97,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
 //        print("\(type(of: self)).\(#function)")
-        
         switch isActive {
+        case false:
+            break
+            
         case true:
             guard let touch = touches.first else { return }
             let location = CGPoint(x: touch.location(in: self).x, y: dropY)
             currentDropObject.position = location
             dropGuide.position.x = location.x
-           
-        case false:
-            break
         }
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
 //        print("\(type(of: self)).\(#function)")
-        
         switch isActive {
         case false:
             break
@@ -178,6 +180,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     }
     
     override func update(_ currentTime: TimeInterval) {
+//        print("\(type(of: self)).\(#function)")
         switch isActive {
         case false:
             break
@@ -195,13 +198,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     /// Called when there is a collision notification.
     func didBegin(_ contact: SKPhysicsContact) {
 //        print("\(type(of: self)).\(#function)")
-        
         switch isActive {
         case false:
             break
             
         case true:
-//            print("\(type(of: self)).\(#function).impulse:\(contact.collisionImpulse)")
+            print("\(type(of: self)).\(#function)")
+            print("  -collisionImpulse: \(contact.collisionImpulse)")
             if contact.collisionImpulse > 5 && !shouldVibrate {
                 HapticManager.instance.impact(PirateHaptic.collision, intensity: contact.collisionImpulse)
             }
@@ -210,15 +213,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
             guard nodeA.size.height != DropObjectSize.largest.rawValue && nodeB.size.height != DropObjectSize.largest.rawValue else { return }
             
             if nodeA.size == nodeB.size && nodeA.name == nodeB.name {
-                print("matched collision detected:\n  \(nodeA) \nAND\n  \(nodeB)\n")
+                print("  -matched collision detected:\n  \(nodeA) \nAND\n  \(nodeB)\n")
                 handleCollision(between: nodeA, and: nodeB)
             }
         }
     }
     
     
+    
 // MARK: High level helper methods
     private func setupWelcomeScene() {
+        print("\(type(of: self)).\(#function)")
         addWelcomeEffectSongNode()
         addStaticDropObjectNodes()
     }
@@ -239,16 +244,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     }
     
     
+    
 // MARK: Welcome scene methods
     private func addWelcomeEffectSongNode() {
+        print("\(type(of: self)).\(#function)")
         if let musicURL = Bundle.main.url(forResource: "welcome_music_effects", withExtension: "mp3") {
             backgroundMusic = SKAudioNode(url: musicURL)
-            toggleThemeMusic()
+            backgroundMusic.run(SKAction.stop())
             addChild(backgroundMusic)
+            toggleThemeMusic()
         }
     }
     
     private func addStaticDropObjectNodes() {
+        print("\(type(of: self)).\(#function)")
         guard let scene = scene else { return }
         var sizes: [DropObjectSize] = DropObjectSize.allCases.shuffled()
         var positions: [CGPoint] = {
@@ -293,62 +302,27 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
 
     
     
-    
 // MARK: Actual game play methods
     func resetGame(isActive: Bool) {
         print("\(type(of: self)).\(#function)")
+        self.isActive = isActive
                 
-        let fadeOut = SKAction.fadeOut(withDuration: 0.5)
-        let wait = SKAction.wait(forDuration: 0.5)
-        let sequence = SKAction.sequence([fadeOut, wait])
-        scene?.run(sequence) { [unowned self] in
-            self.removeAllChildren()
-            self.removeAllActions()
-        }
+//        let fadeOut = SKAction.fadeOut(withDuration: 0.5)
+//        let wait = SKAction.wait(forDuration: 0.5)
+//        let sequence = SKAction.sequence([fadeOut, wait])
+//        scene?.run(sequence) { [unowned self] in
+//            self.removeAllChildren()
+//            self.removeAllActions()
+//        }
         
         let scene = GameScene(size: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
         scene.scaleMode = .fill
         scene.isActive = isActive
         let transition = SKTransition.crossFade(withDuration: 1)
-        view?.presentScene(scene, transition: transition)
-        
-//        guard let scene = scene else { return }
-//        // Remove all drop-objects
-//        scene.children.forEach { node in
-//            if node.name != "background" && node.name != dropGuide.name && node.name != startLine.name {
-//                if let child = node as? SKSpriteNode {
-//                    self.destroy(object: child)
-//                }
-//            }
-//        }
-//        
-//        // reset startLine color
-//        startLine.strokeColor = .darkGray
-//        
-//        // reset drop position
-//        lastDropPosition = nil
-//        
-//        // Reset timer
-//        timer?.invalidate()
-//        timer = nil
-//        
-//        // Reset score
-//        score = 0
-//        
-//        // Reset gameOverTime amount
-//        gameOverTime = 20
-//        
-//        // Reset first drop-object
-//        currentDropObject = addDropObjectNode(dropObjectSize: .random, position: CGPoint(x: scene.frame.width/2, y: dropY))
-//        dropGuide.alpha = 1
-//        dropGuide.position.x = scene.frame.width/2
-//        
-//        // set game isActive bool to false
-//        isActive = false
+        self.view?.presentScene(scene, transition: transition)
     }
     
     func startGameEndingSequence(_ scene: SKScene) {
-//        print("\(type(of: self)).\(#function)")
         guard currentDropObject != nil,
               dropGuide != nil,
               startLine != nil else { return }
@@ -378,9 +352,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         }).count >= 3 {
             // Then start a timer if its not already started.
             if timer == nil {
-//                print("creating timer")
+                print("  -creating timer")
                 timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] timer in
-//                    print("timer running \(timer)")
+                    print("  -timer running...\(timer)")
                     // When the timer runs out, the game ends.
                     self?.gameOverTime -= 1
                     
@@ -396,7 +370,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         } else {
             // If all drop-objects fall below the start line, then invalidate the timer and reset timer/timer amount.
             if timer != nil {
-//                print("invalidating timer")
+                print("  -invalidating timer")
                 timer?.invalidate()
                 timer = nil
                 gameOverTime = 14
@@ -406,10 +380,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     
     /// Combines both dropObjects into next dropObjectSize if they are a matching pair (i.e. destroy both and create a new one)
     func handleCollision(between objectA: SKSpriteNode, and objectB: SKSpriteNode) {
-//        print("\(type(of: self)).\(#function)")
+        print("\(type(of: self)).\(#function)")
         guard let DONode = objectA as? DropObject, let scene = scene else { return }
         let newSize = DONode.dropObjectSize.nextSize
-//        print("currentSize: \(DONode.dropObjectSize.rawValue) - newSize: \(newSize.rawValue)\n")
+        print("  -currentSize: \(DONode.dropObjectSize.rawValue) - newSize: \(newSize.rawValue)\n")
         let mergeXposition = objectA.position.x + abs(objectA.position.x - objectB.position.x)/2
         let sceneWidth = scene.frame.width-(newSize.rawValue/2)
         let newX = min(mergeXposition, sceneWidth)
@@ -422,7 +396,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
             emitter.position = position
             emitter.particleSize = CGSize(width: newSize.rawValue, height: newSize.rawValue)
             let action = SKAction.wait(forDuration: 0.4)
-            emitter.run(action) { self.destroy(object: emitter) }
+            emitter.run(action) { [unowned self] in self.destroy(object: emitter) }
             addChild(emitter)
         }
         
@@ -430,19 +404,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         destroy(object: objectB)
         let newObject = addDropObjectNode(dropObjectSize: newSize, position: position, isDynamic: true)
         newObject?.setBitMasks(to: .booty)
-        newObject?.physicsBody?.applyImpulse(CGVector(dx: Int.random(in: -15...15), dy: Int.random(in: -15...15))) // adds explosion push
+        
+#warning("Adjust the next line for merging physics")
+        // adds explosion push
+        newObject?.physicsBody?.applyImpulse(CGVector(dx: Int.random(in: -15...15), dy: Int.random(in: -15...15)))
+        
         if shouldVibrate { HapticManager.instance.impact(PirateHaptic.merge) }
         playMergeSoundEffect()
     }
     
     func destroy(object: SKNode) {
-//        print("\(type(of: self)).\(#function)")
+        print("\(type(of: self)).\(#function)")
         object.removeFromParent()
     }
     
     func toggleThemeMusic() {
         print("\(type(of: self)).\(#function)_toggling_theme_music: \(shouldPlayMusic)")
-        shouldPlayMusic ? backgroundMusic.run(SKAction.stop()) : backgroundMusic.run(SKAction.play())
+        shouldPlayMusic ? backgroundMusic.run(SKAction.play()) : backgroundMusic.run(SKAction.stop())
     }
     
     func playMergeSoundEffect() {
@@ -456,7 +434,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     }
     
     @discardableResult private func addDropObjectNode(dropObjectSize: DropObjectSize, position: CGPoint, isDynamic: Bool = false, withCollision: Bool = false) -> DropObject? {
-//        print("\(type(of: self)).\(#function)")
+        print("\(type(of: self)).\(#function)")
         let node = DropObject(DOSize: dropObjectSize, position: position)
         guard let nodeTex = node.texture else { return nil }
         
@@ -485,6 +463,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     }
     
     private func addBackgroundImage(position: CGPoint, scene: SKScene) {
+        print("\(type(of: self)).\(#function)")
         let background = SKSpriteNode(imageNamed: "background.jpg")
         background.position = position
         background.size = scene.frame.size
@@ -494,14 +473,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     }
     
     private func addThemeSongNode() {
+        print("\(type(of: self)).\(#function)")
         if let musicURL = Bundle.main.url(forResource: "theme_song", withExtension: "mp3") {
             backgroundMusic = SKAudioNode(url: musicURL)
-            toggleThemeMusic()
+            backgroundMusic.run(SKAction.stop())
             addChild(backgroundMusic)
+            toggleThemeMusic()
         }
     }
     
     private func addSoundEffectsNodes() {
+        print("\(type(of: self)).\(#function)")
         if let soundEffect1URL = Bundle.main.url(forResource: "sound_effect_drop", withExtension: "mp3") {
             soundEffectDrop = SKAudioNode(url: soundEffect1URL)
             soundEffectDrop.autoplayLooped = false
@@ -515,6 +497,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     }
     
     private func addStartLine() {
+        print("\(type(of: self)).\(#function)")
         startLine = SKShapeNode(rect: CGRect(x: 0, y: dropY, width: UIScreen.main.bounds.width, height: 1))
         startLine.strokeColor = .darkGray
         startLine.name = "start_line"
@@ -522,6 +505,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     }
         
     private func createDropGuide(xPosition: Double) -> SKNode {
+        print("\(type(of: self)).\(#function)")
         let guideLine = SKSpriteNode(color: .white.withAlphaComponent(0.6), size: CGSize(width: 3, height: dropY))
         guideLine.position.x = xPosition
         guideLine.position.y = dropY/2
@@ -532,6 +516,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     }
 
 //    private func createDropGuide(xPosition: Double) -> SKNode {
+//        print("\(type(of: self)).\(#function)")
 //        let guideLine = SKSpriteNode(color: .clear, size: CGSize(width: 3, height: dropY))
 //        guideLine.position.x = xPosition
 //        guideLine.position.y = dropY/2
@@ -571,13 +556,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
 //    }
     
     private func incrementScore(with dropObjectSize: DropObjectSize) {
-//        print("\(type(of: self)).\(#function).score_increased:\(Int(Double(dropObjectSize.rawValue)*0.1))")
+        print("\(type(of: self)).\(#function).score_increased:\(Int(Double(dropObjectSize.rawValue)*0.1))")
         score += Int(Double(dropObjectSize.rawValue)*0.1)
     }
     
     /// THIS FIXES THE NEXT-OBJECT'S EDGE OVERLAY. So the new drop object bounds does not extend beyond the edge of the scene/screen for dragging.
     private func calculateLastDropPositionForLargerDropObject(in scene: SKScene) {
-//        print("\(type(of: self)).\(#function)")
+        print("\(type(of: self)).\(#function)")
         if self.lastDropPosition != nil {
             // Check if next drop-object size is bigger or smaller than previous
             if nextDropObject.dropObjectSize > currentDropObject.dropObjectSize {
@@ -597,24 +582,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     }
     
     private func prepareForScreenshot() {
-//        print("\(type(of: self)).\(#function)")
+        print("\(type(of: self)).\(#function)")
         destroy(object: currentDropObject)
         dropGuide.alpha = 0
         if let snapshot = snapshot() {
             screenshot = snapshot
-//            print("snapshot set")
+            print("  -snapshot set")
         }
     }
     
     /// Creates a screen shot from the SKView with the size passed in.
     private func snapshot() -> UIImage? {
-//        print("\(type(of: self)).\(#function)")
+        print("\(type(of: self)).\(#function)")
         guard let scene = self.scene, let view = scene.view else { return nil }
         
         let targetSize = CGSize(width: view.bounds.width, height: view.bounds.height)
         view.bounds.origin = CGPoint(x: 0, y: 0)
         
-//        print("screenshot rendering...")
+        print("  -screenshot rendering...")
         let image = UIGraphicsImageRenderer(size: targetSize).image { context in
             view.drawHierarchy(in: view.bounds, afterScreenUpdates: true)
         }
@@ -637,7 +622,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     }
     
     private func cropImage(_ image: UIImage, toRect: CGRect) -> UIImage? {
-//        print("\(type(of: self)).\(#function)")
+        print("\(type(of: self)).\(#function)")
         let cgImage: CGImage! = image.cgImage
         let croppedCGImage: CGImage! = cgImage.cropping(to: toRect)
         return UIImage(cgImage: croppedCGImage)

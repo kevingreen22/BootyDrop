@@ -252,10 +252,6 @@ public struct StaticPaperScroll<Content>: View where Content: View {
 // MARK: Preview
 #Preview {
     @Previewable @State var showSettings: Bool = true
-    @Previewable @StateObject var game: GameScene = {
-        let scene = GameScene(size: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
-        return scene
-    }()
     
     ZStack {
         Color.black.opacity(0.7)
@@ -266,12 +262,20 @@ public struct StaticPaperScroll<Content>: View where Content: View {
             VStack {
                 PirateText("Paper Scroll", size: 20).padding(.horizontal, 4)
                 VStack(spacing: 10) {
-                    MusicButton()
-                    SoundButton()
-                    VibrateButton()
+                    MusicButton(shouldPlayMusic: .constant(true)) {
+                        
+                    }
+                    SoundButton(shouldPlaySoundEffects: .constant(true)) {
+                        
+                    }
+                    VibrateButton(shouldVibrate: .constant(true)) {
+                        
+                    }
                 }.padding(.vertical, 16)
                 
-                RestartButton()
+                RestartButton {
+                    
+                }
             }
         }
     }
