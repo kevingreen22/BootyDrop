@@ -15,17 +15,16 @@ struct WelcomeView: View {
     @EnvironmentObject var game: GameScene
     
     @AppStorage(AppStorageKey.sound) var shouldPlaySoundEffects: Bool = true
-
     
     var body: some View {
         ZStack {
             GameView(showSettings: $showSettings, showRankings: $showRankings)
                 .environmentObject(game)
             
-            if game.isActive == false {
-                StaticPaperScroll(height: 400) {
+            if game.gameState == .welcome {
+                StaticPaperScroll(height: 400, shouldPlaySoundEffect: .constant(false)) {
                     PaperScrollContent
-                }
+                }.offset(y: -85)
             } // PaperScroll View
         }
         
@@ -45,12 +44,12 @@ struct WelcomeView: View {
             }
         } // Rankings View
         
-        .fullScreenCover(isPresented: $game.isGameOver) {
-            GameoverView($game.isGameOver, score: game.score)
+        .fullScreenCover(isPresented:  $game.isGameOver) {
+            GameoverView(score: game.score)
                 .environmentObject(game)
         } // Gameover View
         
-        .animation(.easeInOut, value: game.isActive)
+        .animation(.easeInOut, value: game.gameState)
     }
     
     fileprivate var PaperScrollContent: some View {
@@ -61,16 +60,16 @@ struct WelcomeView: View {
             PirateText("Booty Drop", size: 30)
             
             StartButton {
-                withAnimation(.easeInOut) {
-                    game.resetGame(isActive: true)
+                withAnimation {
+                    game.gameState = .playing
                 }
                 if shouldPlaySoundEffects {
                     try? SoundManager.playeffect(SoundResourceName.soundEffectClick)
                 }
             }
-                .pirateShadow()
-                .padding(.vertical, 24)
-                .environmentObject(game)
+            .pirateShadow()
+            .padding(.vertical, 24)
+            .environmentObject(game)
             
             HStack(spacing: 40) {
                 VStack(spacing: 16) {
@@ -112,10 +111,7 @@ struct WelcomeView: View {
 
 // MARK: Preview
 #Preview {
-    @Previewable @State var showSettings = false
-    @Previewable @State var showRankings = false
-    
     WelcomeView()
-        .environmentObject(GameScene.Preview.gameScene(isActive: false))
+        .environmentObject(GameScene.previewGameScene(state: .welcome))
 }
 

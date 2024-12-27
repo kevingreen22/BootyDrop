@@ -18,10 +18,6 @@ struct SettingView: View {
     @AppStorage(AppStorageKey.vibrate) var shouldVibrate: Bool = true
     @AppStorage(AppStorageKey.music) var shouldPlayMusic: Bool = true
     
-    init(showSettings: Binding<Bool>) {
-        _showSettings = showSettings
-    }
-    
     var body: some View {
         RealBlur(style: .dark)
             .ignoresSafeArea()
@@ -47,7 +43,7 @@ struct SettingView: View {
                     }.pirateShadow(y: 4)
                 }.padding(.bottom, 16)
                 
-                if game.isActive == true {
+                if game.gameState == .playing {
                     HStack(spacing: 16) {
                         RestartButton(frame: CGSize(width: 90, height: 50)) {
                             restartButtonAction()
@@ -71,6 +67,8 @@ struct SettingView: View {
 }
 
 
+
+// MARK: Private Subviews
 extension SettingView {
     
     fileprivate func musicButtonAction() {
@@ -95,7 +93,7 @@ extension SettingView {
     
     fileprivate func restartButtonAction() {
         withAnimation(.easeInOut) {
-            game.resetGame(isActive: true)
+            game.gameState = .playing
             showSettings = false
         }
         if shouldPlaySoundEffects {
@@ -114,7 +112,7 @@ extension SettingView {
     
     fileprivate func exitGameButtonAction() {
         withAnimation(.easeInOut) {
-            game.resetGame(isActive: false)
+            game.gameState = .welcome
             showSettings = false
         }
         if shouldPlaySoundEffects {
@@ -125,13 +123,14 @@ extension SettingView {
 }
 
 
+
 // MARK: Preview
 #Preview {
     @Previewable @State var showSettings: Bool = true
     
     ZStack {
         SettingView(showSettings: $showSettings)
-            .environmentObject(GameScene.Preview.gameScene(isActive: true))
+            .environmentObject(GameScene.previewGameScene(state: .welcome))
     }
 }
 

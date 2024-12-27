@@ -9,22 +9,18 @@ import SwiftUI
 import KGViews
 
 struct GameoverView: View {
-    @Binding var showGameover: Bool
     var score: Int
     
     @EnvironmentObject var game: GameScene
     
-    init(_ showGameOver: Binding<Bool>, score: Int) {
-        _showGameover = showGameOver
-        self.score = score
-    }
-    
-    
     var body: some View {
         let shareSnapshot: Image = Image(uiImage: game.screenshot)
         
-        return PaperScroll(show: $showGameover, height: 546, pullText: "Exit", onDismiss: {
-            game.resetGame(isActive: false)
+        return PaperScroll(show: $game.isGameOver, height: 546, pullText: "Exit", onDismiss: {
+            withAnimation(.easeInOut) {
+                game.gameState = .welcome
+                game.isGameOver = false
+            }
         }) {
             VStack {
                 PirateText("Game Over")
@@ -46,8 +42,8 @@ struct GameoverView: View {
                     
                     RestartButton(frame: CGSize(width: 85, height: 40)) {
                         withAnimation(.easeInOut) {
-                            game.resetGame(isActive: true)
-                            showGameover = false
+                            game.gameState = .playing
+                            game.isGameOver = false
                         }
                     }.pirateShadow(y: 4)
                     
@@ -63,9 +59,10 @@ struct GameoverView: View {
 
 // MARK: Preview
 #Preview {
-    @Previewable @State var showGameOver = false
+    let gameScene = GameScene.previewGameScene(state: .playing)
+    gameScene.isGameOver = true
     
-    GameoverView($showGameOver, score: GameScene.Preview.score)
-        .environmentObject(GameScene.Preview.gameScene(isActive: true))
+    return GameoverView(score: gameScene.score)
+        .environmentObject(gameScene)
 }
 

@@ -18,36 +18,23 @@ struct GameView: View {
         ZStack(alignment: .top) {
             VStack(spacing: 0) {
                 SpriteView(scene: game)
-                if game.isActive == true {
-                    Footer().frame(height: 85)
-                }
+                Footer().frame(height: 85)
             }.ignoresSafeArea() // Sprite View
             
-            if game.isActive == true {
+            if game.gameState == .playing {
                 Header(showSettings: $showSettings, showRankings: $showRankings)
                     .environmentObject(game)
             }
         }
+        .animation(.easeInOut, value: game.gameState)
     }
     
 }
 
 
 
-// MARK: Preview
-#Preview {
-    @Previewable @State var showSettings = false
-    @Previewable @State var showRankings = false
-    
-    GameView(showSettings: $showSettings, showRankings: $showRankings)
-        .environmentObject(GameScene.Preview.gameScene(isActive: true))
-}
-
-
-
-
 // MARK: GameView Subviews
-struct Header: View {
+fileprivate struct Header: View {
     @EnvironmentObject var game: GameScene
     @Binding var showSettings: Bool
     @Binding var showRankings: Bool
@@ -69,12 +56,12 @@ struct Header: View {
                     HStack {
                         RankingsButton {
                             withAnimation {
-                                showRankings.toggle()
+                                showRankings = true
                             }
                         }.environmentObject(game)
                         SettingsButton {
                             withAnimation {
-                                showSettings.toggle()
+                                showSettings = true
                             }
                         }.environmentObject(game)
                     }
@@ -118,7 +105,7 @@ struct Header: View {
     }
 }
 
-struct NextObjectView: View {
+fileprivate struct NextObjectView: View {
     @Binding var dropObject: DropObject
     
     var body: some View {
@@ -138,7 +125,7 @@ struct NextObjectView: View {
     }
 }
 
-struct Footer: View {
+fileprivate struct Footer: View {
     var body: some View {
         ZStack {
             background
@@ -155,8 +142,8 @@ struct Footer: View {
             Image("gem4").resizable().scaledToFit()
             Image("gem5").resizable().scaledToFit()
             Image("diamond").resizable().scaledToFit()
-            Image("potion").resizable().scaledToFit()
             Image("nugget").resizable().scaledToFit()
+            Image("potion").resizable().scaledToFit()
             Image("skull").resizable().scaledToFit()
         }
         .padding(.horizontal, 8)
@@ -175,4 +162,14 @@ struct Footer: View {
     }
 }
 
+
+
+// MARK: Preview
+#Preview {
+    @Previewable @State var showSettings = false
+    @Previewable @State var showRankings = false
+    
+    GameView(showSettings: $showSettings, showRankings: $showRankings)
+        .environmentObject(GameScene.previewGameScene(state: .playing))
+}
 
