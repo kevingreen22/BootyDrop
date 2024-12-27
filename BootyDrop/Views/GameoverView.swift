@@ -8,24 +8,19 @@
 import SwiftUI
 import KGViews
 
-struct GameOverView: View {
-    @Binding var showGameOver: Bool
+struct GameoverView: View {
     var score: Int
     
     @EnvironmentObject var game: GameScene
-    @EnvironmentObject var router: ViewRouter
-    
-    init(_ showGameOver: Binding<Bool>, score: Int) {
-        _showGameOver = showGameOver
-        self.score = score
-    }
-    
     
     var body: some View {
         let shareSnapshot: Image = Image(uiImage: game.screenshot)
         
-        return PaperScroll(show: $showGameOver, height: 546, pullText: "Exit", onDismiss: {
-            router.view = .welcome
+        return PaperScroll(show: $game.isGameOver, height: 546, pullText: "Exit", onDismiss: {
+            withAnimation(.easeInOut) {
+                game.gameState = .welcome
+                game.isGameOver = false
+            }
         }) {
             VStack {
                 PirateText("Game Over")
@@ -46,9 +41,9 @@ struct GameOverView: View {
                         .pirateShadow(y: 4)
                     
                     RestartButton(frame: CGSize(width: 85, height: 40)) {
-                        game.resetGame(isActive: true)
                         withAnimation(.easeInOut) {
-                            showGameOver = false
+                            game.gameState = .playing
+                            game.isGameOver = false
                         }
                     }.pirateShadow(y: 4)
                     
@@ -60,16 +55,14 @@ struct GameOverView: View {
     }
 }
 
+
+
+// MARK: Preview
 #Preview {
-    @Previewable @State var showGameOver = false
-    @Previewable @StateObject var game: GameScene = {
-        let scene = GameScene(size: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
-        return scene
-    }()
-    @Previewable @StateObject var router = ViewRouter()
-        
-    GameOverView($showGameOver, score: game.score)
-        .environmentObject(game)
-        .environmentObject(router)
+    let gameScene = GameScene.previewGameScene(state: .playing)
+    gameScene.isGameOver = true
+    
+    return GameoverView(score: gameScene.score)
+        .environmentObject(gameScene)
 }
 

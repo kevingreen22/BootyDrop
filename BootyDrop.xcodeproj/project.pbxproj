@@ -9,9 +9,8 @@
 /* Begin PBXBuildFile section */
 		C729AA252CA60FD50083557C /* welcome_music_effects.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C729AA242CA60FD50083557C /* welcome_music_effects.mp3 */; };
 		C729AA262CA60FD50083557C /* sound_effect_merge.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C729AA232CA60FD50083557C /* sound_effect_merge.mp3 */; };
-		C729AA2A2CA737E60083557C /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C729AA292CA737E60083557C /* MainView.swift */; };
+		C729AA2A2CA737E60083557C /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C729AA292CA737E60083557C /* WelcomeView.swift */; };
 		C753C0BB2CA485F700B4F1A7 /* TODOs.swift in Sources */ = {isa = PBXBuildFile; fileRef = C753C0BA2CA485F100B4F1A7 /* TODOs.swift */; };
-		C753C0BD2CA4B19C00B4F1A7 /* RoutingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C753C0BC2CA4B19C00B4F1A7 /* RoutingView.swift */; };
 		C753C0BF2CA4BCD000B4F1A7 /* WindowSceneEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C753C0BE2CA4BCD000B4F1A7 /* WindowSceneEnvironment.swift */; };
 		C753C0C22CA4C10B00B4F1A7 /* DropObjectNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = C753C0C12CA4C10B00B4F1A7 /* DropObjectNode.swift */; };
 		C753C0C52CA4CFFE00B4F1A7 /* AppInfo in Frameworks */ = {isa = PBXBuildFile; productRef = C753C0C42CA4CFFE00B4F1A7 /* AppInfo */; };
@@ -27,15 +26,14 @@
 		C75850E02C6C2836001C6A05 /* Shape.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7CC62592C50BAC6005D9F48 /* Shape.swift */; };
 		C76F5B392C6FC63400F42E90 /* KGToolbelt in Frameworks */ = {isa = PBXBuildFile; productRef = C76F5B382C6FC63400F42E90 /* KGToolbelt */; };
 		C76F5B3C2C6FC65100F42E90 /* KGViews in Frameworks */ = {isa = PBXBuildFile; productRef = C76F5B3B2C6FC65100F42E90 /* KGViews */; };
+		C789EE692D1773B40013187E /* scroll_sound_effect.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C789EE682D1773B40013187E /* scroll_sound_effect.mp3 */; };
 		C7CC623D2C507A40005D9F48 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C7CC623C2C507A40005D9F48 /* Assets.xcassets */; };
 		C7CC62402C507A40005D9F48 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C7CC623F2C507A40005D9F48 /* Preview Assets.xcassets */; };
 		C7CF22B32CD3F64100DA22C5 /* theme_song.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C7CF22B22CD3F64100DA22C5 /* theme_song.mp3 */; };
 		C7D24EBA2C9CBD7B0006B9EF /* sound_effect_drop.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C7D24EB92C9CBD7B0006B9EF /* sound_effect_drop.mp3 */; };
 		C7D24EBC2C9CC28A0006B9EF /* button_click.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C7D24EBB2C9CC28A0006B9EF /* button_click.mp3 */; };
 		C7D24EBE2C9CF93D0006B9EF /* background.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C7D24EBD2C9CF93D0006B9EF /* background.jpg */; };
-		C7D24EC02C9CFA6A0006B9EF /* WelcomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D24EBF2C9CFA6A0006B9EF /* WelcomeScreen.swift */; };
 		C7D24EC22C9E03020006B9EF /* Random Helper functions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D24EC12C9E03020006B9EF /* Random Helper functions.swift */; };
-		C7D24EC42C9F3A110006B9EF /* FakeGameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D24EC32C9F3A110006B9EF /* FakeGameScene.swift */; };
 		C7DDA40A2C559E27005E6663 /* potion.png in Resources */ = {isa = PBXBuildFile; fileRef = C7DDA4012C559E25005E6663 /* potion.png */; };
 		C7DDA40B2C559E27005E6663 /* skull.png in Resources */ = {isa = PBXBuildFile; fileRef = C7DDA4022C559E26005E6663 /* skull.png */; };
 		C7DDA40C2C559E27005E6663 /* gem3.png in Resources */ = {isa = PBXBuildFile; fileRef = C7DDA4032C559E26005E6663 /* gem3.png */; };
@@ -58,7 +56,7 @@
 		C7F1BAA52C76A28D005CC0A4 /* AppStorageKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F1BAA42C76A28D005CC0A4 /* AppStorageKey.swift */; };
 		C7F1BAA72C76AC39005CC0A4 /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F1BAA62C76AC39005CC0A4 /* SoundManager.swift */; };
 		C7F1BAA92C76AFCB005CC0A4 /* HapticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F1BAA82C76AFCB005CC0A4 /* HapticsManager.swift */; };
-		C7F512EE2C6E7E96003315FF /* GameOverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F512ED2C6E7E96003315FF /* GameOverView.swift */; };
+		C7F512EE2C6E7E96003315FF /* GameoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F512ED2C6E7E96003315FF /* GameoverView.swift */; };
 		C7F512F22C6E9FB7003315FF /* ButtonsAndMore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F512F12C6E9FB7003315FF /* ButtonsAndMore.swift */; };
 		C7FB00382C642BDF00C8AC70 /* scroll_top.png in Resources */ = {isa = PBXBuildFile; fileRef = C7FB00352C642BDE00C8AC70 /* scroll_top.png */; };
 		C7FB00392C642BDF00C8AC70 /* scroll_middle.png in Resources */ = {isa = PBXBuildFile; fileRef = C7FB00362C642BDF00C8AC70 /* scroll_middle.png */; };
@@ -71,11 +69,11 @@
 /* Begin PBXFileReference section */
 		C729AA232CA60FD50083557C /* sound_effect_merge.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = sound_effect_merge.mp3; sourceTree = "<group>"; };
 		C729AA242CA60FD50083557C /* welcome_music_effects.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = welcome_music_effects.mp3; sourceTree = "<group>"; };
-		C729AA292CA737E60083557C /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		C729AA292CA737E60083557C /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
 		C753C0BA2CA485F100B4F1A7 /* TODOs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TODOs.swift; sourceTree = "<group>"; };
-		C753C0BC2CA4B19C00B4F1A7 /* RoutingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutingView.swift; sourceTree = "<group>"; };
 		C753C0BE2CA4BCD000B4F1A7 /* WindowSceneEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowSceneEnvironment.swift; sourceTree = "<group>"; };
 		C753C0C12CA4C10B00B4F1A7 /* DropObjectNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropObjectNode.swift; sourceTree = "<group>"; };
+		C789EE682D1773B40013187E /* scroll_sound_effect.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = scroll_sound_effect.mp3; sourceTree = "<group>"; };
 		C78A55CB2C602F6700630C56 /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
 		C796E5602C683868002E0423 /* RankingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankingsView.swift; sourceTree = "<group>"; };
 		C796E5622C6BE68E002E0423 /* BootyDrop.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BootyDrop.entitlements; sourceTree = "<group>"; };
@@ -92,9 +90,7 @@
 		C7D24EB92C9CBD7B0006B9EF /* sound_effect_drop.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = sound_effect_drop.mp3; sourceTree = "<group>"; };
 		C7D24EBB2C9CC28A0006B9EF /* button_click.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = button_click.mp3; sourceTree = "<group>"; };
 		C7D24EBD2C9CF93D0006B9EF /* background.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = background.jpg; sourceTree = "<group>"; };
-		C7D24EBF2C9CFA6A0006B9EF /* WelcomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeScreen.swift; sourceTree = "<group>"; };
 		C7D24EC12C9E03020006B9EF /* Random Helper functions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Random Helper functions.swift"; sourceTree = "<group>"; };
-		C7D24EC32C9F3A110006B9EF /* FakeGameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeGameScene.swift; sourceTree = "<group>"; };
 		C7DDA4012C559E25005E6663 /* potion.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = potion.png; sourceTree = "<group>"; };
 		C7DDA4022C559E26005E6663 /* skull.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = skull.png; sourceTree = "<group>"; };
 		C7DDA4032C559E26005E6663 /* gem3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gem3.png; sourceTree = "<group>"; };
@@ -119,7 +115,7 @@
 		C7F1BAA42C76A28D005CC0A4 /* AppStorageKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStorageKey.swift; sourceTree = "<group>"; };
 		C7F1BAA62C76AC39005CC0A4 /* SoundManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundManager.swift; sourceTree = "<group>"; };
 		C7F1BAA82C76AFCB005CC0A4 /* HapticsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticsManager.swift; sourceTree = "<group>"; };
-		C7F512ED2C6E7E96003315FF /* GameOverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameOverView.swift; sourceTree = "<group>"; };
+		C7F512ED2C6E7E96003315FF /* GameoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameoverView.swift; sourceTree = "<group>"; };
 		C7F512F12C6E9FB7003315FF /* ButtonsAndMore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonsAndMore.swift; sourceTree = "<group>"; };
 		C7FB00352C642BDE00C8AC70 /* scroll_top.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = scroll_top.png; sourceTree = "<group>"; };
 		C7FB00362C642BDF00C8AC70 /* scroll_middle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = scroll_middle.png; sourceTree = "<group>"; };
@@ -204,7 +200,6 @@
 				C753C0BA2CA485F100B4F1A7 /* TODOs.swift */,
 				C7CC62382C507A3E005D9F48 /* BootyDropApp.swift */,
 				C7CC62462C508459005D9F48 /* GameScene.swift */,
-				C7D24EC32C9F3A110006B9EF /* FakeGameScene.swift */,
 				C796E5632C6BE921002E0423 /* GameCenterManager.swift */,
 				C7FB73592C6C10C500DC4DBB /* Views */,
 				C753C0C62CA4D62000B4F1A7 /* Models */,
@@ -217,6 +212,7 @@
 				C7FB735C2C6C117000DC4DBB /* finger_touch.sks */,
 				C7FB735D2C6C117000DC4DBB /* merge.sks */,
 				C7FB735E2C6C117000DC4DBB /* ripple_ring.png */,
+				C789EE682D1773B40013187E /* scroll_sound_effect.mp3 */,
 				C7CF22B22CD3F64100DA22C5 /* theme_song.mp3 */,
 				C729AA242CA60FD50083557C /* welcome_music_effects.mp3 */,
 				C7D24EB72C9B51690006B9EF /* theme_song.mp3 */,
@@ -248,14 +244,12 @@
 		C7FB73592C6C10C500DC4DBB /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				C753C0BC2CA4B19C00B4F1A7 /* RoutingView.swift */,
-				C7D24EBF2C9CFA6A0006B9EF /* WelcomeScreen.swift */,
+				C729AA292CA737E60083557C /* WelcomeView.swift */,
 				C7CC623A2C507A3E005D9F48 /* GameView.swift */,
-				C7F512ED2C6E7E96003315FF /* GameOverView.swift */,
-				C796E5602C683868002E0423 /* RankingsView.swift */,
 				C78A55CB2C602F6700630C56 /* SettingView.swift */,
+				C796E5602C683868002E0423 /* RankingsView.swift */,
+				C7F512ED2C6E7E96003315FF /* GameoverView.swift */,
 				C7FB00452C66A73400C8AC70 /* Components */,
-				C729AA292CA737E60083557C /* MainView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -361,6 +355,7 @@
 				C7FB73612C6C117000DC4DBB /* ripple_ring.png in Resources */,
 				C7EFD0FB2C546D6200B883B4 /* trophy.png in Resources */,
 				C7DDA40D2C559E27005E6663 /* coin.png in Resources */,
+				C789EE692D1773B40013187E /* scroll_sound_effect.mp3 in Resources */,
 				C7FB735F2C6C117000DC4DBB /* finger_touch.sks in Resources */,
 				C7DDA4142C559ED0005E6663 /* gem1.png in Resources */,
 				C7EFD0F72C543A3300B883B4 /* TheRumIsGone.ttf in Resources */,
@@ -394,26 +389,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C7D24EC02C9CFA6A0006B9EF /* WelcomeScreen.swift in Sources */,
 				C75850E02C6C2836001C6A05 /* Shape.swift in Sources */,
-				C7F512EE2C6E7E96003315FF /* GameOverView.swift in Sources */,
+				C7F512EE2C6E7E96003315FF /* GameoverView.swift in Sources */,
 				C753C0BB2CA485F700B4F1A7 /* TODOs.swift in Sources */,
 				C7F512F22C6E9FB7003315FF /* ButtonsAndMore.swift in Sources */,
 				C753C0BF2CA4BCD000B4F1A7 /* WindowSceneEnvironment.swift in Sources */,
 				C7F1BAA92C76AFCB005CC0A4 /* HapticsManager.swift in Sources */,
 				C75850D72C6C27DC001C6A05 /* BootyDropApp.swift in Sources */,
-				C753C0BD2CA4B19C00B4F1A7 /* RoutingView.swift in Sources */,
 				C7F1BAA52C76A28D005CC0A4 /* AppStorageKey.swift in Sources */,
 				C7F1BAA72C76AC39005CC0A4 /* SoundManager.swift in Sources */,
 				C75850D82C6C27DC001C6A05 /* GameScene.swift in Sources */,
 				C75850D92C6C27DC001C6A05 /* GameCenterManager.swift in Sources */,
 				C75850DA2C6C27DC001C6A05 /* GameView.swift in Sources */,
-				C7D24EC42C9F3A110006B9EF /* FakeGameScene.swift in Sources */,
 				C753C0C22CA4C10B00B4F1A7 /* DropObjectNode.swift in Sources */,
 				C7D24EC22C9E03020006B9EF /* Random Helper functions.swift in Sources */,
 				C75850DB2C6C27DC001C6A05 /* RankingsView.swift in Sources */,
 				C75850DC2C6C27DC001C6A05 /* SettingView.swift in Sources */,
-				C729AA2A2CA737E60083557C /* MainView.swift in Sources */,
+				C729AA2A2CA737E60083557C /* WelcomeView.swift in Sources */,
 				C75850DD2C6C27DC001C6A05 /* PaperScroll.swift in Sources */,
 				C75850DE2C6C27DC001C6A05 /* Extensions.swift in Sources */,
 				C75850DF2C6C27DC001C6A05 /* CustomFonts.swift in Sources */,
@@ -549,12 +541,13 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = BootyDrop/BootyDrop.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2024.12.21.01;
 				DEVELOPMENT_ASSET_PATHS = "\"BootyDrop/Preview Content\"";
 				DEVELOPMENT_TEAM = KY6DPH5Y6J;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BootyDrop/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Pirate's Booty Drop";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.puzzle-games";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -581,12 +574,13 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = BootyDrop/BootyDrop.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2024.12.21.01;
 				DEVELOPMENT_ASSET_PATHS = "\"BootyDrop/Preview Content\"";
 				DEVELOPMENT_TEAM = KY6DPH5Y6J;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BootyDrop/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Pirate's Booty Drop";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.puzzle-games";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

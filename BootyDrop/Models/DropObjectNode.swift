@@ -15,10 +15,9 @@ class DropObject: SKSpriteNode {
     var imageName: DropObjectImageName = .coin
     var shape: CGPath = CGPath(ellipseIn: .zero, transform: .none)
     
-    init(DOSize: DropObjectSize, position: CGPoint = .zero) {
-        super.init(texture: nil, color: .clear, size: DOSize.actual)
-
-        self.dropObjectSize = DOSize
+    init(size: DropObjectSize, position: CGPoint = .zero) {
+        super.init(texture: nil, color: .clear, size: size.actual)
+        self.dropObjectSize = size
         self.imageName = getImageName(for: dropObjectSize)
         self.texture = SKTexture(imageNamed: self.imageName.rawValue)
         self.name = DropObjectImageName.asString(for: dropObjectSize)
@@ -33,15 +32,16 @@ class DropObject: SKSpriteNode {
     private func getImageName(for size: DropObjectSize) -> DropObjectImageName {
         switch size {
         case ._30: .coin
-        case ._40: .gem1
-        case ._50: .gem2
-        case ._60: .gem3
-        case ._70: .gem4
-        case ._80: .gem5
-        case ._100: .diamond
-        case ._120: .goldNugget
-        case ._130: .potion
-        case ._150: .skull
+        case ._50: .gem1
+        case ._60: .gem2
+        case ._70: .gem3
+        case ._80: .gem4
+        case ._100: .gem5
+        case ._120: .diamond
+        case ._150: .goldNugget
+        case ._170: .potion
+        case ._200: .skull
+
         }
     }
     
@@ -74,22 +74,22 @@ enum DropObjectImageName: String, RawRepresentable {
     case gem4 = "gem4"
     case gem5 = "gem5"
     case diamond = "diamond"
-    case potion = "potion"
     case goldNugget = "nugget"
+    case potion = "potion"
     case skull = "skull"
     
     static func asString(for size: DropObjectSize) -> String {
         switch size {
         case ._30: DropObjectImageName.coin.rawValue
-        case ._40: DropObjectImageName.gem1.rawValue
-        case ._50: DropObjectImageName.gem2.rawValue
-        case ._60: DropObjectImageName.gem3.rawValue
-        case ._70: DropObjectImageName.gem4.rawValue
-        case ._80: DropObjectImageName.gem5.rawValue
-        case ._100: DropObjectImageName.diamond.rawValue
-        case ._120: DropObjectImageName.potion.rawValue
-        case ._130: DropObjectImageName.goldNugget.rawValue
-        case ._150: DropObjectImageName.skull.rawValue
+        case ._50: DropObjectImageName.gem1.rawValue
+        case ._60: DropObjectImageName.gem2.rawValue
+        case ._70: DropObjectImageName.gem3.rawValue
+        case ._80: DropObjectImageName.gem4.rawValue
+        case ._100: DropObjectImageName.gem5.rawValue
+        case ._120: DropObjectImageName.diamond.rawValue
+        case ._150: DropObjectImageName.goldNugget.rawValue
+        case ._170: DropObjectImageName.potion.rawValue
+        case ._200: DropObjectImageName.skull.rawValue
         }
     }
 }
@@ -100,28 +100,28 @@ enum DropObjectSize: CGFloat, CaseIterable, Comparable {
     }
     
     case _30 = 30
-    case _40 = 40
     case _50 = 50
     case _60 = 60
     case _70 = 70
     case _80 = 80
     case _100 = 100
     case _120 = 120
-    case _130 = 130
     case _150 = 150
+    case _170 = 170
+    case _200 = 200
     
     var actual: CGSize {
         switch self {
         case ._30: CGSize(width: 30, height: 30)
-        case ._40: CGSize(width: 40, height: 40)
         case ._50: CGSize(width: 50, height: 50)
         case ._60: CGSize(width: 60, height: 60)
         case ._70: CGSize(width: 70, height: 70)
         case ._80: CGSize(width: 80, height: 80)
         case ._100: CGSize(width: 100, height: 100)
         case ._120: CGSize(width: 120, height: 120)
-        case ._130: CGSize(width: 130, height: 130)
         case ._150: CGSize(width: 150, height: 150)
+        case ._170: CGSize(width: 170, height: 170)
+        case ._200: CGSize(width: 200, height: 200)
         }
     }
     
@@ -133,15 +133,15 @@ enum DropObjectSize: CGFloat, CaseIterable, Comparable {
         return DropObjectSize.allCases.last!
     }
     
-    /// Returns a random DropObjectSize from the specified range. Default range is the first 6 sizes.
+    /// Returns a random DropObjectSize from the first 6 sizes.
     static var random: DropObjectSize {
         switch self.allCases.randomElement()! {
         case ._30: return ._30
-        case ._40: return ._40
         case ._50: return ._50
         case ._60: return ._60
         case ._70: return ._70
         case ._80: return ._80
+        case ._100: return ._100
         default: break
         }
         return self.random
@@ -149,33 +149,34 @@ enum DropObjectSize: CGFloat, CaseIterable, Comparable {
     
     var nextSize: DropObjectSize {
         switch self {
-        case ._30: return ._40
-        case ._40: return ._50
+        case ._30: return ._50
         case ._50: return ._60
         case ._60: return ._70
         case ._70: return ._80
         case ._80: return ._100
         case ._100: return ._120
-        case ._120: return ._130
-        case ._130: return ._150
-        case ._150: return ._150
+        case ._120: return ._150
+        case ._150: return ._170
+        case ._170: return ._200
+        case ._200: return ._200
         }
     }
     
     static func sizeFor(float: CGFloat) -> DropObjectSize {
         switch float {
-        case 0...39.999: return ._30
-        case 40...49.999: return ._40
+        case 0...49.999: return ._30
         case 50...59.999: return ._50
         case 60...69.999: return ._60
         case 70...79.999: return ._70
         case 80...99.999: return ._80
         case 100...119.999: return ._100
-        case 120...129.999: return ._120
-        case 130...139.999: return ._130
-        case 150...: return ._150
-        default: fatalError()
+        case 120...149.999: return ._120
+        case 150...169.999: return ._150
+        case 170...199.999: return ._170
+        case 200...: return ._200
+        default: return ._200
         }
     }
     
 }
+

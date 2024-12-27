@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+public let gameoverTimerCount: Int = 8
+
 public var windowScene: UIWindowScene? {
     return UIApplication.shared.connectedScenes.first as? UIWindowScene
 }

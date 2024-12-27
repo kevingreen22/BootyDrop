@@ -14,6 +14,8 @@ struct RankingsView: View {
     @State private var showGamecenterView = false
     
     @State private var leaderboardEntries: (GKLeaderboard.Entry?, [GKLeaderboard.Entry], Int) = (nil,[],0)
+    
+    @EnvironmentObject var game: GameScene
 
     
     var body: some View {
@@ -114,6 +116,8 @@ struct RankingsView: View {
 }
 
 
+
+// MARK: Preview
 #Preview {
     @Previewable @State var showRankings: Bool = true
     

@@ -11,13 +11,12 @@ import AppInfo
 
 struct SettingView: View {
     @Binding var showSettings: Bool
-    var game: GameScene?
-    @EnvironmentObject var router: ViewRouter
     
-    init(showSettings: Binding<Bool>, game: GameScene?) {
-        _showSettings = showSettings
-        self.game = game
-    }
+    @EnvironmentObject var game: GameScene
+    
+    @AppStorage(AppStorageKey.sound) var shouldPlaySoundEffects: Bool = true
+    @AppStorage(AppStorageKey.vibrate) var shouldVibrate: Bool = true
+    @AppStorage(AppStorageKey.music) var shouldPlayMusic: Bool = true
     
     var body: some View {
         RealBlur(style: .dark)
@@ -29,41 +28,30 @@ struct SettingView: View {
                 PirateText("Settings").pirateShadow(y: 4)
                 
                 HStack(spacing: 40) {
-                    MusicButton(frame: CGSize(width: 100, height: 100)) {
-                        game?.toggleThemeMusic()
-                    }
-                        .pirateShadow(y: 4)
+                    MusicButton(frame: CGSize(width: 100, height: 100), shouldPlayMusic: $shouldPlayMusic) {
+                        musicButtonAction()
+                    }.pirateShadow(y: 4)
                     
-                    SoundButton(frame: CGSize(width: 100, height: 100))
-                        .pirateShadow(y: 4)
+                    SoundButton(frame: CGSize(width: 100, height: 100), shouldPlaySoundEffects: $shouldPlaySoundEffects) {
+                        soundButtonAction()
+                    }.pirateShadow(y: 4)
                 }.padding(.bottom, 16)
                 
                 HStack {
-                    VibrateButton(frame: CGSize(width: 100, height: 100))
-                        .pirateShadow(y: 4)
+                    VibrateButton(frame: CGSize(width: 100, height: 100), shouldVibrate: $shouldVibrate) {
+                        vibrateButtonAction()
+                    }.pirateShadow(y: 4)
                 }.padding(.bottom, 16)
                 
-                if let game = game {
+                if game.gameState == .playing {
                     HStack(spacing: 16) {
                         RestartButton(frame: CGSize(width: 90, height: 50)) {
-                            withAnimation(.easeInOut) {
-                                showSettings = false
-                            } completion: {
-                                game.resetGame(isActive: true)
-                            }
-                        }
-                        .pirateShadow(y: 4)
+                            restartButtonAction()
+                        }.pirateShadow(y: 4)
                         
                         ExitGameButton(frame: CGSize(width: 90, height: 50)) {
-                            withAnimation(.easeInOut) {
-                                showSettings = false
-                            } completion: {
-                                withAnimation(.easeInOut) {
-                                    router.view = .welcome
-                                }
-                            }
-                        }
-                        .pirateShadow(y: 4)
+                            exitGameButtonAction()
+                        }.pirateShadow(y: 4)
                     }
                 }
                 
@@ -78,19 +66,71 @@ struct SettingView: View {
     }    
 }
 
-#Preview {
-    @Previewable @StateObject var game: GameScene = {
-        let scene = GameScene(size: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
-//        scene.isActive = true
-        return scene
-    }()
-    @Previewable @StateObject var router = ViewRouter()
-    @Previewable @State var showSettings: Bool = true
-    game.isActive = true
+
+
+// MARK: Private Subviews
+extension SettingView {
     
-    return ZStack {
-        SettingView(showSettings: $showSettings, game: game)
-            .environmentObject(router)
+    fileprivate func musicButtonAction() {
+        withAnimation {
+            shouldPlayMusic.toggle()
+        } completion: {
+            game.toggleThemeMusic()
+        }
+        if shouldPlaySoundEffects {
+            try? SoundManager.playeffect(SoundResourceName.soundEffectClick)
+        }
+    }
+    
+    fileprivate func soundButtonAction() {
+        withAnimation {
+            shouldPlaySoundEffects.toggle()
+        }
+        if shouldPlaySoundEffects {
+            try? SoundManager.playeffect(SoundResourceName.soundEffectClick)
+        }
+    }
+    
+    fileprivate func restartButtonAction() {
+        withAnimation(.easeInOut) {
+            game.gameState = .playing
+            showSettings = false
+        }
+        if shouldPlaySoundEffects {
+            try? SoundManager.playeffect(SoundResourceName.soundEffectClick)
+        }
+    }
+    
+    fileprivate func vibrateButtonAction() {
+        withAnimation {
+            shouldVibrate.toggle()
+        }
+        if shouldPlaySoundEffects {
+            try? SoundManager.playeffect(SoundResourceName.soundEffectClick)
+        }
+    }
+    
+    fileprivate func exitGameButtonAction() {
+        withAnimation(.easeInOut) {
+            game.gameState = .welcome
+            showSettings = false
+        }
+        if shouldPlaySoundEffects {
+            try? SoundManager.playeffect(SoundResourceName.soundEffectClick)
+        }
+    }
+    
+}
+
+
+
+// MARK: Preview
+#Preview {
+    @Previewable @State var showSettings: Bool = true
+    
+    ZStack {
+        SettingView(showSettings: $showSettings)
+            .environmentObject(GameScene.previewGameScene(state: .welcome))
     }
 }
 

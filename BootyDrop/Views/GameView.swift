@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  GameView.swift
 //  BootyDrop
 //
 //  Created by Kevin Green on 7/15/24.
@@ -9,65 +9,32 @@ import SwiftUI
 import SpriteKit
 
 struct GameView: View {
-    @EnvironmentObject var game: GameScene
-    @EnvironmentObject var router: ViewRouter
-    @State private var showSettings: Bool = false
-    @State private var showRankings: Bool = false
+    @Binding var showSettings: Bool
+    @Binding var showRankings: Bool
     
+    @EnvironmentObject var game: GameScene
     
     var body: some View {
-        VStack(spacing: 0) {
-            SpriteView(scene: game)
-            Footer().frame(height: 85)
-        }.ignoresSafeArea()
-        
-        .overlay(alignment: .top) {
-            Header(showSettings: $showSettings, showRankings: $showRankings)
-                .environmentObject(game)
-        } // Header View
-        
-        .overlay {
-            if showSettings {
-                SettingView(showSettings: $showSettings, game: game)
-                    .environmentObject(router)
-                    .transition(.asymmetric(insertion: .move(edge: .leading), removal: .move(edge: .trailing)))
+        ZStack(alignment: .top) {
+            VStack(spacing: 0) {
+                SpriteView(scene: game)
+                Footer().frame(height: 85)
+            }.ignoresSafeArea() // Sprite View
+            
+            if game.gameState == .playing {
+                Header(showSettings: $showSettings, showRankings: $showRankings)
+                    .environmentObject(game)
             }
-        } // Settings View
-        
-        .overlay {
-            if showRankings {
-                RankingsView(showRankings: $showRankings)
-                    .transition(.asymmetric(insertion: .move(edge: .leading), removal: .move(edge: .trailing)))
-            }
-        } // Rankings View
-        
-        .fullScreenCover(isPresented: $game.isGameOver) {
-            GameOverView($game.isGameOver, score: game.score)
-                .environmentObject(game)
-                .environmentObject(router)
-        } // GameOver View
+        }
+        .animation(.easeInOut, value: game.gameState)
     }
-}
-
-#Preview {
-    @Previewable @StateObject var game: GameScene = {
-        let scene = GameScene(size: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
-        scene.isActive = true
-        return scene
-    }()
-    @Previewable @StateObject var router = ViewRouter()
     
-    GameView()
-        .environmentObject(game)
-        .environmentObject(router)
 }
 
 
 
-
-// MARK: Views
-
-struct Header: View {
+// MARK: GameView Subviews
+fileprivate struct Header: View {
     @EnvironmentObject var game: GameScene
     @Binding var showSettings: Bool
     @Binding var showRankings: Bool
@@ -87,8 +54,16 @@ struct Header: View {
                 }
                 .overlay(alignment: .topTrailing) {
                     HStack {
-                        RankingsButton($showRankings).environmentObject(game)
-                        SettingsButton($showSettings).environmentObject(game)
+                        RankingsButton {
+                            withAnimation {
+                                showRankings = true
+                            }
+                        }.environmentObject(game)
+                        SettingsButton {
+                            withAnimation {
+                                showSettings = true
+                            }
+                        }.environmentObject(game)
                     }
                     .padding(.trailing, 26)
                     .padding(.top, 20)
@@ -130,7 +105,7 @@ struct Header: View {
     }
 }
 
-struct NextObjectView: View {
+fileprivate struct NextObjectView: View {
     @Binding var dropObject: DropObject
     
     var body: some View {
@@ -143,14 +118,14 @@ struct NextObjectView: View {
                 .resizable()
                 .frame(width: 30, height: 30)
                 .pirateShadow(x: 3)
-                .animation(.bouncy, value: dropObject.size)
+                .animation(.smooth, value: dropObject)
         }
         .padding(.top, 8)
         .padding(.leading)
     }
 }
 
-struct Footer: View {
+fileprivate struct Footer: View {
     var body: some View {
         ZStack {
             background
@@ -167,8 +142,8 @@ struct Footer: View {
             Image("gem4").resizable().scaledToFit()
             Image("gem5").resizable().scaledToFit()
             Image("diamond").resizable().scaledToFit()
-            Image("potion").resizable().scaledToFit()
             Image("nugget").resizable().scaledToFit()
+            Image("potion").resizable().scaledToFit()
             Image("skull").resizable().scaledToFit()
         }
         .padding(.horizontal, 8)
@@ -187,4 +162,14 @@ struct Footer: View {
     }
 }
 
+
+
+// MARK: Preview
+#Preview {
+    @Previewable @State var showSettings = false
+    @Previewable @State var showRankings = false
+    
+    GameView(showSettings: $showSettings, showRankings: $showRankings)
+        .environmentObject(GameScene.previewGameScene(state: .playing))
+}
 

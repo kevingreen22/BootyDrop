@@ -9,21 +9,32 @@ import SwiftUI
 
 @main
 struct BootyDropApp: App {
-    @StateObject var router = ViewRouter()
+    @Environment(\.scenePhase) var scenePhase
     @StateObject private var game: GameScene = {
         let scene = GameScene(size: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
         scene.scaleMode = .fill
+        scene.name = "playable_game"
         return scene
     }()
     
+    
     var body: some Scene {
         WindowGroup {
-//            RoutingView()
-//                    .task { GameCenterManager.authenticateUser() }
-//                    .environmentObject(router)
-            MainView()
-                .environmentObject(router)
+            WelcomeView()
+//                .task { GameCenterManager.authenticateUser() }
                 .environmentObject(game)
+        }
+        .onChange(of: scenePhase) { oldValue, newValue in
+            switch newValue {
+            case .background, .inactive:
+                break
+                
+            case .active:
+                game.toggleThemeMusic()
+                
+            @unknown default:
+                break
+            }
         }
     }
 }
