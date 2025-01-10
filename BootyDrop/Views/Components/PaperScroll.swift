@@ -31,16 +31,18 @@ public struct PaperScroll<Content>: View where Content: View {
         
     /// Plays a sound file contained in the main bundle.
     private func playeffect(_ forResource: String, withExtension: String? = ".mp3") throws {
-        guard let url = Bundle.main.url(forResource: forResource, withExtension: withExtension) else { return }
-        do {
-            player = try AVAudioPlayer(contentsOf: url)
-            player.play()
-        } catch {
-            throw error
+        if shouldPlaySoundEffect {
+            guard let url = Bundle.main.url(forResource: forResource, withExtension: withExtension) else { return }
+            do {
+                player = try AVAudioPlayer(contentsOf: url)
+                player.play()
+            } catch {
+                throw error
+            }
         }
     }
     
-    init(show: Binding<Bool>, shouldPlaySoundEffect: Binding<Bool> = .constant(true), height: CGFloat = 400, pullText: String? = nil,  onDismiss: (()->())? = nil, content: @escaping ()->Content) {
+    init(show: Binding<Bool>, shouldPlaySoundEffect: Binding<Bool>, height: CGFloat = 400, pullText: String? = nil,  onDismiss: (()->())? = nil, content: @escaping ()->Content) {
         _show = show
         self.height = height
         self.pullText = pullText
@@ -165,9 +167,7 @@ public struct PaperScroll<Content>: View where Content: View {
             } completion: {
                 onDismiss?()
             }
-            if shouldPlaySoundEffect {
-                try? playeffect("scroll_sound_effect")
-            }
+            try? playeffect("scroll_sound_effect")
         }
     }
     
@@ -178,9 +178,7 @@ public struct PaperScroll<Content>: View where Content: View {
                 scrollBottomOffset = (height/2)+18
                 scrollMiddleHeight = height
             }
-            if shouldPlaySoundEffect {
-                try? playeffect("scroll_sound_effect")
-            }
+            try? playeffect("scroll_sound_effect")
             chevronOffset = 8
             chevronScale = 1.4
         }
@@ -204,16 +202,18 @@ public struct StaticPaperScroll<Content>: View where Content: View {
     
     /// Plays a sound file contained in the main bundle.
     private func playeffect(_ forResource: String, withExtension: String? = ".mp3") throws {
-        guard let url = Bundle.main.url(forResource: forResource, withExtension: withExtension) else { return }
-        do {
-            player = try AVAudioPlayer(contentsOf: url)
-            player.play()
-        } catch {
-            throw error
+        if shouldPlaySoundEffect {
+            guard let url = Bundle.main.url(forResource: forResource, withExtension: withExtension) else { return }
+            do {
+                player = try AVAudioPlayer(contentsOf: url)
+                player.play()
+            } catch {
+                throw error
+            }
         }
     }
     
-    init(height: CGFloat = 400, openOnAppear: Bool = true, shouldPlaySoundEffect: Binding<Bool> = .constant(true), content: @escaping ()->Content) {
+    init(height: CGFloat = 400, openOnAppear: Bool = true, shouldPlaySoundEffect: Binding<Bool>, content: @escaping ()->Content) {
         self.openOnAppear = openOnAppear
         _shouldPlaySoundEffect = shouldPlaySoundEffect
         self.height = height
@@ -263,9 +263,7 @@ public struct StaticPaperScroll<Content>: View where Content: View {
                 scrollBottomOffset = 36
                 scrollMiddleHeight = 30
             }
-            if shouldPlaySoundEffect {
-                try? playeffect("scroll_sound_effect")
-            }
+            try? playeffect("scroll_sound_effect")
         }
     }
     
@@ -276,9 +274,7 @@ public struct StaticPaperScroll<Content>: View where Content: View {
                 scrollBottomOffset = (height/2)+18
                 scrollMiddleHeight = height
             }
-            if shouldPlaySoundEffect {
-                try? playeffect("scroll_sound_effect")
-            }
+            try? playeffect("scroll_sound_effect")
         }
     }
     
@@ -295,7 +291,7 @@ public struct StaticPaperScroll<Content>: View where Content: View {
             .ignoresSafeArea()
             .transition(.opacity)
         
-        PaperScroll(show: $showSettings, pullText: "Pull to Close") {
+        PaperScroll(show: $showSettings, shouldPlaySoundEffect: .constant(true), pullText: "Pull to Close") {
             VStack {
                 PirateText("Paper Scroll", size: 20)
                     .padding(.horizontal, 4)

@@ -39,8 +39,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     @AppStorage(AppStorageKey.music) var shouldPlayMusic: Bool = true
     @AppStorage(AppStorageKey.vibrate) var shouldVibrate: Bool = true
     @AppStorage(AppStorageKey.sound) var shouldPlaySoundEffects: Bool = true
+    @AppStorage(AppStorageKey.highScore) var highScore: Int = 0
         
-    public var screenshot: UIImage = UIImage(systemName: "questionmark")!
+//    public var screenshot: UIImage = UIImage(systemName: "questionmark")!
+    public var screenshot: Image = Image(systemName: "questionmark")
     
     private var cancellables = Set<AnyCancellable>()
     private var startLine: SKShapeNode!
@@ -206,7 +208,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
             
         case .playing, ._preview:
 //            print("  -collisionImpulse: \(contact.collisionImpulse)")
-            if contact.collisionImpulse > 5 && !shouldVibrate {
+            if contact.collisionImpulse > 5 && shouldVibrate {
                 HapticManager.instance.impact(PirateHaptic.collision, intensity: contact.collisionImpulse)
             }
             guard let nodeA = contact.bodyA.node as? SKSpriteNode else { return }
@@ -444,8 +446,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
             let newObject = addDropObjectNode(dropObjectSize: newSize, position: position, isDynamic: true)
             newObject?.setBitMasks(to: .booty)
             
-#warning("Adjust the next line for merging physics")
-            // adds explosion push
+#warning("Adjust/replace the next line for merging physics")
+            // adds physics push/movement
             newObject?.physicsBody?.applyImpulse(CGVector(dx: Int.random(in: -15...15), dy: Int.random(in: -15...15)))
             
             if shouldVibrate { HapticManager.instance.impact(PirateHaptic.merge) }
@@ -474,6 +476,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
 //        print("\(type(of: self)).\(#function)_toggling_drop_sound_effect: \(shouldPlaySoundEffects)")
         if shouldPlaySoundEffects {
             scene?.run(dropSoundEffectAction)
+        }
+    }
+    
+    func updateHighScore() {
+        if score > highScore {
+            highScore = score
         }
     }
     
@@ -624,7 +632,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     }
     
     /// Creates a screen shot from the SKView with the size passed in.
-    private func snapshot() -> UIImage? {
+    private func snapshot() -> Image? {
         print("  -\(#function)")
         guard let scene = self.scene, let view = scene.view else { return nil }
         
@@ -635,7 +643,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         let image = UIGraphicsImageRenderer(size: targetSize).image { context in
             view.drawHierarchy(in: view.bounds, afterScreenUpdates: true)
         }
-        return cropImage(
+        guard let uiImageCropped = cropImage(
             image,
             toRect:
                 CGRect(
@@ -650,7 +658,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
                             height: view.bounds.height * 100
                         )
                 )
-        )
+        ) else { return nil }
+        
+        return Image(uiImage: uiImageCropped)
     }
     
     private func cropImage(_ image: UIImage, toRect: CGRect) -> UIImage? {
@@ -751,7 +761,7 @@ extension SKNode {
 
 
 
-// MARK: Preview
+// MARK: PREVIEW
 extension GameScene {
     // Remember these static methods run BEFORE GameScene init
     

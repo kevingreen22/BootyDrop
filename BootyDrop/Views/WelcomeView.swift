@@ -45,7 +45,7 @@ struct WelcomeView: View {
         } // Rankings View
         
         .fullScreenCover(isPresented:  $game.isGameOver) {
-            GameoverView(score: game.score)
+            GameoverView()
                 .environmentObject(game)
         } // Gameover View
         

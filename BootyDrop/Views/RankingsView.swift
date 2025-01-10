@@ -16,6 +16,8 @@ struct RankingsView: View {
     @State private var leaderboardEntries: (GKLeaderboard.Entry?, [GKLeaderboard.Entry], Int) = (nil,[],0)
     
     @EnvironmentObject var game: GameScene
+    
+    @AppStorage(AppStorageKey.sound) var shouldPlaySoundEffects: Bool = true
 
     
     var body: some View {
@@ -23,7 +25,7 @@ struct RankingsView: View {
             .ignoresSafeArea()
             .transition(.opacity)
         
-        PaperScroll(show: $showRankings, pullText: "Close") {
+        PaperScroll(show: $showRankings, shouldPlaySoundEffect: $shouldPlaySoundEffects, pullText: "Close") {
             VStack {
                 Spacer()
                 comingSoon

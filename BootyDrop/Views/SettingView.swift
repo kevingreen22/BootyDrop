@@ -23,7 +23,7 @@ struct SettingView: View {
             .ignoresSafeArea()
             .transition(.opacity)
         
-        PaperScroll(show: $showSettings, height: 450, pullText: "Close") {
+        PaperScroll(show: $showSettings, shouldPlaySoundEffect: $shouldPlaySoundEffects, height: 450, pullText: "Close") {
             VStack {
                 PirateText("Settings").pirateShadow(y: 4)
                 
