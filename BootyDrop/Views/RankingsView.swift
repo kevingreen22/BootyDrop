@@ -11,9 +11,10 @@ import KGViews
 
 struct RankingsView: View {
     @Binding var showRankings: Bool
-    @State private var showGamecenterView = false
     
-    @State private var leaderboardEntries: (GKLeaderboard.Entry?, [GKLeaderboard.Entry], Int) = (nil,[],0)
+    @State private var showGamecenterView = false
+    @State private var leaderboardEntries: [GKPlayer] = []
+    @State private var loadingText: String = "loading..."
     
     @EnvironmentObject var game: GameScene
     
@@ -25,50 +26,50 @@ struct RankingsView: View {
             .ignoresSafeArea()
             .transition(.opacity)
         
-        PaperScroll(show: $showRankings, shouldPlaySoundEffect: $shouldPlaySoundEffects, pullText: "Close") {
+        PaperScroll(show: $showRankings, shouldPlaySoundEffect: $shouldPlaySoundEffects, height: UIScreen.main.bounds.height*0.60, pullText: "Close") {
             VStack {
-                Spacer()
-                comingSoon
-                Spacer()
-//                rankingsViews
+                rankingsViews
             }.padding(.vertical, 24)
         }
         .pirateShadow(y: 24)
         
         .fullScreenCover(isPresented: $showGamecenterView) {
-            GameCenterView()
+            GameCenterView(format: .leaderboards)
         }
         
-        .task {
-            await loadLeaderboards()
+        .onAppear {
+            loadingText = "loading..."
+            if !GKLocalPlayer.local.isAuthenticated {
+                GameCenterManager.authenticateUser()
+            } else if leaderboardEntries.count == 0 {
+                Task(priority: .high) {
+                    await loadLeaderboards()
+                    await MainActor.run {
+                        if leaderboardEntries.isEmpty {
+                            loadingText = "No Rankings yet"
+                        }
+                    }
+                }
+            }
         }
     }
     
     
-    var leaderBoardButton: some View {
+    fileprivate var leaderBoardButton: some View {
         Button {
             showGamecenterView.toggle()
         } label: {
-            HM.ButtonLabel(imageName: "trophy", title: "Leaderboards", frame: CGSize(width: 200, height: 40))
-                .frame(width: 200, height: 40)
+            HStack(spacing: 8) {
+                Image("trophy")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(height: 20)
+                PirateText("Leaderboards", size: 14)
+                    .frame(width: 160, height: 40)
+            }
         }
         .buttonStyle(.borderedProminent)
         .pirateShadow(y: 4)
-    }
-    
-    fileprivate func loadLeaderboards() async {
-        do {
-            leaderboardEntries = try await GameCenterManager.fetchLeaderboard()
-        } catch {
-            print("Failed to fetch leaderboard: \(error)")
-        }
-    }
-    
-    fileprivate var comingSoon: some View {
-        VStack {
-            PirateText("Coming", size: 30)
-            PirateText("Soon!", size: 30)
-        }
     }
     
     @ViewBuilder fileprivate var rankingsViews: some View {
@@ -77,44 +78,65 @@ struct RankingsView: View {
             
             HStack {
                 Button {
-                    
+                    Task(priority: .userInitiated) {
+                        await loadLeaderboards()
+                    }
                 } label: {
-                    HM.ButtonLabel(imageName: "trophy", title: "Today")
-                }
+                    PirateText("Today", size: 11, relativeTo: .subheadline, withShadow: false)
+                }.buttonStyle(.borderedProminent).pirateShadow()
                 
-                Button(action: {
-                    
-                }, label: {
-                    HM.ButtonLabel(imageName: "trophy", title: "Weekly")
-                })
+                Button {
+                    Task(priority: .userInitiated) {
+                        await loadLeaderboards(for: .friendsOnly, timeScope: .week)
+                    }
+                } label: {
+                    PirateText("Week", size: 11, relativeTo: .subheadline, withShadow: false)
+                }.buttonStyle(.borderedProminent).pirateShadow()
                 
-                Button(action: {
-                    
-                }, label: {
-                    HM.ButtonLabel(imageName: "trophy", title: "All-time")
-                })
+                Button {
+                    Task(priority: .userInitiated) {
+                        await loadLeaderboards(for: .friendsOnly, timeScope: .allTime)
+                    }
+                } label: {
+                    PirateText("All-Time", size: 11, relativeTo: .subheadline, withShadow: false)
+                }.buttonStyle(.borderedProminent).pirateShadow()
+                
             }.padding(.bottom, 8)
             
             ZStack {
-                Text("loading...")
-                    .font(.custom(CustomFont.rum, size: 16, relativeTo: .subheadline))
-                    .opacity(leaderboardEntries.1.isEmpty ? 1 : 0)
-                    .offset(y: 20)
-                    .pirateShadow()
-                
-                ForEach(leaderboardEntries.1, id: \.player.gamePlayerID) { entry in
-                    HStack {
-                        Text("\(entry.player.displayName)")
-                        Spacer()
-                        Text("\(entry.formattedScore)")
-                    }
+                if leaderboardEntries.isEmpty {
+                    VStack {
+                        ProgressView()
+                            .opacity(loadingText == "loading..." ? 1 : 0)
+                        PirateText(loadingText, size: 14)
+                    }.offset(y: 20)
+                } else {
+                    LazyVStack(alignment: .leading) {
+                        ForEach(leaderboardEntries) { player in
+                            HStack {
+                                Image(uiimage: player.image)
+                                Text("\(player.name)")
+                                Spacer()
+                                Text("\(player.score)")
+                            }
+                        }
+                    }.padding(.horizontal, 24)
                 }
-                .padding(.horizontal, 24)
             }
         }
         Spacer()
         leaderBoardButton
     }
+    
+    fileprivate func loadLeaderboards(for playerScope: GKLeaderboard.PlayerScope = .friendsOnly, timeScope: GKLeaderboard.TimeScope = .today, range: NSRange? = NSRange(1...100)
+    ) async {
+        do {
+            leaderboardEntries = try await GameCenterManager.fetchLeaderboard()
+        } catch {
+            print("\(type(of: self)).\(#function)_failed to fetch leaderboard: \(error)")
+        }
+    }
+    
 }
 
 

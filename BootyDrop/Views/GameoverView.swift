@@ -57,7 +57,7 @@ struct GameoverView: View {
         .presentationBackground(Color.accentColor)
         
         .task(priority: .background) {
-            game.updateHighScore()
+            await game.updateHighScore()
         }
     }
 }

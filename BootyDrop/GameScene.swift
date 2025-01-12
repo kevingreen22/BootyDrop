@@ -479,10 +479,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         }
     }
     
-    func updateHighScore() {
+    func updateHighScore() async {
         if score > highScore {
             highScore = score
         }
+        try? await GameCenterManager.submit(highScore)
     }
     
     @discardableResult private func addDropObjectNode(dropObjectSize: DropObjectSize, position: CGPoint, isDynamic: Bool = false, withCollision: Bool = false) -> DropObject? {
