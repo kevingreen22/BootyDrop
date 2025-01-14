@@ -10,7 +10,7 @@
 import SwiftUI
 import GameKit
 
-class GKPlayer: Identifiable {
+class GKPlayer: Identifiable, Equatable {
     var id: UUID = UUID()
     var name: String
     var score: String
@@ -21,6 +21,14 @@ class GKPlayer: Identifiable {
         self.score = score
         self.image = image
     }
+    
+    static func == (lhs: GKPlayer, rhs: GKPlayer) -> Bool {
+        return lhs.id == rhs.id &&
+        lhs.image == rhs.image &&
+        lhs.name == rhs.name &&
+        lhs.score == rhs.score
+    }
+
 }
 
 class GameCenterManager {

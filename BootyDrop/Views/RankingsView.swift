@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import GameKit
+import GameKit  
 import KGViews
 
 struct RankingsView: View {
@@ -78,6 +78,7 @@ struct RankingsView: View {
             
             HStack {
                 Button {
+                    leaderboardEntries = []
                     Task(priority: .userInitiated) {
                         await loadLeaderboards()
                     }
@@ -86,6 +87,7 @@ struct RankingsView: View {
                 }.buttonStyle(.borderedProminent).pirateShadow()
                 
                 Button {
+                    leaderboardEntries = []
                     Task(priority: .userInitiated) {
                         await loadLeaderboards(for: .friendsOnly, timeScope: .week)
                     }
@@ -94,6 +96,7 @@ struct RankingsView: View {
                 }.buttonStyle(.borderedProminent).pirateShadow()
                 
                 Button {
+                    leaderboardEntries = []
                     Task(priority: .userInitiated) {
                         await loadLeaderboards(for: .friendsOnly, timeScope: .allTime)
                     }
@@ -115,14 +118,19 @@ struct RankingsView: View {
                         ForEach(leaderboardEntries) { player in
                             HStack {
                                 Image(uiimage: player.image)
-                                Text("\(player.name)")
+                                    .resizable()
+                                    .frame(width: 35, height: 35)
+                                    .padding(4)
+                                PirateText("\(player.name)", size: 14)
                                 Spacer()
-                                Text("\(player.score)")
+                                PirateText("\(player.score)", size: 16)
                             }
                         }
-                    }.padding(.horizontal, 24)
+                    }
                 }
             }
+            .padding(.horizontal, 28)
+            .animation(.easeInOut, value: leaderboardEntries)
         }
         Spacer()
         leaderBoardButton

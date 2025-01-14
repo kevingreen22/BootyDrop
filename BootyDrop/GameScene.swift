@@ -54,6 +54,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     private let dropY: CGFloat = 640
     private var timer: Timer?
     private var gameOverTime: Int = gameoverTimerCount
+    private var gameEndingClock: SKLabelNode!
+
     
     private var backgroundMusic: SKAudioNode!
     private let dropSoundEffectAction = SKAction.playSoundFileNamed("sound_effect_drop.mp3", waitForCompletion: false)
@@ -91,7 +93,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         scene.physicsWorld.gravity = CGVector(dx: 0, dy: -5)
         
         switch gameState {
-        case .playing, .welcome: setGameScene(for: gameState)
+        case .playing, .welcome:
+            setGameScene(for: gameState)
             
         case ._preview:
             addBackgroundImage(position: CGPoint(x: scene.frame.width/2, y: scene.frame.height/2))
@@ -243,7 +246,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         scene.removeAllActions()
         
         addBackgroundImage(position: CGPoint(x: scene.frame.width/2, y: scene.frame.height/2))
-        
+
         switch state {
         case .welcome:
             setupWelcomeScene()
@@ -391,13 +394,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
             // Then start a timer if its not already started.
             if timer == nil {
                 print("  -creating timer")
+                addGameEndingClock()
                 timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] timer in
                     print("  -timer running...\(timer)")
                     // When the timer runs out, the game ends.
                     self?.gameOverTime -= 1
+                    if let time = self?.gameOverTime {
+                        self?.gameEndingClock.text = time.asSeconds
+                    }
                     
                     if self?.gameOverTime == 0 {
                         self?.isGameOver = true
+                        if let clock = self?.gameEndingClock {
+                            self?.destroy(object: clock)
+                        }
                         self?.timer?.invalidate()
                         self?.prepareForScreenshot()
                     }
@@ -407,6 +417,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         } else {
             // If all drop-objects fall below the start line, then invalidate the timer and reset timer/timer amount.
             if timer != nil {
+                destroy(object: gameEndingClock)
                 print("  -invalidating timer")
                 timer?.invalidate()
                 timer = nil
@@ -542,6 +553,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         startLine.strokeColor = .darkGray
         startLine.name = "start_line"
         addChild(startLine)
+    }
+    
+    private func addGameEndingClock() {
+        print("  -\(#function)")
+        gameEndingClock = SKLabelNode(text: "\(gameOverTime.asSeconds)")
+        gameEndingClock.fontSize = 40
+        gameEndingClock.fontColor = .red
+        gameEndingClock.fontName = CustomFont.rum
+        gameEndingClock.position = CGPoint(x: UIScreen.main.bounds.width/2, y: dropY + 30)
+        gameEndingClock.name = "gameEndingClock"
+        addChild(gameEndingClock)
     }
         
     private func createDropGuide(xPosition: Double) -> SKNode {
