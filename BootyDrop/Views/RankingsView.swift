@@ -13,7 +13,7 @@ struct RankingsView: View {
     @Binding var showRankings: Bool
     
     @State private var showGamecenterView = false
-    @State var leaderboardEntries: [GKPlayer] = []
+    @State private var leaderboardEntries: [GKPlayer] = []
     @State private var loadingText: String = "loading..."
     @State private var selectedPlayerScope: Int = GKLeaderboard.PlayerScope.global.rawValue
     @EnvironmentObject var game: GameScene
