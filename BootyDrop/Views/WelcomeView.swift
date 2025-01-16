@@ -22,7 +22,7 @@ struct WelcomeView: View {
                 .environmentObject(game)
             
             if game.gameState == .welcome {
-                StaticPaperScroll(height: 400, shouldPlaySoundEffect: .constant(false)) {
+                StaticPaperScroll(height: 420, shouldPlaySoundEffect: .constant(false)) {
                     PaperScrollContent
                 }.offset(y: -85)
             } // PaperScroll View
@@ -45,7 +45,7 @@ struct WelcomeView: View {
         } // Rankings View
         
         .fullScreenCover(isPresented:  $game.isGameOver) {
-            GameoverView(score: game.score)
+            GameoverView()
                 .environmentObject(game)
         } // Gameover View
         
@@ -68,7 +68,7 @@ struct WelcomeView: View {
                 }
             }
             .pirateShadow()
-            .padding(.vertical, 24)
+            .padding(.bottom, 16)
             .environmentObject(game)
             
             HStack(spacing: 40) {

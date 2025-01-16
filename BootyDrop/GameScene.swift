@@ -39,8 +39,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     @AppStorage(AppStorageKey.music) var shouldPlayMusic: Bool = true
     @AppStorage(AppStorageKey.vibrate) var shouldVibrate: Bool = true
     @AppStorage(AppStorageKey.sound) var shouldPlaySoundEffects: Bool = true
+    @AppStorage(AppStorageKey.highScore) var highScore: Int = 0
         
-    public var screenshot: UIImage = UIImage(systemName: "questionmark")!
+//    public var screenshot: UIImage = UIImage(systemName: "questionmark")!
+    public var screenshot: Image = Image(systemName: "questionmark")
     
     private var cancellables = Set<AnyCancellable>()
     private var startLine: SKShapeNode!
@@ -52,6 +54,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     private let dropY: CGFloat = 640
     private var timer: Timer?
     private var gameOverTime: Int = gameoverTimerCount
+    private var gameEndingClock: SKLabelNode!
+
     
     private var backgroundMusic: SKAudioNode!
     private let dropSoundEffectAction = SKAction.playSoundFileNamed("sound_effect_drop.mp3", waitForCompletion: false)
@@ -89,7 +93,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         scene.physicsWorld.gravity = CGVector(dx: 0, dy: -5)
         
         switch gameState {
-        case .playing, .welcome: setGameScene(for: gameState)
+        case .playing, .welcome:
+            setGameScene(for: gameState)
             
         case ._preview:
             addBackgroundImage(position: CGPoint(x: scene.frame.width/2, y: scene.frame.height/2))
@@ -206,7 +211,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
             
         case .playing, ._preview:
 //            print("  -collisionImpulse: \(contact.collisionImpulse)")
-            if contact.collisionImpulse > 5 && !shouldVibrate {
+            if contact.collisionImpulse > 5 && shouldVibrate {
                 HapticManager.instance.impact(PirateHaptic.collision, intensity: contact.collisionImpulse)
             }
             guard let nodeA = contact.bodyA.node as? SKSpriteNode else { return }
@@ -241,7 +246,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         scene.removeAllActions()
         
         addBackgroundImage(position: CGPoint(x: scene.frame.width/2, y: scene.frame.height/2))
-        
+
         switch state {
         case .welcome:
             setupWelcomeScene()
@@ -389,13 +394,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
             // Then start a timer if its not already started.
             if timer == nil {
                 print("  -creating timer")
+                addGameEndingClock()
                 timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] timer in
                     print("  -timer running...\(timer)")
                     // When the timer runs out, the game ends.
                     self?.gameOverTime -= 1
+                    if let time = self?.gameOverTime {
+                        self?.gameEndingClock.text = time.asSeconds
+                    }
                     
                     if self?.gameOverTime == 0 {
                         self?.isGameOver = true
+                        if let clock = self?.gameEndingClock {
+                            self?.destroy(object: clock)
+                        }
                         self?.timer?.invalidate()
                         self?.prepareForScreenshot()
                     }
@@ -405,6 +417,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         } else {
             // If all drop-objects fall below the start line, then invalidate the timer and reset timer/timer amount.
             if timer != nil {
+                destroy(object: gameEndingClock)
                 print("  -invalidating timer")
                 timer?.invalidate()
                 timer = nil
@@ -444,8 +457,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
             let newObject = addDropObjectNode(dropObjectSize: newSize, position: position, isDynamic: true)
             newObject?.setBitMasks(to: .booty)
             
-#warning("Adjust the next line for merging physics")
-            // adds explosion push
+#warning("Adjust/replace the next line for merging physics")
+            // adds physics push/movement
             newObject?.physicsBody?.applyImpulse(CGVector(dx: Int.random(in: -15...15), dy: Int.random(in: -15...15)))
             
             if shouldVibrate { HapticManager.instance.impact(PirateHaptic.merge) }
@@ -475,6 +488,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         if shouldPlaySoundEffects {
             scene?.run(dropSoundEffectAction)
         }
+    }
+    
+    func updateHighScore() async {
+        if score > highScore {
+            highScore = score
+        }
+        try? await GameCenterManager.submit(highScore)
     }
     
     @discardableResult private func addDropObjectNode(dropObjectSize: DropObjectSize, position: CGPoint, isDynamic: Bool = false, withCollision: Bool = false) -> DropObject? {
@@ -533,6 +553,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         startLine.strokeColor = .darkGray
         startLine.name = "start_line"
         addChild(startLine)
+    }
+    
+    private func addGameEndingClock() {
+        print("  -\(#function)")
+        gameEndingClock = SKLabelNode(text: "\(gameOverTime.asSeconds)")
+        gameEndingClock.zPosition = 1000
+        gameEndingClock.fontSize = 40
+        gameEndingClock.fontColor = .red
+        gameEndingClock.fontName = CustomFont.rum
+        gameEndingClock.position = CGPoint(x: UIScreen.main.bounds.width/2, y: dropY + 30)
+        gameEndingClock.name = "gameEndingClock"
+        addChild(gameEndingClock)
     }
         
     private func createDropGuide(xPosition: Double) -> SKNode {
@@ -624,7 +656,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     }
     
     /// Creates a screen shot from the SKView with the size passed in.
-    private func snapshot() -> UIImage? {
+    private func snapshot() -> Image? {
         print("  -\(#function)")
         guard let scene = self.scene, let view = scene.view else { return nil }
         
@@ -635,7 +667,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         let image = UIGraphicsImageRenderer(size: targetSize).image { context in
             view.drawHierarchy(in: view.bounds, afterScreenUpdates: true)
         }
-        return cropImage(
+        guard let uiImageCropped = cropImage(
             image,
             toRect:
                 CGRect(
@@ -650,7 +682,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
                             height: view.bounds.height * 100
                         )
                 )
-        )
+        ) else { return nil }
+        
+        return Image(uiImage: uiImageCropped)
     }
     
     private func cropImage(_ image: UIImage, toRect: CGRect) -> UIImage? {
@@ -751,7 +785,7 @@ extension SKNode {
 
 
 
-// MARK: Preview
+// MARK: PREVIEW
 extension GameScene {
     // Remember these static methods run BEFORE GameScene init
     

@@ -21,7 +21,7 @@ struct BootyDropApp: App {
     var body: some Scene {
         WindowGroup {
             WelcomeView()
-//                .task { GameCenterManager.authenticateUser() }
+                .task { GameCenterManager.authenticateUser() }
                 .environmentObject(game)
         }
         .onChange(of: scenePhase) { oldValue, newValue in
@@ -31,6 +31,7 @@ struct BootyDropApp: App {
                 
             case .active:
                 game.toggleThemeMusic()
+                break
                 
             @unknown default:
                 break

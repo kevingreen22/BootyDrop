@@ -11,4 +11,5 @@ struct AppStorageKey {
     static var music = "music"
     static var sound = "sound"
     static var vibrate = "vibrate"
+    static var highScore = "high_score"
 }

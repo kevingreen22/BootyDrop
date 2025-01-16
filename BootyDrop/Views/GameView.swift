@@ -14,6 +14,7 @@ struct GameView: View {
     
     @EnvironmentObject var game: GameScene
     
+    
     var body: some View {
         ZStack(alignment: .top) {
             VStack(spacing: 0) {
@@ -39,6 +40,9 @@ fileprivate struct Header: View {
     @Binding var showSettings: Bool
     @Binding var showRankings: Bool
     
+    @AppStorage(AppStorageKey.highScore) var highScore: Int = 0
+
+    
     var body: some View {
         ZStack {
             headerBackground
@@ -48,21 +52,17 @@ fileprivate struct Header: View {
                 }
                 .overlay(alignment: .top) {
                     VStack(spacing: 0) {
-                        highScore
-                        score
+                        highScoreView
+                        scoreView
                     }
                 }
                 .overlay(alignment: .topTrailing) {
                     HStack {
                         RankingsButton {
-                            withAnimation {
-                                showRankings = true
-                            }
+                            showRankings = true
                         }.environmentObject(game)
                         SettingsButton {
-                            withAnimation {
-                                showSettings = true
-                            }
+                            showSettings = true
                         }.environmentObject(game)
                     }
                     .padding(.trailing, 26)
@@ -71,16 +71,18 @@ fileprivate struct Header: View {
         }
         .pirateShadow()
         .padding(.horizontal, 8)
+        .animation(.easeInOut, value: showRankings)
+        .animation(.easeInOut, value: showSettings)
     }
     
-    var highScore: some View {
+    var highScoreView: some View {
         HStack(spacing: 4) {
             Image("trophy")
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(height: 20)
                 .foregroundStyle(Color(uiColor: .darkText))
-            Text("\(6757)")
+            Text("\(highScore)")
                 .font(.custom(CustomFont.rum, size: 16))
                 .foregroundStyle(Color(uiColor: .darkText))
         }
@@ -89,7 +91,7 @@ fileprivate struct Header: View {
         .padding(.top, 8)
     }
     
-    var score: some View {
+    var scoreView: some View {
         Text("\(game.score)")
             .font(.custom(CustomFont.rum, size: 28))
             .foregroundStyle(Color(uiColor: .darkText))

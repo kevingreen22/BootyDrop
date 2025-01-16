@@ -168,15 +168,13 @@ struct StartButton: View {
         Button {
             action()
         } label: {
-            HM.ButtonLabel(
-                image:
-                    Image("coin")
+            VStack {
+                Image("coin")
                     .resizable()
-                    .scaledToFit(),
-                title: "Start",
-                fontSize: 30,
-                frame: CGSize(width: 150, height: 80))
-            .foregroundStyle(Color.black.opacity(0.8))
+                    .frame(width: 80, height: 80)
+                
+                PirateText("Start", size: 20)
+            }.padding(8)
         }
         .buttonStyle(.borderedProminent)
     }
@@ -190,18 +188,26 @@ struct PirateText: View {
     var text: String
     var size: CGFloat
     var textStyle: Font.TextStyle
+    var withShadow: Bool
     
-    init(_ text: String, size: CGFloat = 30, relativeTo textStyle: Font.TextStyle = .title) {
+    init(_ text: String, size: CGFloat = 30, relativeTo textStyle: Font.TextStyle = .title, withShadow: Bool = true) {
         self.text = text
         self.size = size
         self.textStyle = textStyle
+        self.withShadow = withShadow
     }
     
     var body: some View {
-        Text(text)
-            .foregroundStyle(Color.black)
-            .font(.custom(CustomFont.rum, size: size, relativeTo: textStyle))
-            .pirateShadow()
+        if withShadow {
+            Text(text)
+                .foregroundStyle(Color.black)
+                .font(.custom(CustomFont.rum, size: size, relativeTo: textStyle))
+                .pirateShadow()
+        } else {
+            Text(text)
+                .foregroundStyle(Color.black)
+                .font(.custom(CustomFont.rum, size: size, relativeTo: textStyle))
+        }
     }
 }
 
@@ -230,12 +236,14 @@ extension View {
 }
 
 struct HM {
-    static func ButtonLabel(imageName: String, title: String? = nil, fontSize: Double = 16, offIndicator: Binding<Bool>? = nil, frame: CGSize? = nil) -> some View {
+    static func ButtonLabel(imageName: String?, title: String? = nil, fontSize: Double = 16, offIndicator: Binding<Bool>? = nil, frame: CGSize? = nil) -> some View {
         VStack {
-            Image(imageName)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .buttonOffIndicator(offIndicator)
+            if let imageName {
+                Image(imageName)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .buttonOffIndicator(offIndicator)
+            }
             if let title {
                 Text(title)
                     .font(.custom(CustomFont.rum, size: fontSize, relativeTo: .subheadline))
@@ -246,12 +254,14 @@ struct HM {
         .frame(width: frame?.width ?? 40, height: frame?.height ?? 40)
     }
     
-    static func ButtonLabel(systemName: String, title: String? = nil, fontSize: Double = 16, offIndicator: Binding<Bool>? = nil, frame: CGSize? = nil) -> some View {
+    static func ButtonLabel(systemName: String?, title: String? = nil, fontSize: Double = 16, offIndicator: Binding<Bool>? = nil, frame: CGSize? = nil) -> some View {
         VStack {
-            Image(systemName: systemName)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .buttonOffIndicator(offIndicator)
+            if let systemName {
+                Image(systemName: systemName)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .buttonOffIndicator(offIndicator)
+            }
             if let title {
                 Text(title)
                     .font(.custom(CustomFont.rum, size: fontSize, relativeTo: .subheadline))
@@ -262,11 +272,13 @@ struct HM {
         .frame(width: frame?.width ?? 40, height: frame?.height ?? 40)
     }
     
-    static func ButtonLabel(image: (some View), title: String? = nil, fontSize: Double = 16, withIndicator: Binding<Bool>? = nil, frame: CGSize? = nil) -> some View {
+    static func ButtonLabel(image: (some View)?, title: String? = nil, fontSize: Double = 16, withIndicator: Binding<Bool>? = nil, frame: CGSize? = nil) -> some View {
         VStack {
-            image
-                .aspectRatio(contentMode: .fit)
-                .buttonOffIndicator(withIndicator)
+            if let image {
+                image
+                    .aspectRatio(contentMode: .fit)
+                    .buttonOffIndicator(withIndicator)
+            }
             if let title {
                 Text(title)
                     .font(.custom(CustomFont.rum, size: fontSize, relativeTo: .subheadline))

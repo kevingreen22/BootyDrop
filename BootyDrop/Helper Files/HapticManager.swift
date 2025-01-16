@@ -1,5 +1,5 @@
 //
-//  HapticsManager.swift
+//  HapticManager.swift
 //  BootyDrop
 //
 //  Created by Kevin Green on 8/21/24.

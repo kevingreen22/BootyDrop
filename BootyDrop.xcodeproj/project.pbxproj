@@ -48,6 +48,7 @@
 		C7EFD0F72C543A3300B883B4 /* TheRumIsGone.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C7EFD0F22C54335100B883B4 /* TheRumIsGone.ttf */; };
 		C7EFD0F92C5463FE00B883B4 /* sand.png in Resources */ = {isa = PBXBuildFile; fileRef = C7EFD0F82C5463FE00B883B4 /* sand.png */; };
 		C7EFD0FB2C546D6200B883B4 /* trophy.png in Resources */ = {isa = PBXBuildFile; fileRef = C7EFD0FA2C546D6200B883B4 /* trophy.png */; };
+		C7F1347E2D387C1100EF4EF9 /* Temp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F1347D2D387C1100EF4EF9 /* Temp.swift */; };
 		C7F1BA9F2C767C19005CC0A4 /* sound_button.png in Resources */ = {isa = PBXBuildFile; fileRef = C7F1BA9A2C767C18005CC0A4 /* sound_button.png */; };
 		C7F1BAA02C767C19005CC0A4 /* settings_button.png in Resources */ = {isa = PBXBuildFile; fileRef = C7F1BA9B2C767C19005CC0A4 /* settings_button.png */; };
 		C7F1BAA12C767C19005CC0A4 /* rankings_button.png in Resources */ = {isa = PBXBuildFile; fileRef = C7F1BA9C2C767C19005CC0A4 /* rankings_button.png */; };
@@ -55,7 +56,7 @@
 		C7F1BAA32C767C19005CC0A4 /* vibrate_button.png in Resources */ = {isa = PBXBuildFile; fileRef = C7F1BA9E2C767C19005CC0A4 /* vibrate_button.png */; };
 		C7F1BAA52C76A28D005CC0A4 /* AppStorageKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F1BAA42C76A28D005CC0A4 /* AppStorageKey.swift */; };
 		C7F1BAA72C76AC39005CC0A4 /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F1BAA62C76AC39005CC0A4 /* SoundManager.swift */; };
-		C7F1BAA92C76AFCB005CC0A4 /* HapticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F1BAA82C76AFCB005CC0A4 /* HapticsManager.swift */; };
+		C7F1BAA92C76AFCB005CC0A4 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F1BAA82C76AFCB005CC0A4 /* HapticManager.swift */; };
 		C7F512EE2C6E7E96003315FF /* GameoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F512ED2C6E7E96003315FF /* GameoverView.swift */; };
 		C7F512F22C6E9FB7003315FF /* ButtonsAndMore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F512F12C6E9FB7003315FF /* ButtonsAndMore.swift */; };
 		C7FB00382C642BDF00C8AC70 /* scroll_top.png in Resources */ = {isa = PBXBuildFile; fileRef = C7FB00352C642BDE00C8AC70 /* scroll_top.png */; };
@@ -107,6 +108,7 @@
 		C7EFD0F42C5433CE00B883B4 /* CustomFonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFonts.swift; sourceTree = "<group>"; };
 		C7EFD0F82C5463FE00B883B4 /* sand.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sand.png; sourceTree = "<group>"; };
 		C7EFD0FA2C546D6200B883B4 /* trophy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = trophy.png; sourceTree = "<group>"; };
+		C7F1347D2D387C1100EF4EF9 /* Temp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Temp.swift; sourceTree = "<group>"; };
 		C7F1BA9A2C767C18005CC0A4 /* sound_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sound_button.png; sourceTree = "<group>"; };
 		C7F1BA9B2C767C19005CC0A4 /* settings_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settings_button.png; sourceTree = "<group>"; };
 		C7F1BA9C2C767C19005CC0A4 /* rankings_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rankings_button.png; sourceTree = "<group>"; };
@@ -114,7 +116,7 @@
 		C7F1BA9E2C767C19005CC0A4 /* vibrate_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = vibrate_button.png; sourceTree = "<group>"; };
 		C7F1BAA42C76A28D005CC0A4 /* AppStorageKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStorageKey.swift; sourceTree = "<group>"; };
 		C7F1BAA62C76AC39005CC0A4 /* SoundManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundManager.swift; sourceTree = "<group>"; };
-		C7F1BAA82C76AFCB005CC0A4 /* HapticsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticsManager.swift; sourceTree = "<group>"; };
+		C7F1BAA82C76AFCB005CC0A4 /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
 		C7F512ED2C6E7E96003315FF /* GameoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameoverView.swift; sourceTree = "<group>"; };
 		C7F512F12C6E9FB7003315FF /* ButtonsAndMore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonsAndMore.swift; sourceTree = "<group>"; };
 		C7FB00352C642BDE00C8AC70 /* scroll_top.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = scroll_top.png; sourceTree = "<group>"; };
@@ -220,6 +222,7 @@
 				C729AA232CA60FD50083557C /* sound_effect_merge.mp3 */,
 				C7D24EBB2C9CC28A0006B9EF /* button_click.mp3 */,
 				C7CC623E2C507A40005D9F48 /* Preview Content */,
+				C7F1347D2D387C1100EF4EF9 /* Temp.swift */,
 			);
 			path = BootyDrop;
 			sourceTree = "<group>";
@@ -267,11 +270,11 @@
 			isa = PBXGroup;
 			children = (
 				C7FB00432C66A71300C8AC70 /* Extensions.swift */,
+				C7D24EC12C9E03020006B9EF /* Random Helper functions.swift */,
 				C7CC62592C50BAC6005D9F48 /* Shape.swift */,
 				C7F1BAA42C76A28D005CC0A4 /* AppStorageKey.swift */,
 				C7F1BAA62C76AC39005CC0A4 /* SoundManager.swift */,
-				C7F1BAA82C76AFCB005CC0A4 /* HapticsManager.swift */,
-				C7D24EC12C9E03020006B9EF /* Random Helper functions.swift */,
+				C7F1BAA82C76AFCB005CC0A4 /* HapticManager.swift */,
 				C753C0BE2CA4BCD000B4F1A7 /* WindowSceneEnvironment.swift */,
 			);
 			path = "Helper Files";
@@ -394,7 +397,7 @@
 				C753C0BB2CA485F700B4F1A7 /* TODOs.swift in Sources */,
 				C7F512F22C6E9FB7003315FF /* ButtonsAndMore.swift in Sources */,
 				C753C0BF2CA4BCD000B4F1A7 /* WindowSceneEnvironment.swift in Sources */,
-				C7F1BAA92C76AFCB005CC0A4 /* HapticsManager.swift in Sources */,
+				C7F1BAA92C76AFCB005CC0A4 /* HapticManager.swift in Sources */,
 				C75850D72C6C27DC001C6A05 /* BootyDropApp.swift in Sources */,
 				C7F1BAA52C76A28D005CC0A4 /* AppStorageKey.swift in Sources */,
 				C7F1BAA72C76AC39005CC0A4 /* SoundManager.swift in Sources */,
@@ -403,6 +406,7 @@
 				C75850DA2C6C27DC001C6A05 /* GameView.swift in Sources */,
 				C753C0C22CA4C10B00B4F1A7 /* DropObjectNode.swift in Sources */,
 				C7D24EC22C9E03020006B9EF /* Random Helper functions.swift in Sources */,
+				C7F1347E2D387C1100EF4EF9 /* Temp.swift in Sources */,
 				C75850DB2C6C27DC001C6A05 /* RankingsView.swift in Sources */,
 				C75850DC2C6C27DC001C6A05 /* SettingView.swift in Sources */,
 				C729AA2A2CA737E60083557C /* WelcomeView.swift in Sources */,
@@ -541,7 +545,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = BootyDrop/BootyDrop.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2024.12.21.01;
+				CURRENT_PROJECT_VERSION = 2025.01.10.01;
 				DEVELOPMENT_ASSET_PATHS = "\"BootyDrop/Preview Content\"";
 				DEVELOPMENT_TEAM = KY6DPH5Y6J;
 				ENABLE_PREVIEWS = YES;
@@ -574,7 +578,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = BootyDrop/BootyDrop.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2024.12.21.01;
+				CURRENT_PROJECT_VERSION = 2025.01.10.01;
 				DEVELOPMENT_ASSET_PATHS = "\"BootyDrop/Preview Content\"";
 				DEVELOPMENT_TEAM = KY6DPH5Y6J;
 				ENABLE_PREVIEWS = YES;
