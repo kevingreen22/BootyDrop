@@ -20,6 +20,7 @@ public var safeArea: UIEdgeInsets {
 
 
 public extension Int {
+    
     var asSeconds: String {
         if self % 10 != 0 {
             return "0:0\(self)"
@@ -27,4 +28,12 @@ public extension Int {
             return "0:\(self)"
         }
     }
+    
+    func inRange(of range: ClosedRange<Int>) -> Bool {
+        if self < range.lowerBound || self > range.upperBound {
+            return false
+        }
+        return true
+    }
+    
 }

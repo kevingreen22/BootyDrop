@@ -558,6 +558,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     private func addGameEndingClock() {
         print("  -\(#function)")
         gameEndingClock = SKLabelNode(text: "\(gameOverTime.asSeconds)")
+        gameEndingClock.zPosition = 1000
         gameEndingClock.fontSize = 40
         gameEndingClock.fontColor = .red
         gameEndingClock.fontName = CustomFont.rum
